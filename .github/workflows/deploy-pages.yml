@@ -49,11 +49,6 @@ jobs:
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-        with:
-          # enablement: true lets this action activate Pages automatically
-          # rather than requiring the setting to be toggled manually in the
-          # repo's Settings UI before the first deploy succeeds.
-          enablement: true
 
       - name: Copy health log into dashboard directory
         # The dashboard fetches health-log.json relative to itself, so the

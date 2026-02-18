@@ -295,6 +295,171 @@
       .card-metrics { grid-template-columns: 1fr; }
       .header-meta { text-align: left; }
     }
+
+    /* -----------------------------------------------------------------------
+       Weekly reports section
+    ----------------------------------------------------------------------- */
+    .reports-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+      padding: 0 24px 40px;
+    }
+
+    .reports-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .report-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s;
+      box-shadow: var(--shadow);
+    }
+
+    .report-card:hover { border-color: rgba(47, 129, 247, 0.4); }
+
+    .report-card-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      flex-wrap: wrap;
+      /* user-select prevents text selection flash when clicking to expand */
+      user-select: none;
+    }
+
+    .report-card-title {
+      flex: 1;
+      min-width: 200px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .report-card-meta {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .report-card-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-outline {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      background: transparent;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: rgba(47, 129, 247, 0.1);
+      text-decoration: none;
+      color: var(--accent);
+    }
+
+    .btn-filled {
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      border: none;
+      color: #fff;
+      background: var(--accent);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-filled:hover { background: var(--accent-hover); }
+
+    .badge-open   { background: rgba(63,185,80,0.15);     color: var(--green); }
+    .badge-closed { background: rgba(139,148,158,0.15);   color: var(--text-muted); }
+
+    /* max-height transition gives a smooth expand/collapse without JS animation frames */
+    .report-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+    }
+
+    .report-body.expanded { max-height: 2000px; }
+
+    .report-body-inner {
+      padding: 16px 20px 16px 23px;
+      background: var(--bg-card-alt);
+      border-top: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .report-body-inner h4 {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 14px 0 6px;
+    }
+
+    .report-body-inner h4:first-child { margin-top: 0; }
+
+    .report-body-inner p { margin: 4px 0; }
+
+    .report-body-inner strong { color: var(--text-primary); }
+
+    .report-body-inner ul { margin: 6px 0 6px 16px; }
+
+    .report-body-inner li { margin: 2px 0; }
+
+    .report-body-inner hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 12px 0;
+    }
+
+    /* Report tables reuse the existing table styles via inheritance */
+    .report-body-inner table { margin: 10px 0; }
+
+    .reports-state {
+      padding: 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .reports-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 600px) {
+      .reports-wrapper { padding: 0 16px 32px; }
+      .report-card-actions { flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
@@ -380,6 +545,29 @@
     </section>
 
   </main>
+
+  <!-- Weekly health reports — fetches GitHub Issues API independently of health-log.json
+       so it remains visible even if the health data fetch fails. -->
+  <div class="reports-wrapper">
+    <section aria-labelledby="reports-heading">
+      <h2 id="reports-heading">Weekly Health Reports</h2>
+      <div id="reports-loading" class="reports-state" role="status" aria-live="polite">
+        <span class="reports-spinner" aria-hidden="true"></span>Loading reports…
+      </div>
+      <div id="reports-error" class="reports-state hidden" role="alert">
+        Unable to load reports — view them directly on
+        <a href="https://github.com/erenkahraman/statpulse/issues?q=label%3Aweekly-report"
+           target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+      <div id="reports-empty" class="reports-state hidden" role="status">
+        No weekly reports generated yet — the first report runs every Monday at 09:00 UTC
+      </div>
+      <div id="reports-list" class="reports-list hidden"
+           role="list" aria-label="Weekly health report issues">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+  </div>
 
   <footer>
     <div>
@@ -749,6 +937,275 @@
     }
 
     init();
+
+    // -------------------------------------------------------------------------
+    // Weekly reports — GitHub Issues integration
+    // -------------------------------------------------------------------------
+
+    const REPORTS_API_URL =
+      'https://api.github.com/repos/erenkahraman/statpulse/issues' +
+      '?labels=weekly-report&state=all&per_page=20&sort=created&direction=desc';
+
+    // Module-level store so copyReport() can access raw bodies by index
+    // without bloating each DOM element with a large encoded data attribute.
+    let _reportIssues = [];
+
+    /**
+     * Escapes HTML special characters before inserting untrusted text into the DOM.
+     * Applied before any other processing so markdown symbols in the text
+     * cannot be interpreted as HTML tags.
+     * @param {string} str
+     * @returns {string}
+     */
+    function escHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    /**
+     * Renders inline markdown within a single line of already-escaped text.
+     * Order matters: escHtml runs first so markdown symbols in literal text
+     * are safe, then we apply bold/code/link transformations.
+     * @param {string} text - Raw (unescaped) inline text.
+     * @returns {string} HTML string with inline formatting applied.
+     */
+    function renderInline(text) {
+      let s = escHtml(text);
+      // **bold**
+      s = s.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // `code`
+      s = s.replace(/`([^`]+)`/g,
+        '<code style="background:var(--bg-primary);padding:1px 4px;border-radius:3px;font-family:monospace;font-size:0.9em">$1</code>');
+      // [link text](url)
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+      return s;
+    }
+
+    /**
+     * Converts a subset of Markdown to safe HTML for rendering issue bodies.
+     *
+     * Handles: ## / ### headings → <h4>, **bold**, `code`, [links](url),
+     * | table | rows |, * / - bullet lists, --- horizontal rules, blank lines.
+     * Everything else is wrapped in <p>.
+     *
+     * A line-by-line approach rather than regex-on-full-text gives predictable
+     * behaviour for the structured Markdown our report script always produces.
+     *
+     * @param {string} text - Raw Markdown string (issue body).
+     * @returns {string} HTML string safe to assign to innerHTML.
+     */
+    function parseMarkdown(text) {
+      if (!text) return '';
+      const lines  = text.split('\n');
+      const out    = [];
+      let inTable  = false;
+      let tHeadDone = false;
+      let inList   = false;
+
+      const closeTable = () => { out.push('</tbody></table></div>'); inTable = false; tHeadDone = false; };
+      const closeList  = () => { out.push('</ul>'); inList = false; };
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+
+        // ── Table row ────────────────────────────────────────────────────────
+        if (trimmed.startsWith('|')) {
+          // Separator row: |---|---| transitions thead → tbody
+          if (/^\|[\s\-|:]+\|$/.test(trimmed)) {
+            if (!tHeadDone) { out.push('</thead><tbody>'); tHeadDone = true; }
+            continue;
+          }
+
+          if (inList) closeList();
+
+          const cells = trimmed.replace(/^\||\|$/g, '').split('|');
+
+          if (!inTable) {
+            // First row of a new table is always the header
+            out.push('<div class="table-wrapper"><table><thead>');
+            inTable = true;
+            tHeadDone = false;
+            out.push('<tr>' + cells.map(c => `<th scope="col">${escHtml(c.trim())}</th>`).join('') + '</tr>');
+          } else {
+            out.push('<tr>' + cells.map(c => `<td>${renderInline(c.trim())}</td>`).join('') + '</tr>');
+          }
+          continue;
+        }
+
+        // Close any open table when we hit a non-table line
+        if (inTable) closeTable();
+
+        // ── Headings (## and ###) → <h4> to stay below existing h2 hierarchy ─
+        if (trimmed.startsWith('### ')) {
+          if (inList) closeList();
+          out.push(`<h4>${escHtml(trimmed.slice(4))}</h4>`);
+          continue;
+        }
+        if (trimmed.startsWith('## ')) {
+          if (inList) closeList();
+          out.push(`<h4>${escHtml(trimmed.slice(3))}</h4>`);
+          continue;
+        }
+
+        // ── Bullet list (* item or - item) ───────────────────────────────────
+        if (/^[*-] /.test(trimmed)) {
+          if (!inList) { out.push('<ul>'); inList = true; }
+          out.push(`<li>${renderInline(trimmed.slice(2))}</li>`);
+          continue;
+        }
+
+        if (inList) closeList();
+
+        // ── Horizontal rule ──────────────────────────────────────────────────
+        if (/^---+$/.test(trimmed)) {
+          out.push('<hr>');
+          continue;
+        }
+
+        // ── Blank line → line break between paragraphs ───────────────────────
+        if (trimmed === '') {
+          out.push('<br>');
+          continue;
+        }
+
+        // ── Default: paragraph ───────────────────────────────────────────────
+        out.push(`<p>${renderInline(line)}</p>`);
+      }
+
+      if (inList)  closeList();
+      if (inTable) closeTable();
+
+      return out.join('\n');
+    }
+
+    /**
+     * Copies the raw Markdown body of a report to the clipboard.
+     * Looks up the body by index from _reportIssues rather than reading a
+     * data attribute to avoid storing large strings in the DOM.
+     * @param {HTMLButtonElement} btn - The clicked "Copy Report" button.
+     */
+    async function copyReport(btn) {
+      const idx  = parseInt(btn.dataset.issueIdx, 10);
+      const body = _reportIssues[idx]?.body || '';
+      try {
+        await navigator.clipboard.writeText(body);
+        const orig = btn.textContent;
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => { btn.textContent = orig; }, 2000);
+      } catch {
+        // Clipboard API requires HTTPS and user gesture — silently no-op if
+        // either condition isn't met rather than surfacing a confusing error.
+      }
+    }
+
+    /**
+     * Renders the list of weekly report issue cards.
+     * Each card has a click-to-expand body area; buttons use stopPropagation
+     * so their clicks don't also toggle the expand state.
+     * @param {Array<Object>} issues - GitHub Issues API response array.
+     */
+    function renderReports(issues) {
+      _reportIssues = issues;
+
+      const $list = document.getElementById('reports-list');
+      $list.innerHTML = '';
+
+      issues.forEach((issue, idx) => {
+        const bodyId        = `report-body-${idx}`;
+        const stateCss      = issue.state === 'open' ? 'badge-open' : 'badge-closed';
+        const stateLabel    = issue.state === 'open' ? 'Open' : 'Closed';
+        const dateStr       = new Date(issue.created_at).toLocaleDateString();
+
+        const article = document.createElement('article');
+        article.className = 'report-card';
+        article.setAttribute('role', 'listitem');
+        article.setAttribute('aria-expanded', 'false');
+
+        article.innerHTML = `
+          <div class="report-card-header">
+            <div class="report-card-title">${escHtml(issue.title)}</div>
+            <div class="report-card-meta">
+              <span class="badge ${stateCss}">${stateLabel}</span>
+              #${issue.number} &bull; ${dateStr}
+            </div>
+            <div class="report-card-actions">
+              <a href="${escHtml(issue.html_url)}"
+                 target="_blank" rel="noopener noreferrer"
+                 class="btn-outline"
+                 aria-label="View issue #${issue.number} on GitHub"
+                 onclick="event.stopPropagation()">View on GitHub →</a>
+              <button class="btn-filled"
+                      data-issue-idx="${idx}"
+                      aria-label="Copy report markdown for issue #${issue.number}"
+                      onclick="event.stopPropagation(); copyReport(this)">Copy Report</button>
+            </div>
+          </div>
+          <div class="report-body" id="${bodyId}"
+               role="region"
+               aria-label="Report content for issue #${issue.number}">
+            <div class="report-body-inner">${parseMarkdown(issue.body || '')}</div>
+          </div>
+        `;
+
+        // Toggle expand/collapse on card click — buttons handle their own
+        // events via stopPropagation so they don't bubble here.
+        article.addEventListener('click', () => {
+          const body       = document.getElementById(bodyId);
+          const isExpanded = article.getAttribute('aria-expanded') === 'true';
+          article.setAttribute('aria-expanded', String(!isExpanded));
+          body.classList.toggle('expanded', !isExpanded);
+        });
+
+        $list.appendChild(article);
+      });
+    }
+
+    /**
+     * Fetches weekly report issues from the public GitHub API and renders them.
+     * Runs independently of init() so the section is populated even if the
+     * health-log.json fetch fails or the main dashboard hasn't loaded yet.
+     */
+    async function initWeeklyReports() {
+      const $loading = document.getElementById('reports-loading');
+      const $error   = document.getElementById('reports-error');
+      const $empty   = document.getElementById('reports-empty');
+      const $list    = document.getElementById('reports-list');
+
+      try {
+        const res = await fetch(REPORTS_API_URL, {
+          headers: {
+            'Accept':     'application/vnd.github.v3+json',
+            'User-Agent': 'statpulse-dashboard/1.0',
+          },
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const issues = await res.json();
+
+        $loading.classList.add('hidden');
+
+        if (!Array.isArray(issues) || issues.length === 0) {
+          $empty.classList.remove('hidden');
+          return;
+        }
+
+        renderReports(issues);
+        $list.classList.remove('hidden');
+
+      } catch {
+        // Any network or API error falls through here — show the error state
+        // with a direct GitHub link so the user is never left without options.
+        $loading.classList.add('hidden');
+        $error.classList.remove('hidden');
+      }
+    }
+
+    initWeeklyReports();
   </script>
 
 </body>

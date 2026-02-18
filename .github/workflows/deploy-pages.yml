@@ -1,0 +1,67 @@
+# deploy-pages.yml
+# Deploys the StatPulse dashboard to GitHub Pages after every successful
+# health-check run, ensuring the live site always reflects the latest data.
+
+name: Deploy Dashboard
+
+on:
+  # Trigger automatically once the health-check workflow finishes so the
+  # Pages deployment always includes the freshest health-log.json.
+  workflow_run:
+    workflows:
+      - API Health Check
+    types:
+      - completed
+
+  # Allow manual deployment — useful for initial setup or CSS-only changes
+  # that do not touch monitored scripts.
+  workflow_dispatch:
+
+  # Also deploy when the dashboard HTML or health data changes directly,
+  # so design tweaks go live without waiting for the next health check.
+  push:
+    branches:
+      - main
+    paths:
+      - 'dashboard/**'
+      - 'data/**'
+
+# pages: write + id-token: write are both required by the official GitHub
+# Pages deploy action (actions/deploy-pages). contents: read is the minimum
+# needed to check out the repository.
+permissions:
+  pages: write
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and deploy dashboard to GitHub Pages
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Copy health log into dashboard directory
+        # The dashboard fetches health-log.json relative to itself, so the
+        # data file must live alongside index.html in the Pages artifact.
+        run: cp data/health-log.json dashboard/health-log.json
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload only the dashboard directory — avoids exposing scripts,
+          # governance docs, or workflow files on the public website.
+          path: ./dashboard
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

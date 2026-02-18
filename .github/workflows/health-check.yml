@@ -1,0 +1,73 @@
+# health-check.yml
+# Runs the StatPulse health check script on a schedule and commits results
+# back to the repository so the GitHub Pages dashboard always has fresh data.
+
+name: API Health Check
+
+on:
+  # Run every 6 hours — frequent enough for meaningful uptime stats without
+  # hammering the public SIS-CC demo API.
+  schedule:
+    - cron: '0 */6 * * *'
+
+  # Allow manual runs from the Actions tab to bootstrap the data on day one
+  # or to debug a suspected incident without waiting for the next cron window.
+  workflow_dispatch:
+
+  # Re-run on changes to monitoring logic or workflow config so the data stays
+  # consistent with whatever version of the script is on main.
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/health-check.yml'
+
+# contents: write is required so the workflow can commit health-log.json back.
+# No other permissions are needed — principle of least privilege.
+permissions:
+  contents: write
+
+jobs:
+  health-check:
+    name: Check SIS-CC SDMX API endpoints
+    runs-on: ubuntu-latest
+    # Hard ceiling to prevent a hung network request from consuming Actions minutes.
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository with full history
+        uses: actions/checkout@v4
+        with:
+          # fetch-depth: 0 ensures the bot commit has the full ancestry chain,
+          # which matters if we ever need to git log the health data history.
+          fetch-depth: 0
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          # Cache npm dependencies so repeated runs are faster even though
+          # this project currently has no runtime dependencies.
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run StatPulse health check
+        run: node scripts/check-health.js
+
+      - name: Commit updated health log to repository
+        run: |
+          # Use a dedicated bot identity so commits are clearly automated and
+          # do not pollute contributors' commit history.
+          git config user.name "statpulse-bot"
+          git config user.email "statpulse-bot@users.noreply.github.com"
+
+          git add data/health-log.json
+
+          # --quiet suppresses output when there is nothing staged; the OR
+          # short-circuit means we only commit when the file actually changed.
+          git diff --staged --quiet || git commit -m "chore(data): update health log [skip ci]"
+
+          git push

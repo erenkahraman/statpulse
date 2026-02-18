@@ -1,0 +1,114 @@
+# kpis.yaml
+# KPI framework for the SIS-CC .Stat Suite API monitoring platform.
+# Each entry represents a measurable commitment tied to a specific platform
+# component, stakeholder group, or governance obligation.
+# Owners are functional roles, not named individuals, so this stays valid
+# across team changes.
+
+kpis:
+
+  # 1 — Core availability SLA. The 99.5% threshold (≈ 44h downtime/year)
+  # matches what .Stat Core NSI advertises for its demo environment. For
+  # a production OECD deployment the target would tighten to 99.9%.
+  - id: api-availability
+    name: API Availability
+    category: Reliability
+    description: >
+      Percentage of scheduled health checks (every 6 hours) where at least
+      one of the three monitored endpoints returns HTTP 200 within the timeout
+      window. Measured per endpoint and in aggregate.
+    target: ">= 99.5%"
+    measurement: "(successful checks / total checks) × 100, rolling 30-day window"
+    frequency: Every 6 hours (automated via GitHub Actions)
+    owner: Platform Operations
+    related_sdmx_component: .Stat Core NSI web service (REST API layer)
+
+  # 2 — Response time. p95 rather than mean because outliers matter more than
+  # averages when users are waiting for the Data Explorer to load.
+  - id: api-response-time
+    name: API Response Time (p95)
+    category: Performance
+    description: >
+      95th-percentile response time across all monitored endpoints over a
+      rolling 7-day window. Directly impacts Data Explorer perceived performance
+      because the front-end issues blocking SDMX REST calls on page load.
+    target: "p95 < 3000ms"
+    measurement: "p95 of responseTimeMs values in health-log.json, 7-day rolling window"
+    frequency: Every 6 hours (automated via GitHub Actions)
+    owner: Platform Operations
+    related_sdmx_component: Data Explorer (SDE) — user experience impact
+
+  # 3 — Content-Type validity. A 200 with text/html usually means a reverse
+  # proxy or WAF is returning an error page — the NSI is down but the load
+  # balancer is masking it. This KPI catches that failure mode.
+  - id: sdmx-content-type-validity
+    name: SDMX Content-Type Validity
+    category: Data Quality
+    description: >
+      Percentage of successful HTTP responses where the Content-Type header
+      contains "xml" or "sdmx". A mismatch at 200 OK indicates a proxy layer
+      or WAF is intercepting requests and returning HTML error pages instead
+      of SDMX-ML payloads.
+    target: "100%"
+    measurement: "(contentTypeValid=true checks / ok=true checks) × 100"
+    frequency: Every 6 hours (automated via GitHub Actions)
+    owner: Infrastructure / DevOps
+    related_sdmx_component: Reverse proxy / WAF layer fronting the NSI
+
+  # 4 — Catalogue stability. DSD count is a proxy for governance discipline:
+  # a sudden drop may mean structures were accidentally deleted or de-published;
+  # a sudden spike may indicate mass import without review.
+  - id: datastructure-catalogue-stability
+    name: DataStructure Catalogue Stability
+    category: Governance
+    description: >
+      Rolling 30-day average count of DataStructure artefacts returned by
+      the /rest/datastructure endpoint. Significant deviation (> ±5 from the
+      rolling average) triggers review to confirm changes were intentional
+      and governed through the DLM workflow.
+    target: "Stable within ±5 of 30-day rolling average"
+    measurement: >
+      extraMetric.value from Structures endpoint checks, compared against
+      rolling 30-day mean using last 120 entries in health-log.json
+    frequency: Daily (derived from 6-hourly checks)
+    owner: Data Lifecycle Management (DLM) Team
+    related_sdmx_component: DLM module — Data Structure Definition governance
+
+  # 5 — Accessibility. WCAG 2.1 AA is required by EU Directive 2016/2102 and
+  # referenced in OECD's own digital accessibility policy. The dashboard is
+  # public-facing so zero-tolerance on critical violations is appropriate.
+  - id: wcag-accessibility
+    name: Dashboard WCAG 2.1 AA Compliance
+    category: Accessibility
+    description: >
+      Number of WCAG 2.1 Level AA critical violations detected in the
+      StatPulse dashboard (dashboard/index.html) by automated tooling
+      (axe-core or equivalent). Zero tolerance — any critical violation
+      blocks a dashboard release.
+    target: "Zero critical violations"
+    measurement: "Automated axe-core scan on each dashboard/index.html change"
+    frequency: On every pull request touching dashboard/ (CI gate)
+    owner: Product Manager / Frontend Lead
+    related_sdmx_component: >
+      Dashboard layer — EU Directive 2016/2102 and OECD digital accessibility
+      requirements
+
+  # 6 — Community issue resolution. Proxy for PM responsiveness and community
+  # health. Data sourced from GitHub Issues; thresholds are conservative for
+  # a public portfolio project but realistic for a live OECD tool.
+  - id: community-issue-resolution
+    name: Community Issue Resolution Time
+    category: Community Health
+    description: >
+      Median calendar days from issue open to close, split by type.
+      Bug reports should close faster because they represent broken
+      functionality; feature requests can wait for milestone planning.
+    target: "Bugs: median < 30 days | Features: median < 90 days"
+    measurement: >
+      Median of (closed_at - created_at) for issues labelled "bug" vs
+      "enhancement", measured via GitHub milestone analytics or API query
+    frequency: Monthly review
+    owner: Product Manager
+    related_sdmx_component: >
+      GitLab milestone analytics (if mirrored) or GitHub Issues — community
+      governance and roadmap transparency

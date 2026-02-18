@@ -192,6 +192,22 @@
     .metric-value.bad    { color: var(--red); }
     .metric-value.muted  { color: var(--text-muted); font-size: 15px; }
 
+    .anomaly-warn {
+      font-size: 11px;
+      color: var(--yellow);
+      margin-top: 5px;
+      font-weight: 500;
+    }
+
+    .anomaly-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      padding: 12px 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
     /* -----------------------------------------------------------------------
        Charts
     ----------------------------------------------------------------------- */
@@ -324,6 +340,15 @@
       <div class="cards-grid" id="cards-grid" role="list" aria-label="Endpoint status cards">
         <!-- Injected by JS -->
       </div>
+    </section>
+
+    <!-- Anomaly detection info -->
+    <section aria-labelledby="anomaly-heading">
+      <h2 id="anomaly-heading">Anomaly Detection</h2>
+      <p class="anomaly-description">
+        Response times are compared against a 10-check rolling average.
+        Deviations above 2× trigger a warning; above 3× trigger a critical alert.
+      </p>
     </section>
 
     <!-- Response-time chart -->
@@ -482,6 +507,10 @@
 
     /**
      * Determines operational status from the most recent record.
+     * Anomaly detection overrides OPERATIONAL: a warning-severity anomaly
+     * shows DEGRADED in yellow; a critical-severity anomaly shows DEGRADED
+     * in red (using badge-down styling) to communicate urgency without
+     * conflating it with a true HTTP failure (which shows DOWN).
      * @param {Object|null} latest
      * @param {string} uptime
      * @returns {{ label: string, cssClass: string }}
@@ -489,6 +518,11 @@
     function statusBadge(latest, uptime) {
       if (!latest) return { label: 'PENDING', cssClass: 'badge-pending' };
       if (!latest.ok) return { label: 'DOWN', cssClass: 'badge-down' };
+      // Anomaly severity takes precedence over uptime-based DEGRADED check.
+      if (latest.anomaly?.detected) {
+        if (latest.anomaly.severity === 'critical') return { label: 'DEGRADED', cssClass: 'badge-down' };
+        return { label: 'DEGRADED', cssClass: 'badge-degraded' };
+      }
       const v = parseFloat(uptime);
       if (!isNaN(v) && v < UPTIME_WARN_PCT) return { label: 'DEGRADED', cssClass: 'badge-degraded' };
       return { label: 'OPERATIONAL', cssClass: 'badge-operational' };
@@ -542,6 +576,14 @@
         const badge   = statusBadge(latest, uptime);
         const respMs  = latest?.responseTimeMs ?? null;
 
+        const anomaly = latest?.anomaly;
+        // Build anomaly warning line only when an anomaly is detected so
+        // normal operational cards stay visually clean.
+        const anomalyHtml = anomaly?.detected
+          ? `<div class="anomaly-warn" role="alert" aria-label="Anomaly detected">` +
+            `⚠ ${anomaly.deviationFactor}× above rolling avg (${anomaly.rollingAvgMs}ms)</div>`
+          : '';
+
         const article = document.createElement('article');
         article.className = 'card';
         article.setAttribute('role', 'listitem');
@@ -558,6 +600,7 @@
               <div class="metric-value ${responseClass(respMs)}">
                 ${respMs !== null ? respMs + 'ms' : '—'}
               </div>
+              ${anomalyHtml}
             </div>
             <div>
               <div class="metric-label">Uptime (all checks)</div>

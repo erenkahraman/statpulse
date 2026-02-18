@@ -25,6 +25,26 @@ const MAX_LOG_ENTRIES = 200;
  *  before the GitHub Actions job times out at 10 minutes. */
 const TIMEOUT_MS = 15_000;
 
+/** Number of previous checks per endpoint to include in the rolling average.
+ *  10 checks = 2.5 days of history at 6-hour intervals — long enough to smooth
+ *  out transient spikes but short enough to track genuine degradation trends. */
+const ANOMALY_WINDOW = 10;
+
+/** Minimum number of historical samples required before anomaly detection fires.
+ *  Prevents false positives during the first few runs when the baseline is
+ *  too small to be statistically meaningful. */
+const ANOMALY_MIN_SAMPLES = 5;
+
+/** Response time deviation factor that triggers a WARNING anomaly.
+ *  2× the rolling average is the threshold — a doubling of response time
+ *  is significant enough to warrant attention without over-alerting. */
+const ANOMALY_WARNING_FACTOR = 2;
+
+/** Response time deviation factor that triggers a CRITICAL anomaly.
+ *  3× the rolling average indicates a severe degradation that likely
+ *  impacts end users of the Data Explorer directly. */
+const ANOMALY_CRITICAL_FACTOR = 3;
+
 /** Path resolution so the script works regardless of cwd.
  *  Using import.meta.url is the ESM equivalent of __dirname. */
 const __filename = fileURLToPath(import.meta.url);
@@ -106,6 +126,65 @@ const logWarn = (msg) => console.warn(`[WARN]  ${new Date().toISOString()} ${msg
 const logError = (msg) => console.error(`[ERROR] ${new Date().toISOString()} ${msg}`);
 
 // ---------------------------------------------------------------------------
+// Anomaly detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Computes anomaly status for a single endpoint result by comparing the
+ * current response time against the rolling average of recent checks.
+ * Detection is intentionally conservative — it requires a minimum sample
+ * window before firing to avoid false positives on cold-start checks.
+ *
+ * The rolling average excludes failed/timed-out requests (null responseTimeMs)
+ * so that a previous outage does not artificially lower the baseline and cause
+ * subsequent normal responses to appear anomalous.
+ *
+ * @param {string} endpointName     - Name matching the endpoint's `name` field.
+ * @param {number|null} currentMs   - Response time for the current check.
+ * @param {Array<Object>} historicalLog - Existing log entries BEFORE this run.
+ * @returns {{ detected: boolean, rollingAvgMs?: number, deviationFactor?: number, severity?: string }}
+ */
+function detectAnomaly(endpointName, currentMs, historicalLog) {
+  // A null currentMs means the request failed outright — skip anomaly scoring
+  // since the DOWN badge already communicates the problem more clearly.
+  if (currentMs === null || currentMs === undefined) {
+    return { detected: false };
+  }
+
+  // Gather valid historical response times for this endpoint only.
+  // Filtering to successful, non-null records keeps the baseline clean.
+  const history = historicalLog
+    .filter((r) => r.endpoint === endpointName && r.responseTimeMs !== null)
+    .slice(-ANOMALY_WINDOW);
+
+  // Refuse to score until we have a statistically meaningful baseline.
+  if (history.length < ANOMALY_MIN_SAMPLES) {
+    return { detected: false };
+  }
+
+  const rollingAvgMs = Math.round(
+    history.reduce((sum, r) => sum + r.responseTimeMs, 0) / history.length,
+  );
+
+  // Avoid division-by-zero if all historical times were somehow 0.
+  if (rollingAvgMs === 0) {
+    return { detected: false };
+  }
+
+  const deviationFactor = parseFloat((currentMs / rollingAvgMs).toFixed(2));
+
+  if (deviationFactor >= ANOMALY_CRITICAL_FACTOR) {
+    return { detected: true, rollingAvgMs, deviationFactor, severity: 'critical' };
+  }
+
+  if (deviationFactor >= ANOMALY_WARNING_FACTOR) {
+    return { detected: true, rollingAvgMs, deviationFactor, severity: 'warning' };
+  }
+
+  return { detected: false };
+}
+
+// ---------------------------------------------------------------------------
 // Core functions
 // ---------------------------------------------------------------------------
 
@@ -136,6 +215,7 @@ async function checkEndpoint(endpoint) {
     contentTypeValid: false,
     responseSizeKB: null,
     extraMetric: { label: endpoint.extraMetric('').label, value: null },
+    anomaly: { detected: false },
     error: null,
   };
 
@@ -193,7 +273,7 @@ async function checkEndpoint(endpoint) {
 /**
  * Reads the existing health log from disk.
  * Returns an empty array on first run or if the file is unparseable —
- * we never want a corrupt log to block a fresh health check from running.
+ * a corrupt log must never block a fresh health check from running.
  *
  * @returns {Array<Object>}
  */
@@ -236,8 +316,9 @@ function writeLog(log) {
 /**
  * Orchestrates the health check run:
  * 1. Checks each endpoint sequentially.
- * 2. Appends results to the log.
- * 3. Exits with code 1 only if every single endpoint failed — a partial
+ * 2. Reads the existing log so anomaly detection has a clean historical baseline.
+ * 3. Annotates each result with anomaly status before appending to the log.
+ * 4. Exits with code 1 only if every single endpoint failed — a partial
  *    outage should not block the git commit step in the workflow.
  */
 async function main() {
@@ -249,7 +330,22 @@ async function main() {
     results.push(result);
   }
 
+  // Read existing log BEFORE appending new results so anomaly detection
+  // compares each new reading against purely historical data. Including the
+  // current run in the baseline would make the comparison self-referential.
   const log = readLog();
+
+  // Annotate each result with anomaly status then log warnings for CI output.
+  for (const result of results) {
+    result.anomaly = detectAnomaly(result.endpoint, result.responseTimeMs, log);
+    if (result.anomaly.detected) {
+      logWarn(
+        `${result.endpoint} ANOMALY (${result.anomaly.severity}): ` +
+        `${result.anomaly.deviationFactor}× rolling avg (${result.anomaly.rollingAvgMs}ms baseline, ${result.responseTimeMs}ms actual)`,
+      );
+    }
+  }
+
   log.push(...results);
   writeLog(log);
 

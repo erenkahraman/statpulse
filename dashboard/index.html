@@ -460,6 +460,369 @@
       .reports-wrapper { padding: 0 16px 32px; }
       .report-card-actions { flex-wrap: wrap; }
     }
+
+    /* -----------------------------------------------------------------------
+       SDMX Guide Panel — floating trigger button + slide-in reference overlay
+    ----------------------------------------------------------------------- */
+
+    /* Locking body scroll via a class (rather than an inline style) keeps all
+       styling declarative and consistent with the class-driven approach used
+       throughout the rest of the dashboard. */
+    body.panel-open { overflow: hidden; }
+
+    /* Fixed pill sits above all page content. z-index 1000 is the base of the
+       guide layer stack — overlay is 1001, panel is 1002. */
+    .guide-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .guide-btn:hover  { background: var(--accent-hover); }
+    .guide-btn:active { transform: scale(0.97); }
+
+    /* Overlay fades in separately from the panel slide so both transitions
+       can have different durations without JavaScript animation frames. */
+    .guide-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 1001;
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+
+    .guide-overlay.visible { opacity: 1; }
+
+    /* Panel starts fully offscreen (translateX 100%) so it cannot intercept
+       pointer events when closed. cubic-bezier matches Material Design's
+       standard decelerate easing for elements entering the viewport. */
+    .guide-panel {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 480px;
+      max-width: 100vw;
+      z-index: 1002;
+      background: var(--bg-card);
+      border-left: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .guide-panel.open { transform: translateX(0); }
+
+    .guide-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .guide-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .guide-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 2px 7px;
+      border-radius: 4px;
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .guide-close:hover {
+      color: var(--text-primary);
+      background: var(--bg-card-alt);
+    }
+
+    /* Tab bar scrolls horizontally on narrow viewports rather than wrapping
+       or truncating the tab labels. */
+    .guide-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      overflow-x: auto;
+    }
+
+    .guide-tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 10px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: color 0.15s, border-color 0.15s;
+      /* Negative margin aligns the 2px active indicator flush with
+         the container's 1px bottom border. */
+      margin-bottom: -1px;
+    }
+
+    .guide-tab:hover { color: var(--text-primary); }
+
+    .guide-tab.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* Scrollable content area grows to fill available panel height so the
+       tab bar and header stay pinned while content scrolls independently. */
+    .guide-tab-content {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .guide-tabpanel {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .guide-tabpanel.hidden { display: none; }
+
+    .guide-section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      /* Reset h3/h4 browser defaults since this appears inside an aside */
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    /* Smaller heading for sub-sections within a tab panel */
+    .guide-subsection-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .guide-prose {
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* ── Architecture flow diagram (Tab 1) ──────────────────────────── */
+
+    /* flex-wrap lets the diagram reflow vertically on narrow viewports
+       without needing media queries for the internal layout. */
+    .flow-diagram {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 12px 0;
+    }
+
+    .flow-box {
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      text-align: center;
+      flex: 1;
+      min-width: 110px;
+    }
+
+    .flow-icon  { font-size: 20px; display: block; margin-bottom: 4px; }
+    .flow-label { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+    .flow-desc  { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .flow-arrow {
+      font-size: 20px;
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 700;
+    }
+
+    /* ── Why-it-matters cards (Tab 1) ─────────────────────────────── */
+
+    .why-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .why-card {
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 12px;
+    }
+
+    .why-icon  { font-size: 18px; display: block; margin-bottom: 6px; }
+    .why-title { font-size: 12px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+    .why-text  { font-size: 11px; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+    /* ── Accordion glossary (Tab 2) ────────────────────────────────── */
+
+    .accordion { display: flex; flex-direction: column; gap: 4px; }
+
+    .accordion-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      background: var(--bg-card-alt);
+      border: none;
+      color: var(--text-primary);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 11px 14px;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background 0.15s;
+    }
+
+    .accordion-trigger:hover { background: rgba(47,129,247,0.07); }
+
+    /* CSS handles the chevron rotation — no JS animation frames needed.
+       The .open class is toggled on .accordion-item by JS. */
+    .accordion-chevron {
+      font-size: 10px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+      color: var(--text-muted);
+    }
+
+    .accordion-item.open .accordion-chevron { transform: rotate(90deg); }
+
+    /* Same max-height transition pattern as .report-body — keeps animation
+       behaviour consistent across expandable content in the dashboard. */
+    .accordion-body {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.25s ease;
+    }
+
+    .accordion-body.expanded { max-height: 600px; }
+
+    .accordion-body-inner {
+      padding: 12px 14px 14px;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .accordion-body-inner p { margin: 0 0 8px; }
+    .accordion-body-inner p:last-of-type { margin-bottom: 0; }
+
+    /* Tag pills use accent at ~18% opacity so they stand out against the
+       card background without competing with the prose text hierarchy. */
+    .tag-list { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+
+    .tag {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(47,129,247,0.18);
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    /* ── API anatomy code block (Tab 2) ────────────────────────────── */
+
+    .api-anatomy {
+      background: var(--bg-primary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 11px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      color: var(--text-primary);
+      overflow-x: auto;
+      white-space: pre;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    /* Monospace inline code used in static HTML tables (distinct from the
+       dynamically-injected code spans in the markdown renderer). */
+    .code-mono {
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.85em;
+      background: var(--bg-primary);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* ── How-to-read blocks (Tab 3) ─────────────────────────────────── */
+
+    .howto-block {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .howto-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+      line-height: 1;
+      padding-top: 1px;
+    }
+
+    .howto-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .howto-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .guide-btn { bottom: 16px; right: 16px; font-size: 13px; padding: 9px 16px; }
+      .why-cards { grid-template-columns: 1fr; }
+      /* Rotate arrows so the vertically-wrapped flow diagram reads top-to-bottom */
+      .flow-arrow { transform: rotate(90deg); }
+    }
   </style>
 </head>
 <body>
@@ -1206,7 +1569,416 @@
     }
 
     initWeeklyReports();
+
+    /* ── SDMX Guide Panel ────────────────────────────────────────────────── */
+    // All DOM refs are module-scoped since they're queried once after the
+    // guide panel HTML has been parsed (script tag is at bottom of <body>).
+    const guideBtn     = document.querySelector('.guide-btn');
+    const guideOverlay = document.querySelector('.guide-overlay');
+    const guidePanel   = document.querySelector('.guide-panel');
+    const guideClose   = document.querySelector('.guide-close');
+    const guideTabs    = document.querySelectorAll('.guide-tab');
+    const guidePanels  = document.querySelectorAll('.guide-tabpanel');
+
+    function openGuide() {
+      // Lock body scroll by class rather than inline style to stay consistent
+      // with the class-driven styling approach used throughout the dashboard.
+      document.body.classList.add('panel-open');
+      guideOverlay.classList.add('visible');
+      guidePanel.classList.add('open');
+      guidePanel.setAttribute('aria-hidden', 'false');
+      guideBtn.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeGuide() {
+      document.body.classList.remove('panel-open');
+      guideOverlay.classList.remove('visible');
+      guidePanel.classList.remove('open');
+      guidePanel.setAttribute('aria-hidden', 'true');
+      guideBtn.setAttribute('aria-expanded', 'false');
+    }
+
+    guideBtn.addEventListener('click', openGuide);
+    guideClose.addEventListener('click', closeGuide);
+    guideOverlay.addEventListener('click', closeGuide);
+
+    // Escape key closes the panel — standard accessible modal pattern.
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && guidePanel.classList.contains('open')) closeGuide();
+    });
+
+    guideTabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => {
+        guideTabs.forEach(t  => { t.classList.remove('active');
+                                   t.setAttribute('aria-selected', 'false'); });
+        guidePanels.forEach(p => p.classList.add('hidden'));
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
+        guidePanels[i].classList.remove('hidden');
+      });
+    });
+
+    // Accordion — each trigger collapses siblings before opening itself,
+    // so only one glossary term is expanded at a time.
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const item   = trigger.closest('.accordion-item');
+        const body   = item.querySelector('.accordion-body');
+        const isOpen = item.classList.contains('open');
+        // Collapse all siblings first so only one accordion item is open at a time.
+        trigger.closest('.accordion').querySelectorAll('.accordion-item').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.accordion-body').classList.remove('expanded');
+          i.querySelector('.accordion-trigger').setAttribute('aria-expanded', 'false');
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          body.classList.add('expanded');
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
   </script>
+
+
+  <!-- ==================================================================
+       SDMX Guide Panel
+       Floating trigger + slide-in reference panel with 3-tab navigation.
+       z-index stacking: btn(1000) < overlay(1001) < panel(1002).
+  ================================================================== -->
+
+  <!-- Backdrop — covers the page behind the panel; clicking it closes it -->
+  <div class="guide-overlay" aria-hidden="true"></div>
+
+  <!-- Floating trigger — fixed bottom-right corner -->
+  <button class="guide-btn"
+          aria-label="Open SDMX Reference Guide"
+          aria-expanded="false"
+          aria-controls="guide-panel">📖 SDMX Guide</button>
+
+  <!-- Slide-in reference panel -->
+  <!-- span used for title instead of h2 to avoid inheriting the global
+       h2 border-bottom rule which would produce a double border here. -->
+  <aside id="guide-panel"
+         class="guide-panel"
+         role="complementary"
+         aria-label="SDMX Reference Guide"
+         aria-hidden="true">
+
+    <div class="guide-panel-header">
+      <span class="guide-panel-title">SDMX Reference Guide</span>
+      <button class="guide-close" aria-label="Close SDMX Reference Guide">×</button>
+    </div>
+
+    <nav class="guide-tabs" role="tablist" aria-label="Guide sections">
+      <button class="guide-tab active"
+              role="tab"
+              aria-selected="true"
+              aria-controls="guide-tab-0">What is statpulse</button>
+      <button class="guide-tab"
+              role="tab"
+              aria-selected="false"
+              aria-controls="guide-tab-1">SDMX Explained</button>
+      <button class="guide-tab"
+              role="tab"
+              aria-selected="false"
+              aria-controls="guide-tab-2">How to Read This Dashboard</button>
+    </nav>
+
+    <div class="guide-tab-content">
+
+      <!-- ── Tab 1: What is statpulse ──────────────────────────────── -->
+      <div id="guide-tab-0" class="guide-tabpanel" role="tabpanel" aria-labelledby="gtab-0">
+
+        <h3 class="guide-section-title">What is statpulse?</h3>
+        <p class="guide-prose">statpulse is an automated API health monitoring platform
+          built specifically for the SIS-CC .Stat Suite — the open-source SDMX dissemination
+          platform used by OECD, national statistical institutes, and international
+          organisations to publish official statistics.</p>
+
+        <!-- CSS-only flow diagram — three boxes represent the monitoring pipeline -->
+        <div class="flow-diagram"
+             role="img"
+             aria-label="Architecture: GitHub Actions checks SDMX API every 6 hours, results shown in this dashboard">
+          <div class="flow-box">
+            <span class="flow-icon" aria-hidden="true">⚙️</span>
+            <span class="flow-label">GitHub Actions</span>
+            <span class="flow-desc">Runs every 6 hours</span>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-box">
+            <span class="flow-icon" aria-hidden="true">🌐</span>
+            <span class="flow-label">SIS-CC NSI API</span>
+            <span class="flow-desc">Live SDMX endpoints</span>
+          </div>
+          <span class="flow-arrow" aria-hidden="true">→</span>
+          <div class="flow-box">
+            <span class="flow-icon" aria-hidden="true">📊</span>
+            <span class="flow-label">This Dashboard</span>
+            <span class="flow-desc">GitHub Pages</span>
+          </div>
+        </div>
+
+        <h4 class="guide-subsection-title">Why it matters</h4>
+        <div class="why-cards">
+          <div class="why-card">
+            <span class="why-icon" aria-hidden="true">🔒</span>
+            <p class="why-title">Platform Reliability</p>
+            <p class="why-text">Statistical organisations depend on continuous API
+              availability. Downtime means analysts, policymakers, and citizens
+              cannot access official statistics.</p>
+          </div>
+          <div class="why-card">
+            <span class="why-icon" aria-hidden="true">📋</span>
+            <p class="why-title">Data Governance</p>
+            <p class="why-text">Tracking DSD and Codelist catalogue size over time
+              detects unreviewed structural changes before they affect
+              downstream consumers.</p>
+          </div>
+          <div class="why-card">
+            <span class="why-icon" aria-hidden="true">🌍</span>
+            <p class="why-title">Open Source Transparency</p>
+            <p class="why-text">statpulse runs entirely on free GitHub infrastructure
+              — no cloud costs, no vendor lock-in.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Tab 2: SDMX Explained ──────────────────────────────────── -->
+      <div id="guide-tab-1" class="guide-tabpanel hidden" role="tabpanel" aria-labelledby="gtab-1">
+
+        <h3 class="guide-section-title">Understanding SDMX</h3>
+        <p class="guide-prose">SDMX (Statistical Data and Metadata eXchange) is the
+          international standard for sharing official statistics. It defines both the data
+          format and the API protocol used by central banks, national statistics offices,
+          and international organisations worldwide.</p>
+
+        <!-- Single-open accordion — only one term expanded at a time (enforced by JS) -->
+        <div class="accordion" role="list" aria-label="SDMX glossary">
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-dsd">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              DSD — Data Structure Definition
+            </button>
+            <div class="accordion-body" id="gloss-dsd">
+              <div class="accordion-body-inner">
+                <p>The schema that defines the structure of a statistical dataset. A DSD specifies
+                  which dimensions are used (e.g. country, frequency, indicator), what codelists
+                  they reference, and which attributes accompany observations. Think of it as the
+                  table schema before any data is loaded.</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">.Stat Core</span>
+                  <span class="tag">DLM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-dataflow">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              Dataflow
+            </button>
+            <div class="accordion-body" id="gloss-dataflow">
+              <div class="accordion-body-inner">
+                <p>A named, published view of data that conforms to a DSD. While a DSD defines
+                  structure, a Dataflow is what end users actually query. The TOURISM_TRIPS
+                  dataset statpulse monitors is a Dataflow.</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">.Stat Core</span>
+                  <span class="tag">Data Explorer</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-codelist">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              Codelist
+            </button>
+            <div class="accordion-body" id="gloss-codelist">
+              <div class="accordion-body-inner">
+                <p>A controlled vocabulary of allowed values for a dimension or attribute.
+                  For example, a FREQ codelist contains codes like A (Annual), Q (Quarterly),
+                  M (Monthly). statpulse currently tracks 2,591 codelists on the SIS-CC demo
+                  instance.</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">.Stat Core</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-nsi">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              NSI Web Service
+            </button>
+            <div class="accordion-body" id="gloss-nsi">
+              <div class="accordion-body-inner">
+                <p>The National Statistics Instance web service — the SDMX REST API endpoint
+                  that .Stat Core exposes. statpulse monitors this layer directly. It handles
+                  both structural queries (/rest/datastructure) and data queries (/rest/data).</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">.Stat Core</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-gsbpm">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              GSBPM
+            </button>
+            <div class="accordion-body" id="gloss-gsbpm">
+              <div class="accordion-body-inner">
+                <p>The Generic Statistical Business Process Model — an international framework
+                  describing all phases of statistical production from Specify Needs to Evaluate.
+                  The .Stat Suite is designed to support the full GSBPM lifecycle.</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">Framework</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-constraint">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              Content Constraint
+            </button>
+            <div class="accordion-body" id="gloss-constraint">
+              <div class="accordion-body-inner">
+                <p>An SDMX artefact that restricts which dimension value combinations are valid
+                  for a given dataflow. It prevents users from querying impossible combinations
+                  and improves API performance by reducing result sets.</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">.Stat Core</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="accordion-item" role="listitem">
+            <button class="accordion-trigger" aria-expanded="false" aria-controls="gloss-transfer">
+              <span class="accordion-chevron" aria-hidden="true">▶</span>
+              Transfer Service
+            </button>
+            <div class="accordion-body" id="gloss-transfer">
+              <div class="accordion-body-inner">
+                <p>The .Stat Suite microservice responsible for loading data into the Core
+                  database. It handles validation (basic and advanced), queuing, and the
+                  /init/dataflow initialisation step required before data can be uploaded.</p>
+                <div class="tag-list" aria-label="Related modules">
+                  <span class="tag">.Stat Core</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <h4 class="guide-subsection-title">SDMX REST API Anatomy</h4>
+        <pre class="api-anatomy">GET https://nsi-demo-stable.siscc.org/rest/data/{agency},{dataflow},{version}/{key}
+                                                  ↑           ↑          ↑        ↑
+                                               Agency ID  Dataflow   Version   Filter Key</pre>
+
+        <div class="table-wrapper">
+          <table aria-label="Endpoints statpulse monitors and what each measures">
+            <thead>
+              <tr>
+                <th scope="col">What statpulse queries</th>
+                <th scope="col">Endpoint</th>
+                <th scope="col">What it measures</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Datastructure catalogue</td>
+                <td><code class="code-mono">/rest/datastructure/all/all/all</code></td>
+                <td>DSD count, availability</td>
+              </tr>
+              <tr>
+                <td>Tourism dataset</td>
+                <td><code class="code-mono">/rest/data/OECD.CFE,INBOUND@TOURISM_TRIPS,2.0</code></td>
+                <td>Data query speed</td>
+              </tr>
+              <tr>
+                <td>Codelist catalogue</td>
+                <td><code class="code-mono">/rest/codelist/all/all/latest</code></td>
+                <td>Codelist count, availability</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- ── Tab 3: How to Read This Dashboard ─────────────────────── -->
+      <div id="guide-tab-2" class="guide-tabpanel hidden" role="tabpanel" aria-labelledby="gtab-2">
+
+        <h3 class="guide-section-title">Reading the Dashboard</h3>
+
+        <div class="howto-block">
+          <span class="howto-icon" aria-hidden="true">🟢</span>
+          <div>
+            <p class="howto-title">Endpoint Status Cards</p>
+            <p class="howto-text">Each card represents one monitored SDMX API endpoint.
+              OPERATIONAL (green) = responding within thresholds. DEGRADED (yellow) =
+              response time is 2–3× above the rolling average. DOWN (red) = HTTP error
+              or timeout.</p>
+          </div>
+        </div>
+
+        <div class="howto-block">
+          <span class="howto-icon" aria-hidden="true">📈</span>
+          <div>
+            <p class="howto-title">Response Time Chart</p>
+            <p class="howto-text">Shows the last 20 health checks as a line chart. Each
+              coloured line is one endpoint. X-axis is time, Y-axis is milliseconds. Spikes
+              indicate temporary slowdowns; an upward trend may indicate infrastructure
+              issues.</p>
+          </div>
+        </div>
+
+        <div class="howto-block">
+          <span class="howto-icon" aria-hidden="true">⚠️</span>
+          <div>
+            <p class="howto-title">Anomaly Detection</p>
+            <p class="howto-text">statpulse computes a 10-check rolling average per endpoint.
+              Readings above 2× trigger a warning; above 3× trigger a critical alert.
+              Detection activates only after 5 or more data points are collected.</p>
+          </div>
+        </div>
+
+        <div class="howto-block">
+          <span class="howto-icon" aria-hidden="true">📊</span>
+          <div>
+            <p class="howto-title">Domain Metric Trends</p>
+            <p class="howto-text">Tracks domain-specific metrics: DSD catalogue count,
+              data query response size in KB, and Codelist count. Unexpected drops may
+              indicate structural deletions; spikes may indicate unreviewed uploads.</p>
+          </div>
+        </div>
+
+        <div class="howto-block">
+          <span class="howto-icon" aria-hidden="true">📋</span>
+          <div>
+            <p class="howto-title">Weekly Health Reports</p>
+            <p class="howto-text">Every Monday at 09:00 UTC, a GitHub Actions workflow
+              generates a structured platform health report as a GitHub Issue. The section
+              below fetches and renders these reports inline.</p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </aside>
 
 </body>
 </html>

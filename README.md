@@ -160,6 +160,16 @@ I welcome issues, ideas, and pull requests. Use the issue templates in `.github/
 - Governance layer: KPI framework, DSD audit checklist, GSBPM lifecycle diagram
 - Issue templates for user stories, SDMX artefact changes, and health alerts
 
+## Documentation
+
+| File | Purpose |
+|---|---|
+| [`docs/onboarding-guide.md`](docs/onboarding-guide.md) | Getting started with statpulse — dashboard sections, alert interpretation, manual checks, and escalation decision tree |
+| [`docs/add-new-endpoint.md`](docs/add-new-endpoint.md) | How to extend monitoring to new .Stat Suite instances — step-by-step with real code snippets |
+| [`docs/product-decision-log.md`](docs/product-decision-log.md) | Architectural decision rationale — GitHub Issues reporting, JSON health log, rolling anomaly detection, dual sparklines |
+| [`governance/user-research/`](governance/user-research/) | Usability testing plan, SUS survey, and GA4 analytics tracking plan |
+| [`governance/accessibility-audit.md`](governance/accessibility-audit.md) | WCAG 2.1 AA compliance report — automated axe-core scan of dashboard/index.html |
+
 ---
 
 *Built as a portfolio project for OECD SDD/SDPS PM role | Not officially affiliated with OECD or SIS-CC*

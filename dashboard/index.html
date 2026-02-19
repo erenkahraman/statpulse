@@ -1359,6 +1359,76 @@
       }
       .dataflow-grid { grid-template-columns: 1fr; }
     }
+
+    /* -----------------------------------------------------------------------
+       Catalogue Snapshot table — replaces Chart.js sparklines
+    ----------------------------------------------------------------------- */
+    .snap-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    .snap-table th {
+      text-align: left;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 4px 8px 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .snap-table td {
+      padding: 6px 8px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+    .snap-row-latest td:first-child { border-left: 3px solid var(--accent); padding-left: 6px; }
+    .snap-change-neutral { color: var(--text-muted); }
+
+    /* -----------------------------------------------------------------------
+       Accessibility status banner
+    ----------------------------------------------------------------------- */
+    .a11y-status-banner {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 16px;
+    }
+    .a11y-score-block { text-align: center; min-width: 80px; }
+    .a11y-score-number {
+      font-size: 32px;
+      font-weight: 800;
+      display: block;
+      color: var(--green);
+    }
+    .a11y-score-number.a11y-has-violations { color: var(--yellow); }
+    .a11y-score-number.a11y-has-critical   { color: var(--red); }
+    .a11y-score-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .a11y-wcag-badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: rgba(63,185,80,0.15);
+      color: var(--green);
+      border: 1px solid var(--green);
+      white-space: nowrap;
+    }
+    .a11y-wcag-badge.a11y-badge-warn {
+      background: rgba(210,153,34,0.15);
+      color: var(--yellow);
+      border-color: var(--yellow);
+    }
+    .a11y-audit-link { font-size: 12px; color: var(--accent); margin-left: auto; }
   </style>
 </head>
 <body>
@@ -2406,20 +2476,43 @@
           </div>
         </div>`;
 
-      const sparklineHtml = `
-        <div class="sparkline-wrapper">
-          <p class="sparkline-title">Catalogue size over last 20 checks</p>
-          <div class="sparkline-duo">
-            <div class="sparkline-item">
-              <p class="sparkline-item-label">Data Structures (DSDs)</p>
-              <canvas id="sparkline-dsd" height="80"></canvas>
-            </div>
-            <div class="sparkline-item">
-              <p class="sparkline-item-label">Codelists</p>
-              <canvas id="sparkline-cl" height="80"></canvas>
-            </div>
-          </div>
-        </div>`;
+      const sparklineHtml = (() => {
+        if (!sparkline || sparkline.length === 0) return '';
+        const rows = sparkline.slice(-10);
+        const rowsHtml = rows.map((r, i) => {
+          const prev = rows[i - 1];
+          let changeHtml;
+          if (i === 0) {
+            changeHtml = `<span class="snap-change-neutral">—</span>`;
+          } else {
+            const dsdDelta = (r.dsd ?? 0) - (prev.dsd ?? 0);
+            const clDelta  = (r.cl  ?? 0) - (prev.cl  ?? 0);
+            if (dsdDelta === 0 && clDelta === 0) {
+              changeHtml = `<span class="snap-change-neutral">No change</span>`;
+            } else {
+              const parts = [];
+              if (dsdDelta !== 0) parts.push(`<span class="${dsdDelta > 0 ? 'delta-positive' : 'delta-negative'}">${dsdDelta > 0 ? '+' : ''}${dsdDelta} DSDs</span>`);
+              if (clDelta  !== 0) parts.push(`<span class="${clDelta  > 0 ? 'delta-positive' : 'delta-negative'}">${clDelta  > 0 ? '+' : ''}${clDelta} CLs</span>`);
+              changeHtml = parts.join(' ');
+            }
+          }
+          const isLatest = i === rows.length - 1;
+          return `<tr${isLatest ? ' class="snap-row-latest"' : ''}>
+              <td>${formatLocal(r.t)}</td>
+              <td>${r.dsd != null ? r.dsd.toLocaleString() : '—'}</td>
+              <td>${r.cl  != null ? r.cl.toLocaleString()  : '—'}</td>
+              <td>${changeHtml}</td>
+            </tr>`;
+        }).join('');
+        return `
+          <div class="sparkline-wrapper">
+            <p class="sparkline-title">Catalogue Snapshot — last ${rows.length} checks</p>
+            <table class="snap-table">
+              <thead><tr><th>Timestamp</th><th>DSDs</th><th>Codelists</th><th>Change</th></tr></thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+          </div>`;
+      })();
 
       let timelineHtml;
       if (events.length === 0) {
@@ -2463,74 +2556,8 @@
 
       container.innerHTML = summaryHtml + sparklineHtml + timelineHtml + footerHtml;
 
-      if (sparkline.length > 0) {
-        /* Two independent charts prevent the 5× magnitude gap between DSD counts
-           (~530) and Codelist counts (~2591) from collapsing one series to the
-           chart floor on a shared Y-axis. Each chart auto-scales to its own range. */
-
-        if (window._sparkDsd) { window._sparkDsd.destroy(); }
-        if (window._sparkCl)  { window._sparkCl.destroy();  }
-
-        // min/max on Chart.js scale config must be static numbers — they are not
-        // scriptable options in Chart.js 4.x, so passing a callback is silently
-        // ignored (coerces to NaN → treated as unset → falls back to a 0 baseline).
-        // Compute the per-series bounds here, before building the config object.
-        // sparklineConfig takes pre-extracted plain number arrays so there is no
-        // object-to-number extraction inside the function — this makes yMin/yMax
-        // computation unambiguous and prevents undefined values in dataset.data.
-        const sparklineConfig = (labels, values, color, label) => {
-          const nums = values.filter(v => v != null);
-          const yMin = nums.length ? Math.floor(Math.min(...nums) * 0.98) : 0;
-          const yMax = nums.length ? Math.ceil(Math.max(...nums) * 1.02) : 100;
-          return {
-            type: 'line',
-            data: {
-              labels,
-              datasets: [{
-                label,
-                data: values,
-                borderColor: color,
-                backgroundColor: color + '1a',
-                borderWidth: 2,
-                pointRadius: values.length <= 5 ? 3 : 0,
-                fill: true,
-                tension: 0.3,
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              plugins: { legend: { display: false } },
-              scales: {
-                x: { display: false },
-                y: { display: false, min: yMin, max: yMax },
-              }
-            }
-          };
-        };
-
-        const sparkLabels = sparkline.map(r => new Date(r.t).toLocaleString());
-
-        window._sparkDsd = new Chart(
-          document.getElementById('sparkline-dsd'),
-          sparklineConfig(
-            sparkLabels,
-            sparkline.map(r => r.dsd ?? null),
-            '#2f81f7',
-            'DSDs'
-          )
-        );
-
-        window._sparkCl = new Chart(
-          document.getElementById('sparkline-cl'),
-          sparklineConfig(
-            sparkLabels,
-            sparkline.map(r => r.cl ?? null),
-            '#3fb950',
-            'Codelists'
-          )
-        );
-      }
+      if (window._sparkDsd) { window._sparkDsd.destroy(); window._sparkDsd = null; }
+      if (window._sparkCl)  { window._sparkCl.destroy();  window._sparkCl  = null; }
     }
 
     /* ── Platform Reports tab switching ──────────────────────────────────── */

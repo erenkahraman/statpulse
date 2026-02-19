@@ -10,7 +10,7 @@
 
 I built statpulse to demonstrate production-grade platform observability skills in the context of the SIS-CC .Stat Suite — the open-source SDMX dissemination platform that powers OECD's Data Explorer, country NSIs, and international statistical organisations.
 
-Every six hours, a GitHub Actions workflow calls three public, auth-free SDMX REST API endpoints on the SIS-CC demo environment. The results — HTTP status, response time, content-type validity, and domain-specific metrics like DSD catalogue size — are committed back to this repository as `data/health-log.json`. A self-contained GitHub Pages dashboard reads that file directly and renders uptime percentages, response-time charts, and data quality trends.
+Every six hours, a GitHub Actions workflow calls three public, auth-free SDMX REST API endpoints on the SIS-CC demo environment. The results — HTTP status, response time, content-type validity, and domain-specific metrics like DSD catalogue size — are committed back to this repository as `data/health-log.json`. A self-contained GitHub Pages dashboard reads that file directly and renders uptime percentages, response-time charts, anomaly detection alerts, a Catalogue Change Report with timeline and sparkline, a live SDMX Artefact Browser, an interactive SDMX Guide Panel, and weekly automated health reports as GitHub Issues.
 
 No backend. No database. No cloud bill.
 
@@ -44,7 +44,21 @@ flowchart LR
     A[GitHub Actions\ncron every 6h] -->|fetch| B[SIS-CC NSI\nPublic SDMX API]
     B -->|results| C[health-log.json\ncommitted to repo]
     C -->|served via| D[GitHub Pages\nDashboard]
+    D -->|weekly| E[GitHub Issues\nHealth Reports]
 ```
+
+## Dashboard Features
+
+| Feature | Description |
+|---|---|
+| Endpoint Status Cards | Live uptime and response time per SDMX endpoint |
+| Response Time Chart | Last 20 checks as a Chart.js line chart |
+| Anomaly Detection | 10-check rolling average — flags 2× and 3× deviations |
+| Domain Metric Trends | DSD count, response KB, Codelist count over time |
+| SDMX Artefact Browser | Live browsing of DSDs and Codelists from the NSI endpoint |
+| Catalogue Change Report | Timeline of structural catalogue changes with sparkline |
+| Weekly Health Reports | GitHub Issues auto-generated every Monday 09:00 UTC |
+| SDMX Guide Panel | Toggleable reference guide covering SDMX concepts and dashboard usage |
 
 ## Monitored Endpoints
 
@@ -78,6 +92,8 @@ Issue templates in `.github/ISSUE_TEMPLATE/` cover user stories, SDMX artefact c
 | DataStructure Catalogue Stability | ±5 of 30-day rolling avg | Daily |
 | Dashboard WCAG 2.1 AA | Zero critical violations | Per PR |
 | Community Issue Resolution | Bugs < 30d, Features < 90d | Monthly |
+
+*Catalogue stability is now tracked with per-check granularity via the Catalogue Change Report tab in the dashboard.*
 
 ## Local Development
 
@@ -117,18 +133,32 @@ I welcome issues, ideas, and pull requests. Use the issue templates in `.github/
 
 ## Changelog
 
-### v1.0.0 — 2025
+### v1.3.0 — February 2026
 
-- Initial release: three-endpoint SDMX monitoring via GitHub Actions
-- Self-contained GitHub Pages dashboard with Chart.js response-time visualisation
-- Governance layer: KPI framework, DSD audit checklist, GSBPM lifecycle diagram
-- Issue templates for user stories, SDMX artefact changes, and health alerts
+- Catalogue Change Report: timeline view of DSD and Codelist changes with sparkline chart and delta tables
+- SDMX Artefact Browser: live searchable, sortable table of DSDs and Codelists fetched directly from nsi-demo-stable.siscc.org
+- SDMX Guide Panel: toggleable overlay with three-tab reference guide covering platform architecture, SDMX concepts, and dashboard usage
+- Tabbed report interface: Weekly Health Reports and Catalogue Changes in a unified reports section
+- Anomaly detection: rolling average deviation alerts at 2× and 3× thresholds
+
+### v1.2.0 — February 2026
+
+- Anomaly detection with configurable rolling average window
+- Weekly automated platform health reports as GitHub Issues
+- Interactive report viewer fetching GitHub Issues API
 
 ### v1.1.0 — 2026
 
 - Rolling-average anomaly detection with warning/critical severity levels
 - Automated weekly platform health report as a GitHub Issue every Monday
 - Job description alignment section in README
+
+### v1.0.0 — 2025
+
+- Initial release: three-endpoint SDMX monitoring via GitHub Actions
+- Self-contained GitHub Pages dashboard with Chart.js response-time visualisation
+- Governance layer: KPI framework, DSD audit checklist, GSBPM lifecycle diagram
+- Issue templates for user stories, SDMX artefact changes, and health alerts
 
 ---
 

@@ -1057,6 +1057,308 @@
       .reports-section { padding: 0 16px 32px; }
       .catalogue-summary-grid { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* -----------------------------------------------------------------------
+       Tooltip — pure CSS hover; used on metric labels and score values
+    ----------------------------------------------------------------------- */
+    .tooltip-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tooltip-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: rgba(47,129,247,0.15);
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 700;
+      cursor: help;
+      flex-shrink: 0;
+    }
+
+    .tooltip-bubble {
+      position: absolute;
+      bottom: calc(100% + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2d333b;
+      color: var(--text-primary);
+      font-size: 11px;
+      line-height: 1.5;
+      padding: 8px 10px;
+      border-radius: 6px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 100;
+      max-width: 220px;
+      white-space: normal;
+      text-align: left;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .tooltip-wrap:hover .tooltip-bubble { opacity: 1; }
+
+    /* -----------------------------------------------------------------------
+       Contextual metric labels
+    ----------------------------------------------------------------------- */
+    .metric-context {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 2px;
+      opacity: 0.8;
+    }
+
+    /* -----------------------------------------------------------------------
+       Info banner — used in Catalogue Changes tab header
+    ----------------------------------------------------------------------- */
+    .info-banner {
+      display: flex;
+      flex-direction: row;
+      gap: 12px;
+      background: rgba(47,129,247,0.08);
+      border: 1px solid rgba(47,129,247,0.25);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .info-banner strong { color: var(--text-primary); }
+
+    .info-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    /* -----------------------------------------------------------------------
+       Platform Health Score widget
+    ----------------------------------------------------------------------- */
+    .health-score-widget {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 32px;
+      margin-bottom: 24px;
+      align-items: center;
+    }
+
+    .health-score-left {
+      text-align: center;
+      border-right: 1px solid var(--border);
+      padding-right: 32px;
+    }
+
+    .health-score-number {
+      font-size: 64px;
+      font-weight: 800;
+      line-height: 1;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .health-score-grade {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .health-score-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .health-score-right {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .score-breakdown-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .breakdown-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .breakdown-weight { opacity: 0.7; }
+
+    .breakdown-bar-track {
+      height: 6px;
+      background: var(--bg-primary);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    /* Width is set via JS style.width to trigger the CSS transition */
+    .breakdown-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      width: 0;
+      transition: width 0.8s ease;
+    }
+
+    /* -----------------------------------------------------------------------
+       Dataflow Explorer
+    ----------------------------------------------------------------------- */
+    .dataflow-controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      align-items: center;
+    }
+
+    .dataflow-search {
+      flex: 1;
+      background: var(--bg-card-alt);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 8px 12px;
+      border-radius: var(--radius);
+      font-size: 13px;
+      outline: none;
+      transition: box-shadow 0.15s, border-color 0.15s;
+    }
+
+    .dataflow-search:focus {
+      box-shadow: 0 0 0 2px rgba(47,129,247,0.3);
+      border-color: var(--accent);
+    }
+
+    .dataflow-counter {
+      font-size: 12px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .dataflow-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .dataflow-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: border-color 0.15s;
+    }
+
+    .dataflow-card:hover { border-color: rgba(47,129,247,0.4); }
+
+    /* Highlighted left border marks the dataflow currently monitored by statpulse */
+    .dataflow-card.monitored { border-left: 3px solid var(--accent); }
+
+    .dataflow-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.4;
+    }
+
+    .dataflow-meta {
+      font-size: 11px;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      color: var(--text-muted);
+    }
+
+    .dataflow-actions {
+      display: flex;
+      gap: 6px;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+
+    .dataflow-btn {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-muted);
+      transition: border-color 0.15s, color 0.15s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .dataflow-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .dataflow-btn.primary {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .dataflow-btn.primary:hover { background: var(--accent-hover); color: #fff; }
+
+    .dataflow-badge {
+      font-size: 10px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .dataflow-load-more {
+      display: block;
+      margin: 16px auto 0;
+      padding: 8px 24px;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 13px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .dataflow-load-more:hover { border-color: var(--accent); color: var(--accent); }
+
+    @media (max-width: 600px) {
+      .health-score-widget { grid-template-columns: 1fr; }
+      .health-score-left {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        padding-right: 0;
+        padding-bottom: 24px;
+      }
+      .dataflow-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1096,6 +1398,45 @@
   <!-- Main dashboard — hidden until data is ready -->
   <main id="dashboard" class="hidden" aria-label="API health dashboard">
 
+    <!-- Platform Health Score widget — computed from last 48h of log data -->
+    <div class="health-score-widget" id="health-score-widget" aria-label="Platform health score">
+      <div class="health-score-left">
+        <span class="health-score-number" id="hs-number">—</span>
+        <div class="health-score-grade" id="hs-grade">—</div>
+        <div class="health-score-label">Platform Health Score</div>
+      </div>
+      <div class="health-score-right">
+        <div class="score-breakdown-title">Score Breakdown (last 48h)</div>
+        <div class="breakdown-row">
+          <div class="breakdown-label-row">
+            <span>Availability</span>
+            <span class="breakdown-weight">50% weight — <span id="hs-avail-val">—</span></span>
+          </div>
+          <div class="breakdown-bar-track">
+            <div class="breakdown-bar-fill" id="hs-avail-bar" style="background:var(--green)"></div>
+          </div>
+        </div>
+        <div class="breakdown-row">
+          <div class="breakdown-label-row">
+            <span>Response Time</span>
+            <span class="breakdown-weight">30% weight — <span id="hs-resp-val">—</span></span>
+          </div>
+          <div class="breakdown-bar-track">
+            <div class="breakdown-bar-fill" id="hs-resp-bar" style="background:var(--accent)"></div>
+          </div>
+        </div>
+        <div class="breakdown-row">
+          <div class="breakdown-label-row">
+            <span>Anomaly-Free</span>
+            <span class="breakdown-weight">20% weight — <span id="hs-anom-val">—</span></span>
+          </div>
+          <div class="breakdown-bar-track">
+            <div class="breakdown-bar-fill" id="hs-anom-bar" style="background:var(--yellow)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Status cards -->
     <section aria-labelledby="status-heading">
       <h2 id="status-heading">Endpoint Status</h2>
@@ -1104,9 +1445,25 @@
       </div>
     </section>
 
+    <!-- SIS-CC Dataflow Explorer — live browsing of available SDMX dataflows -->
+    <section aria-labelledby="dataflow-heading">
+      <h2 id="dataflow-heading">SIS-CC Dataflow Explorer</h2>
+      <p class="section-subtitle">Live catalogue of available SDMX dataflows from the NSI demo environment. Dataflows marked <strong>Monitored</strong> are actively tracked by statpulse.</p>
+      <div id="dataflow-section">
+        <div class="dataflow-controls">
+          <input class="dataflow-search" id="dataflow-search" type="search"
+                 placeholder="Search dataflows by name or ID…" aria-label="Search dataflows" />
+          <span class="dataflow-counter" id="dataflow-counter"></span>
+        </div>
+        <div class="dataflow-grid" id="dataflow-grid" role="list" aria-label="SDMX dataflows"></div>
+        <button class="dataflow-load-more" id="dataflow-load-more" style="display:none">Load more</button>
+      </div>
+    </section>
+
     <!-- Anomaly detection info -->
     <section aria-labelledby="anomaly-heading">
       <h2 id="anomaly-heading">Anomaly Detection</h2>
+      <p class="section-subtitle">Statistical outlier detection using a rolling 10-check baseline — flags sudden performance degradation before it becomes user-visible downtime.</p>
       <p class="anomaly-description">
         Response times are compared against a 10-check rolling average.
         Deviations above 2× trigger a warning; above 3× trigger a critical alert.
@@ -1124,6 +1481,7 @@
     <!-- Extra-metric trends table -->
     <section aria-labelledby="metrics-heading">
       <h2 id="metrics-heading">Domain Metric Trends</h2>
+      <p class="section-subtitle">SDMX-specific payload metrics per check — DSD and Codelist catalogue size, plus Data Query response size. Changes here signal structural evolution of the SDMX data space.</p>
       <div class="table-wrapper">
         <table aria-label="Domain-specific metric values over time">
           <thead>
@@ -1177,6 +1535,10 @@
     </div>
 
     <div id="tab-catalogue" role="tabpanel" aria-labelledby="rtab-catalogue" class="hidden">
+      <div class="info-banner" role="note">
+        <span class="info-icon" aria-hidden="true">ℹ️</span>
+        <span><strong>How to read this report:</strong> Each entry in the timeline represents a 6-hour health check where the SDMX catalogue count changed from the previous snapshot. The sparkline charts show absolute DSD and Codelist totals over the last 20 checks — a rising line means artefacts were published; a drop means they were removed or archived. Net Change compares the latest check against the very first baseline recorded.</span>
+      </div>
       <div id="catalogue-container"><!-- Injected by JS after health-log.json loads --></div>
     </div>
   </section>
@@ -1396,15 +1758,27 @@
           </div>
           <div class="card-metrics">
             <div>
-              <div class="metric-label">Response time</div>
+              <div class="metric-label">
+                <span class="tooltip-wrap">Response time
+                  <span class="tooltip-trigger" aria-label="About response time">?</span>
+                  <span class="tooltip-bubble" role="tooltip">End-to-end HTTP response time measured from GitHub Actions runner. Target: &lt;3000ms (KPI p95).</span>
+                </span>
+              </div>
               <div class="metric-value ${responseClass(respMs)}">
                 ${respMs !== null ? respMs + 'ms' : '—'}
               </div>
+              <div class="metric-context">Latest check · target &lt;3000ms</div>
               ${anomalyHtml}
             </div>
             <div>
-              <div class="metric-label">Uptime (all checks)</div>
+              <div class="metric-label">
+                <span class="tooltip-wrap">Uptime (all checks)
+                  <span class="tooltip-trigger" aria-label="About uptime">?</span>
+                  <span class="tooltip-bubble" role="tooltip">Percentage of all recorded checks where the endpoint returned HTTP 200. Computed across all ${records.length} check${records.length !== 1 ? 's' : ''} in the log. Target: ≥99.5%.</span>
+                </span>
+              </div>
               <div class="metric-value ${uptimeClass(uptime)}">${uptime}</div>
+              <div class="metric-context">${records.length} check${records.length !== 1 ? 's' : ''} recorded · target ≥99.5%</div>
             </div>
           </div>
         `;
@@ -1508,6 +1882,78 @@
     }
 
     // -------------------------------------------------------------------------
+    // Platform Health Score
+    // -------------------------------------------------------------------------
+
+    /**
+     * Computes a weighted composite health score from the last 48 hours of log data.
+     * Weights: Availability 50%, Response Time 30%, Anomaly-Free 20%.
+     * @param {Array} logData
+     * @returns {{ score: number, grade: string, availability: number, responseTime: number, anomalyFree: number }}
+     */
+    function computeHealthScore(logData) {
+      const cutoff = Date.now() - 48 * 60 * 60 * 1000;
+      const recent = logData.filter(r => new Date(r.timestamp).getTime() >= cutoff);
+
+      if (recent.length === 0) {
+        return { score: null, grade: '—', availability: null, responseTime: null, anomalyFree: null };
+      }
+
+      // Availability: % of checks with ok===true
+      const okCount      = recent.filter(r => r.ok).length;
+      const availability = (okCount / recent.length) * 100;
+
+      // Response time score: linear scale 100 at ≤1000ms, 0 at ≥3000ms
+      const okRecords = recent.filter(r => r.ok && r.responseTimeMs != null);
+      let responseTime = 100;
+      if (okRecords.length > 0) {
+        const avgMs    = okRecords.reduce((s, r) => s + r.responseTimeMs, 0) / okRecords.length;
+        responseTime   = Math.max(0, Math.min(100, ((3000 - avgMs) / 2000) * 100));
+      }
+
+      // Anomaly-free: start 100, subtract 10 per detected anomaly, floor 0
+      const anomalyCount = recent.filter(r => r.anomaly?.detected).length;
+      const anomalyFree  = Math.max(0, 100 - anomalyCount * 10);
+
+      const score = availability * 0.5 + responseTime * 0.3 + anomalyFree * 0.2;
+      const grade = score >= 95 ? 'Excellent' : score >= 80 ? 'Good' : score >= 60 ? 'Fair' : 'Poor';
+
+      return { score: Math.round(score), grade, availability, responseTime, anomalyFree };
+    }
+
+    /**
+     * Populates the Platform Health Score widget with computed values and animates bars.
+     * @param {Array} logData
+     */
+    function renderHealthScore(logData) {
+      const { score, grade, availability, responseTime, anomalyFree } = computeHealthScore(logData);
+
+      if (score === null) return;
+
+      const $number = document.getElementById('hs-number');
+      const $grade  = document.getElementById('hs-grade');
+
+      $number.textContent = score;
+      $grade.textContent  = grade;
+
+      // Colour the score number by grade
+      const gradeColor = score >= 95 ? 'var(--green)' : score >= 80 ? 'var(--accent)' : score >= 60 ? 'var(--yellow)' : 'var(--red)';
+      $number.style.color = gradeColor;
+      $grade.style.color  = gradeColor;
+
+      document.getElementById('hs-avail-val').textContent  = availability.toFixed(1) + '%';
+      document.getElementById('hs-resp-val').textContent   = responseTime.toFixed(0) + '/100';
+      document.getElementById('hs-anom-val').textContent   = anomalyFree.toFixed(0) + '/100';
+
+      // Trigger CSS transition by setting widths in the next animation frame
+      requestAnimationFrame(() => {
+        document.getElementById('hs-avail-bar').style.width = availability + '%';
+        document.getElementById('hs-resp-bar').style.width  = responseTime + '%';
+        document.getElementById('hs-anom-bar').style.width  = anomalyFree + '%';
+      });
+    }
+
+    // -------------------------------------------------------------------------
     // Main data-fetch flow
     // -------------------------------------------------------------------------
 
@@ -1542,8 +1988,10 @@
         renderChart(groups);
         renderMetricsTable(groups);
         renderCatalogueReport(document.getElementById('catalogue-container'), log);
+        renderHealthScore(log);
 
         showDashboard();
+        initDataflowExplorer();
       } catch (err) {
         showError(`Network error: ${err.message}`);
       }
@@ -1932,11 +2380,21 @@
         <div class="catalogue-summary-grid">
           <div class="catalogue-stat-card">
             <span class="catalogue-stat-value">${summary.currentDsd ?? '—'}</span>
-            <span class="catalogue-stat-label">Current DSDs</span>
+            <span class="catalogue-stat-label">
+              <span class="tooltip-wrap">Current DSDs
+                <span class="tooltip-trigger" aria-label="About DSDs">?</span>
+                <span class="tooltip-bubble" role="tooltip">Data Structure Definitions — the SDMX artefacts that define dimensions, attributes, and measures for each statistical dataset.</span>
+              </span>
+            </span>
           </div>
           <div class="catalogue-stat-card">
             <span class="catalogue-stat-value">${summary.currentCodelist ?? '—'}</span>
-            <span class="catalogue-stat-label">Current Codelists</span>
+            <span class="catalogue-stat-label">
+              <span class="tooltip-wrap">Current Codelists
+                <span class="tooltip-trigger" aria-label="About Codelists">?</span>
+                <span class="tooltip-bubble" role="tooltip">Codelists define the allowed values for coded dimensions (e.g. country codes, frequency codes). Growth here often precedes new dataset publications.</span>
+              </span>
+            </span>
           </div>
           <div class="catalogue-stat-card">
             <span class="catalogue-stat-value ${netDsdClass}">${netDsdPrefix}${summary.dsdNetChange}</span>
@@ -2086,6 +2544,131 @@
     });
 
     initWeeklyReports();
+
+    /* ── SIS-CC Dataflow Explorer ─────────────────────────────────────────
+       Fetches the live dataflow catalogue from the NSI demo endpoint and
+       renders a searchable, paginated card grid. Runs after the main
+       dashboard data has been loaded (called from init()). */
+
+    const DATAFLOW_API_URL =
+      'https://nsi-demo-stable.siscc.org/rest/dataflow/all/all/latest' +
+      '?references=none&detail=allstubs';
+
+    // The INBOUND agency + TOURISM_TRIPS ID marks the dataflow statpulse monitors.
+    const MONITORED_FLOW_ID = 'TOURISM_TRIPS';
+
+    const PAGE_SIZE = 24;
+    let _allDataflows   = [];
+    let _filteredFlows  = [];
+    let _dfPage         = 0;
+    let _dfSearchTimer  = null;
+
+    function buildDataflowCard(df) {
+      const id       = df.id || '—';
+      const agency   = df.agencyID || '';
+      const version  = df.version  || '';
+      const name     = df.name || df.names?.en || id;
+      const isMonitored = id === MONITORED_FLOW_ID;
+
+      const dataUrl  = `https://nsi-demo-stable.siscc.org/rest/data/${agency},${id}@${agency}_${id},${version}`;
+      const structUrl= `https://nsi-demo-stable.siscc.org/rest/dataflow/${agency}/${id}/${version}`;
+
+      return `
+        <article class="dataflow-card${isMonitored ? ' monitored' : ''}" role="listitem"
+                 aria-label="${name} dataflow${isMonitored ? ' — monitored by statpulse' : ''}">
+          <div class="dataflow-name">${name}${isMonitored ? ' <span class="dataflow-badge">● Monitored</span>' : ''}</div>
+          <div class="dataflow-meta">${agency}/${id} v${version}</div>
+          <div class="dataflow-actions">
+            <a class="dataflow-btn primary" href="${dataUrl}" target="_blank" rel="noopener noreferrer">View Data</a>
+            <a class="dataflow-btn" href="${structUrl}" target="_blank" rel="noopener noreferrer">Structure</a>
+          </div>
+        </article>`;
+    }
+
+    function renderDataflowPage() {
+      const $grid   = document.getElementById('dataflow-grid');
+      const $more   = document.getElementById('dataflow-load-more');
+      const start   = _dfPage * PAGE_SIZE;
+      const slice   = _filteredFlows.slice(start, start + PAGE_SIZE);
+
+      if (_dfPage === 0) $grid.innerHTML = '';
+      $grid.insertAdjacentHTML('beforeend', slice.map(buildDataflowCard).join(''));
+      _dfPage++;
+
+      const shown = Math.min((_dfPage) * PAGE_SIZE, _filteredFlows.length);
+      document.getElementById('dataflow-counter').textContent =
+        `Showing ${shown} of ${_filteredFlows.length} dataflows`;
+
+      $more.style.display = shown < _filteredFlows.length ? 'block' : 'none';
+    }
+
+    function filterDataflows(query) {
+      const q = query.trim().toLowerCase();
+      _filteredFlows = q
+        ? _allDataflows.filter(df => {
+            const name = (df.name || df.names?.en || '').toLowerCase();
+            const id   = (df.id || '').toLowerCase();
+            return name.includes(q) || id.includes(q);
+          })
+        : [..._allDataflows];
+      _dfPage = 0;
+      renderDataflowPage();
+    }
+
+    async function initDataflowExplorer() {
+      const $grid    = document.getElementById('dataflow-grid');
+      const $search  = document.getElementById('dataflow-search');
+      const $more    = document.getElementById('dataflow-load-more');
+      const $counter = document.getElementById('dataflow-counter');
+
+      $grid.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:8px 0">Loading dataflows…</p>';
+
+      try {
+        const res = await fetch(DATAFLOW_API_URL, {
+          headers: { 'Accept': 'application/vnd.sdmx.structure+json;version=1.0' },
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const json = await res.json();
+        const flows = json?.data?.dataflows ?? [];
+
+        if (flows.length === 0) {
+          $grid.innerHTML = '<p style="color:var(--text-muted);font-size:13px;padding:8px 0">No dataflows returned by the API.</p>';
+          return;
+        }
+
+        // Sort monitored flow first, then alphabetically by name/id.
+        _allDataflows = flows.slice().sort((a, b) => {
+          if (a.id === MONITORED_FLOW_ID) return -1;
+          if (b.id === MONITORED_FLOW_ID) return  1;
+          const na = a.name || a.names?.en || a.id || '';
+          const nb = b.name || b.names?.en || b.id || '';
+          return na.localeCompare(nb);
+        });
+
+        _filteredFlows = [..._allDataflows];
+        $grid.innerHTML = '';
+        renderDataflowPage();
+
+        $search.addEventListener('input', e => {
+          clearTimeout(_dfSearchTimer);
+          _dfSearchTimer = setTimeout(() => filterDataflows(e.target.value), 300);
+        });
+
+        $more.addEventListener('click', renderDataflowPage);
+
+      } catch (err) {
+        // CORS or network error — give a graceful fallback with a direct API link.
+        $grid.innerHTML = `
+          <p style="color:var(--text-muted);font-size:13px;padding:8px 0;grid-column:1/-1">
+            Unable to load dataflows from the NSI API (${err.message}). This is likely a CORS restriction when running from GitHub Pages.<br>
+            <a href="${DATAFLOW_API_URL}" target="_blank" rel="noopener noreferrer"
+               style="color:var(--accent)">Browse the raw SDMX API response →</a>
+          </p>`;
+        $counter.textContent = '';
+      }
+    }
 
     /* ── SDMX Guide Panel ────────────────────────────────────────────────── */
     // The guide panel HTML is injected AFTER this <script> block, so any

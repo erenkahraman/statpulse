@@ -39,6 +39,10 @@
     .side-label { color: #334155; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 0 16px 8px; }
     .side-item { width: 100%; border: 0; border-left: 2px solid transparent; background: transparent; color: #64748b; display: flex; align-items: center; gap: 8px; padding: 7px 16px 7px 14px; text-align: left; font-size: 12px; }
     .side-item:hover, .side-item.active { color: #e2e8f0; background: rgba(59,130,246,0.08); border-left-color: #3b82f6; }
+    .side-section-note { font-size: 10px; color: #334155; padding: 0 16px 8px; line-height: 1.4; }
+    .side-item { flex-wrap: wrap; }
+    .side-item-sub { font-size: 10px; color: #334155; width: 100%; padding-left: 14px; margin-top: 1px; }
+    .side-item:hover .side-item-sub, .side-item.active .side-item-sub { color: #475569; }
     .dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 auto; }
     .dot-sis { background: #22c55e; }
     .dot-oecd { background: #3b82f6; }
@@ -123,6 +127,20 @@
     .detail-row { margin-bottom: 12px; }
     .detail-label { color: #64748b; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
     .detail-value { color: #e2e8f0; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 11px; overflow-wrap: anywhere; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal-box { background: #0d1117; border: 1px solid #1e2530; border-radius: 8px; width: min(900px, 94vw); max-height: 82vh; display: flex; flex-direction: column; }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #1e2530; flex-shrink: 0; }
+    .modal-title { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+    .modal-subtitle { font-size: 11px; color: #64748b; margin-top: 2px; }
+    .modal-close { background: none; border: none; color: #64748b; font-size: 22px; cursor: pointer; padding: 0 6px; line-height: 1; }
+    .modal-close:hover { color: #e2e8f0; }
+    .modal-toolbar { padding: 12px 18px; border-bottom: 1px solid #1e2530; display: flex; gap: 10px; flex-shrink: 0; }
+    .modal-toolbar input { flex: 1; }
+    .modal-toolbar select { width: 200px; }
+    .modal-body { overflow-y: auto; flex: 1; }
+    .modal-footer { padding: 10px 18px; border-top: 1px solid #1e2530; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-page-label { font-size: 12px; color: #64748b; }
     .footer-note { color: #334155; font-size: 11px; margin-top: 18px; }
     @media (max-width: 1100px) { .grid-5 { grid-template-columns: repeat(2, 1fr); } .grid-3, .two-col { grid-template-columns: 1fr; } }
     @media (max-width: 760px) {
@@ -156,7 +174,32 @@
   <div class="app-shell">
     <aside class="sidebar" aria-label="Monitoring navigation">
       <div class="side-group"><div class="side-label">SIS-CC Endpoints</div><button class="side-item active" data-view="overview" type="button"><span class="dot dot-sis"></span>Structures</button><button class="side-item" data-view="overview" type="button"><span class="dot dot-sis"></span>Data Query</button><button class="side-item" data-view="overview" type="button"><span class="dot dot-sis"></span>Codelists</button></div>
-      <div class="side-group"><div class="side-label">OECD Production</div><button class="side-item" data-view="oecd" type="button"><span class="dot dot-oecd"></span>CLI</button><button class="side-item" data-view="oecd" type="button"><span class="dot dot-oecd"></span>Unemployment</button><button class="side-item" data-view="oecd" type="button"><span class="dot dot-oecd"></span>GDP</button><button class="side-item" data-view="oecd" type="button"><span class="dot dot-oecd"></span>Health SHA</button><button class="side-item" data-view="catalogue" type="button"><span class="dot dot-oecd"></span>Dataflow Cat.</button></div>
+      <div class="side-group">
+        <div class="side-label">OECD Production</div>
+        <div class="side-section-note">
+          Live production endpoints actively monitored every 6h
+        </div>
+        <button class="side-item" data-view="oecd" type="button">
+          <span class="dot dot-oecd"></span>CLI
+          <span class="side-item-sub">Leading Indicators</span>
+        </button>
+        <button class="side-item" data-view="oecd" type="button">
+          <span class="dot dot-oecd"></span>Unemployment
+          <span class="side-item-sub">Monthly LFS</span>
+        </button>
+        <button class="side-item" data-view="oecd" type="button">
+          <span class="dot dot-oecd"></span>GDP
+          <span class="side-item-sub">National Accounts</span>
+        </button>
+        <button class="side-item" data-view="oecd" type="button">
+          <span class="dot dot-oecd"></span>Health SHA
+          <span class="side-item-sub">Expenditure</span>
+        </button>
+        <button class="side-item" data-view="catalogue" type="button">
+          <span class="dot dot-oecd"></span>Dataflow Cat.
+          <span class="side-item-sub">2,527 flows</span>
+        </button>
+      </div>
       <div class="side-group"><div class="side-label">Governance</div><button class="side-item" data-view="reports" type="button"><span class="dot dot-gov"></span>Weekly Reports</button><button class="side-item" data-view="governance" type="button"><span class="dot dot-gov"></span>KPI Dashboard</button><button class="side-item" data-view="governance" type="button"><span class="dot dot-gov"></span>Audit Log</button></div>
     </aside>
 
@@ -167,6 +210,43 @@
         <div class="grid-3" id="overview-oecd-cards"></div>
         <section class="panel" aria-labelledby="overview-catalogue-title"><div class="table-toolbar"><h2 id="overview-catalogue-title" class="table-title">OECD Dataflow Catalogue</h2><span class="badge badge-blue">LIVE</span></div><div class="search-row"><input id="overview-catalogue-search" type="search" placeholder="Search dataflows by name or ID" aria-label="Search OECD catalogue" /></div><div class="table-wrap"><table><thead><tr><th>Dataset name</th><th>Agency</th><th>Dataflow ID</th><th>Version</th><th>Status</th></tr></thead><tbody id="overview-catalogue-body"></tbody></table></div><button class="btn" id="overview-show-all" type="button">Show all</button></section>
         <section class="panel" aria-labelledby="sis-title"><h2 id="sis-title">SIS-CC .Stat Suite - Demo Instance</h2><div class="grid-3" id="sis-cards"></div><div class="chart-panel"><canvas id="sis-response-chart" aria-label="SIS-CC response time chart"></canvas></div></section>
+        <section class="panel" aria-labelledby="about-title">
+          <h2 id="about-title">About This Platform</h2>
+          <div class="grid-3">
+            <div class="card">
+              <div class="dataset-name">What is StatPulse?</div>
+              <p style="color:#94a3b8;font-size:12px;margin-top:8px;line-height:1.6">
+                StatPulse is an automated SDMX API monitoring and intelligence platform
+                built for the OECD statistical data ecosystem. It monitors production
+                OECD endpoints and the SIS-CC .Stat Suite demo instance every 6 hours,
+                detects anomalies, tracks catalogue changes, and publishes weekly
+                governance reports automatically.
+              </p>
+            </div>
+            <div class="card">
+              <div class="dataset-name">What is SDMX?</div>
+              <p style="color:#94a3b8;font-size:12px;margin-top:8px;line-height:1.6">
+                SDMX (Statistical Data and Metadata eXchange) is the international
+                standard used by OECD, Eurostat, IMF, World Bank, and national
+                statistics offices to share official statistics. StatPulse monitors
+                2,527 OECD dataflows across 47+ agencies via the SDMX REST API.
+              </p>
+            </div>
+            <div class="card">
+              <div class="dataset-name">Monitored Datasets</div>
+              <p style="color:#94a3b8;font-size:12px;margin-top:8px;line-height:1.6">
+                Composite Leading Indicators (CLI) · Monthly Unemployment Rates (LFS) ·
+                GDP National Accounts · Health Expenditure (SHA) · Full Dataflow
+                Catalogue · SIS-CC Structures, Data Query, and Codelists
+              </p>
+              <a href="https://github.com/erenkahraman/statpulse"
+                 target="_blank" rel="noopener"
+                 style="font-size:12px;margin-top:8px;display:inline-block">
+                View on GitHub →
+              </a>
+            </div>
+          </div>
+        </section>
       </section>
 
       <section id="view-oecd" class="view" aria-labelledby="oecd-title"><div class="page-bar"><div><h1 id="oecd-title">OECD Production</h1><p class="subtitle">Detailed monitoring for all production OECD SDMX endpoints.</p></div></div><div class="grid-auto" id="oecd-detail-cards"></div><section class="panel" aria-labelledby="oecd-chart-title"><h2 id="oecd-chart-title">OECD Response Time Comparison</h2><div class="chart-panel"><canvas id="oecd-response-chart" aria-label="OECD response time comparison chart"></canvas></div></section></section>
@@ -182,6 +262,51 @@
 
   <aside class="detail-panel" id="detail-panel" aria-label="Dataflow details" aria-hidden="true"><button class="btn" id="detail-close" type="button">Close</button><h3 id="detail-name">Dataflow</h3><div class="detail-row"><div class="detail-label">Agency</div><div class="detail-value" id="detail-agency"></div></div><div class="detail-row"><div class="detail-label">Version</div><div class="detail-value" id="detail-version"></div></div><div class="detail-row"><div class="detail-label">Direct SDMX API URL</div><a class="detail-value" id="detail-url" href="#" target="_blank" rel="noopener"></a></div></aside>
 
+  <div class="modal-overlay" id="catalogue-modal" role="dialog"
+       aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="modal-title">OECD Dataflow Catalogue</div>
+          <div class="modal-subtitle" id="modal-subtitle"></div>
+        </div>
+        <button class="modal-close" id="modal-close"
+                aria-label="Close catalogue">×</button>
+      </div>
+      <div class="modal-toolbar">
+        <input type="search" id="modal-search"
+               placeholder="Search by name or dataflow ID..."
+               aria-label="Search catalogue" />
+        <select id="modal-agency" aria-label="Filter by agency">
+          <option value="">All agencies</option>
+        </select>
+      </div>
+      <div class="modal-body">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Dataset name</th>
+                <th>Agency</th>
+                <th>Dataflow ID</th>
+                <th>Version</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="modal-catalogue-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <span class="modal-page-label" id="modal-page-label">Page 1</span>
+        <div class="actions">
+          <button class="btn" id="modal-prev" type="button">Prev</button>
+          <button class="btn" id="modal-next" type="button">Next</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const CONFIG = {
       endpoints: { sis: ['Structures', 'Data Query', 'Codelists'], oecdOrder: ['oecd_cli', 'oecd_unemployment', 'oecd_gdp', 'oecd_health', 'oecd_dataflows'], overviewOecd: ['oecd_cli', 'oecd_unemployment', 'oecd_gdp'], monitoredFlows: new Set(['DF_CLI', 'DF_IALFS_UNE_M', 'DF_NAAG_I', 'DF_SHA']) },
@@ -190,6 +315,7 @@
     };
     let healthLog = [], oecdLive = [], oecdCatalogue = null, reportIssues = [], catalogueFiltered = [];
     let renderedViews = new Set(), sisChart = null, oecdChart = null, cataloguePage = 0;
+    let modalPage = 0, modalFiltered = [];
     const $ = id => document.getElementById(id);
     const fmtNum = n => n == null || Number.isNaN(Number(n)) ? '-' : Number(n).toLocaleString();
     const pct = n => n == null ? '-' : `${Number(n).toFixed(1)}%`;
@@ -213,7 +339,92 @@
     function renderOverview() { const latest = latestOecdRecords(oecdLive); const anomalyCount = healthLog.filter(r => r.anomaly?.detected).length; const uptime48 = uptimeLast48h(); const kpis = $('overview-kpis'); kpis.textContent = ''; appendKpi(kpis, pct(uptime48), 'Platform Uptime', 'last 48h SIS-CC checks', uptime48 === 100 ? 'green' : uptime48 >= 99.5 ? 'green' : 'amber'); appendKpi(kpis, fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), 'OECD Dataflows', `${agencyCount()} agencies`, 'blue'); appendKpi(kpis, fmtNum(latest.oecd_cli?.recordCount), 'CLI Observations', 'latest production fetch'); appendKpi(kpis, fmtNum(latest.oecd_unemployment?.recordCount), 'Unemployment Obs.', 'latest production fetch'); appendKpi(kpis, fmtNum(anomalyCount), 'Anomalies Detected', 'all health-log records', anomalyCount > 0 ? 'amber' : 'green'); const cards = $('overview-oecd-cards'); cards.textContent = ''; CONFIG.endpoints.overviewOecd.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id }))); renderOverviewCatalogue(); renderSisHealth(); $('export-csv').addEventListener('click', exportCatalogueCsv); }
     function agencyCount() { const flows = oecdCatalogue?.flows || []; return new Set(flows.map(f => f.agencyID).filter(Boolean)).size; }
     function flowStatus(flow) { return CONFIG.endpoints.monitoredFlows.has(flow.id) ? ['Monitored', 'green'] : ['Available', 'blue']; }
-    function renderOverviewCatalogue(showAll = false) { const flows = oecdCatalogue?.flows || []; const query = $('overview-catalogue-search').value.toLowerCase().trim(); const rows = flows.filter(f => !query || (f.name || '').toLowerCase().includes(query) || (f.id || '').toLowerCase().includes(query)); $('overview-catalogue-title').textContent = `OECD Dataflow Catalogue - ${fmtNum(flows.length)} dataflows · ${fmtNum(agencyCount())} agencies`; const body = $('overview-catalogue-body'); body.textContent = ''; (showAll ? rows : rows.slice(0, 20)).forEach(flow => { const [text, cls] = flowStatus(flow); const tr = document.createElement('tr'); [flow.name, flow.agencyID, flow.id, flow.version, text].forEach((value, i) => { const td = document.createElement('td'); td.textContent = value || '-'; if (i === 4) td.className = cls; tr.appendChild(td); }); body.appendChild(tr); }); if (!flows.length) body.innerHTML = '<tr><td colspan="5" class="muted">Pending first fetch</td></tr>'; $('overview-show-all').textContent = showAll ? 'Showing all' : 'Show all'; $('overview-show-all').disabled = showAll; $('overview-show-all').onclick = () => renderOverviewCatalogue(true); $('overview-catalogue-search').oninput = () => renderOverviewCatalogue(false); }
+    function renderOverviewCatalogue() {
+      const flows = oecdCatalogue?.flows || [];
+      const query = $('overview-catalogue-search').value.toLowerCase().trim();
+      const rows = flows.filter(f =>
+        !query ||
+        (f.name || '').toLowerCase().includes(query) ||
+        (f.id || '').toLowerCase().includes(query)
+      );
+      $('overview-catalogue-title').textContent =
+        `OECD Dataflow Catalogue — ${fmtNum(flows.length)} dataflows · ${fmtNum(agencyCount())} agencies`;
+      const body = $('overview-catalogue-body');
+      body.textContent = '';
+      rows.slice(0, 20).forEach(flow => {
+        const [text, cls] = flowStatus(flow);
+        const tr = document.createElement('tr');
+        [flow.name, flow.agencyID, flow.id, flow.version, text].forEach((value, i) => {
+          const td = document.createElement('td');
+          td.textContent = value || '-';
+          if (i === 4) td.className = cls;
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+      if (!flows.length) {
+        body.innerHTML = '<tr><td colspan="5" class="muted">Pending first fetch</td></tr>';
+      }
+      $('overview-catalogue-search').oninput = () => renderOverviewCatalogue();
+      $('overview-show-all').onclick = openCatalogueModal;
+      $('overview-show-all').textContent = 'View all in full browser';
+      $('overview-show-all').disabled = false;
+    }
+    function openCatalogueModal() {
+      const flows = oecdCatalogue?.flows || [];
+      const modal = $('catalogue-modal');
+      const agencies = [...new Set(flows.map(f => f.agencyID).filter(Boolean))].sort();
+      const agencySelect = $('modal-agency');
+      agencySelect.replaceChildren(new Option('All agencies', ''));
+      agencies.forEach(a => agencySelect.appendChild(new Option(a, a)));
+      $('modal-subtitle').textContent =
+        `${fmtNum(flows.length)} dataflows across ${fmtNum(agencies.length)} agencies`;
+      modalPage = 0;
+      modalFiltered = flows;
+      $('modal-search').value = '';
+      $('modal-agency').value = '';
+      renderModalRows();
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      $('modal-search').focus();
+    }
+    function closeCatalogueModal() {
+      $('catalogue-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    function renderModalRows() {
+      const flows = oecdCatalogue?.flows || [];
+      const q = $('modal-search').value.toLowerCase().trim();
+      const agency = $('modal-agency').value;
+      modalFiltered = flows.filter(f => {
+        const matchSearch = !q ||
+          (f.name || '').toLowerCase().includes(q) ||
+          (f.id || '').toLowerCase().includes(q);
+        return matchSearch && (!agency || f.agencyID === agency);
+      });
+      const maxPage = Math.max(0, Math.ceil(modalFiltered.length / 50) - 1);
+      modalPage = Math.min(modalPage, maxPage);
+      const body = $('modal-catalogue-body');
+      body.textContent = '';
+      modalFiltered.slice(modalPage * 50, modalPage * 50 + 50).forEach(flow => {
+        const [text, cls] = flowStatus(flow);
+        const tr = document.createElement('tr');
+        [flow.name, flow.agencyID, flow.id, flow.version, text].forEach((value, i) => {
+          const td = document.createElement('td');
+          td.textContent = value || '-';
+          if (i === 4) td.className = cls;
+          tr.appendChild(td);
+        });
+        body.appendChild(tr);
+      });
+      if (!modalFiltered.length) {
+        body.innerHTML = '<tr><td colspan="5" class="muted">No results</td></tr>';
+      }
+      $('modal-page-label').textContent =
+        `Page ${modalPage + 1} of ${maxPage + 1} · ${fmtNum(modalFiltered.length)} results`;
+      $('modal-prev').disabled = modalPage === 0;
+      $('modal-next').disabled = modalPage >= maxPage;
+    }
     function renderSisHealth() { const groups = groupByEndpoint(healthLog); const latest = latestSisRecords(); const cards = $('sis-cards'); cards.textContent = ''; CONFIG.endpoints.sis.forEach(name => { const record = latest[name]; const badge = statusBadge(record); const article = document.createElement('article'); article.className = 'card endpoint-card'; article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Uptime</div></div></div>`; article.querySelector('.dataset-name').textContent = name; const vals = article.querySelectorAll('.metric-value'); vals[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; vals[0].classList.add(responseClass(record?.responseTimeMs)); vals[1].textContent = pct(uptime(groups[name] || [])); cards.appendChild(article); }); renderSisChart(groups); }
     function renderSisChart(groups) { if (sisChart) sisChart.destroy(); const ref = (groups.Structures || []).slice(-20); sisChart = new Chart($('sis-response-chart'), { type: 'line', data: { labels: ref.map(r => utcTime(r.timestamp)), datasets: CONFIG.endpoints.sis.map((name, i) => ({ label: name, data: (groups[name] || []).slice(-20).map(r => r.responseTimeMs), borderColor: [CONFIG.colors.green, CONFIG.colors.blue, CONFIG.colors.amber][i], backgroundColor: 'transparent', tension: .25, borderWidth: 2 })) }, options: chartOptions('Response time (ms)') }); }
     function renderOecdProduction() { const latest = latestOecdRecords(oecdLive); const cards = $('oecd-detail-cards'); cards.textContent = ''; CONFIG.endpoints.oecdOrder.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id, detail: true }))); renderOecdChart(); }
@@ -232,6 +443,19 @@
     function renderGovernance() { const up = uptimeLast48h(); const p95ms = p95(healthLog.filter(r => r.ok).map(r => r.responseTimeMs)); const anomalyRate = healthLog.length ? healthLog.filter(r => r.anomaly?.detected).length / healthLog.length * 100 : null; const latestStamp = [...healthLog.map(r => r.timestamp), ...oecdLive.map(r => r.timestamp)].filter(Boolean).sort().pop(); const freshHours = latestStamp ? (Date.now() - new Date(latestStamp).getTime()) / 3600000 : Infinity; const rows = [['API Availability', '>=99.5%', pct(up), up >= 99.5], ['Response Time p95', '<3000ms', p95ms == null ? '-' : `${Math.round(p95ms)}ms`, p95ms != null && p95ms < 3000], ['Anomaly Rate', '<5%', pct(anomalyRate), anomalyRate != null && anomalyRate < 5], ['Catalogue Coverage', '2527 flows', fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), (oecdCatalogue?.flows?.length || 0) >= 2527], ['Report Cadence', 'Weekly', 'on schedule', true], ['OECD Data Freshness', '<24h', Number.isFinite(freshHours) ? `${freshHours.toFixed(1)}h` : '-', freshHours < 24]]; const body = $('governance-kpis'); body.textContent = ''; rows.forEach(([name, target, current, ok]) => { const tr = document.createElement('tr'); [name, target, current, ok ? '●' : '○', ok ? 'Stable' : 'Needs review'].forEach((value, i) => { const td = document.createElement('td'); td.textContent = value; if (i >= 3) td.className = ok ? 'green' : 'amber'; tr.appendChild(td); }); body.appendChild(tr); }); }
     function exportCatalogueCsv() { const flows = oecdCatalogue?.flows || []; const rows = [['Agency', 'ID', 'Name', 'Version'], ...flows.map(f => [f.agencyID, f.id, f.name, f.version])]; const csv = rows.map(r => r.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',')).join('\n'); const blob = new Blob([csv], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'oecd-catalogue.csv'; a.click(); URL.revokeObjectURL(url); }
     document.querySelectorAll('[data-view]').forEach(el => el.addEventListener('click', () => showView(el.dataset.view, el)));
+    $('modal-close').addEventListener('click', closeCatalogueModal);
+    $('catalogue-modal').addEventListener('click', e => {
+      if (e.target === $('catalogue-modal')) closeCatalogueModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && $('catalogue-modal').classList.contains('open')) {
+        closeCatalogueModal();
+      }
+    });
+    $('modal-search').addEventListener('input', () => { modalPage = 0; renderModalRows(); });
+    $('modal-agency').addEventListener('change', () => { modalPage = 0; renderModalRows(); });
+    $('modal-prev').addEventListener('click', () => { modalPage--; renderModalRows(); });
+    $('modal-next').addEventListener('click', () => { modalPage++; renderModalRows(); });
     loadData();
   </script>
 </body>

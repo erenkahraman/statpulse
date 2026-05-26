@@ -1,0 +1,41 @@
+name: Update Vercel Dashboard Data
+
+on:
+  workflow_run:
+    workflows:
+      - API Health Check
+    types:
+      - completed
+
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-vercel-data:
+    name: Sync dashboard data files for Vercel
+    runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy data files into dashboard directory
+        run: |
+          cp data/health-log.json dashboard/health-log.json
+          cp data/oecd-live.json dashboard/oecd-live.json
+          cp data/oecd-catalogue.json dashboard/oecd-catalogue.json
+
+      - name: Commit synced dashboard data
+        run: |
+          git config user.name "statpulse-bot"
+          git config user.email "statpulse-bot@users.noreply.github.com"
+
+          git add dashboard/health-log.json dashboard/oecd-live.json dashboard/oecd-catalogue.json
+
+          git diff --staged --quiet || git commit -m "chore(data): sync dashboard data for Vercel [skip ci]"
+
+          git push

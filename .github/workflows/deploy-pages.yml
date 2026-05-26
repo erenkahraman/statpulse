@@ -38,6 +38,7 @@ jobs:
   deploy:
     name: Build and deploy dashboard to GitHub Pages
     runs-on: ubuntu-latest
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     timeout-minutes: 10
     environment:
       name: github-pages
@@ -50,10 +51,13 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Copy health log into dashboard directory
-        # The dashboard fetches health-log.json relative to itself, so the
-        # data file must live alongside index.html in the Pages artifact.
-        run: cp data/health-log.json dashboard/health-log.json
+      - name: Copy data files into dashboard directory
+        # The dashboard fetches JSON data relative to itself, so the data files
+        # must live alongside index.html in the Pages artifact.
+        run: |
+          cp data/health-log.json dashboard/health-log.json
+          if [ -f data/oecd-live.json ]; then cp data/oecd-live.json dashboard/oecd-live.json; else printf '[]\n' > dashboard/oecd-live.json; fi
+          if [ -f data/oecd-catalogue.json ]; then cp data/oecd-catalogue.json dashboard/oecd-catalogue.json; else printf '{"fetchedAt":null,"totalFlows":0,"flows":[]}\n' > dashboard/oecd-catalogue.json; fi
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

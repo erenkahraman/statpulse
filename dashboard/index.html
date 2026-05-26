@@ -217,6 +217,47 @@
       border-radius: var(--radius);
     }
 
+    .oecd-status-message {
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 16px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .oecd-catalogue-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .oecd-catalogue-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .oecd-catalogue-search,
+    .oecd-agency-filter {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font: inherit;
+      padding: 8px 10px;
+    }
+
+    .oecd-catalogue-search {
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .oecd-agency-filter { min-width: 180px; }
+
     /* -----------------------------------------------------------------------
        Charts
     ----------------------------------------------------------------------- */
@@ -1444,7 +1485,7 @@
 
   <header>
     <div class="header-title">
-      <div class="wordmark">statpulse</div>
+      <h1 class="wordmark">statpulse</h1>
       <div class="subtitle">SIS-CC .Stat Suite API Monitor</div>
     </div>
     <div class="header-meta">
@@ -1461,6 +1502,8 @@
       </svg>
     </a>
   </header>
+
+  <main id="main-content" aria-label="StatPulse dashboard">
 
   <!-- Loading state — visible until data loads or an error occurs -->
   <div id="loading-state" class="state-container" role="status" aria-live="polite" aria-label="Loading health data">
@@ -1484,7 +1527,7 @@
   </div>
 
   <!-- Main dashboard — hidden until data is ready -->
-  <main id="dashboard" class="hidden" aria-label="API health dashboard">
+  <div id="dashboard" class="hidden" aria-label="API health dashboard">
 
     <!-- Platform Health Score widget — computed from last 48h of log data -->
     <div class="health-score-widget" id="health-score-widget" aria-label="Platform health score">
@@ -1554,6 +1597,51 @@
     </section>
 
     <!-- SIS-CC Dataflow Explorer — live browsing of available SDMX dataflows -->
+    <!-- OECD production status -->
+    <section aria-labelledby="oecd-status-heading">
+      <h2 id="oecd-status-heading">OECD Production Status</h2>
+      <div id="oecd-status-message" class="oecd-status-message" role="status">OECD data loading - first fetch pending</div>
+      <div class="cards-grid hidden" id="oecd-status-cards" role="list" aria-label="OECD production status cards"></div>
+    </section>
+
+    <!-- OECD dataflow catalogue -->
+    <section aria-labelledby="oecd-catalogue-heading">
+      <h2 id="oecd-catalogue-heading">OECD Dataflow Catalogue</h2>
+      <div id="oecd-catalogue-message" class="oecd-status-message" role="status">Catalogue fetch pending</div>
+      <div id="oecd-catalogue-content" class="hidden">
+        <div class="oecd-catalogue-summary">
+          <div class="card">
+            <div class="metric-label">Dataflows</div>
+            <div class="metric-value" id="oecd-flow-count">-</div>
+          </div>
+          <div class="card">
+            <div class="metric-label">Agencies</div>
+            <div class="metric-value" id="oecd-agency-count">-</div>
+          </div>
+        </div>
+        <div class="oecd-catalogue-controls">
+          <input class="oecd-catalogue-search" id="oecd-catalogue-search" type="search"
+                 placeholder="Search OECD dataflows by name or ID..." aria-label="Search OECD dataflows" />
+          <select class="oecd-agency-filter" id="oecd-agency-filter" aria-label="Filter OECD dataflows by agency">
+            <option value="">All agencies</option>
+          </select>
+        </div>
+        <div class="table-wrapper">
+          <table aria-label="OECD dataflow catalogue">
+            <thead>
+              <tr>
+                <th scope="col">Agency</th>
+                <th scope="col">ID</th>
+                <th scope="col">Name</th>
+                <th scope="col">Version</th>
+              </tr>
+            </thead>
+            <tbody id="oecd-catalogue-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <section aria-labelledby="dataflow-heading">
       <h2 id="dataflow-heading">SIS-CC Dataflow Explorer</h2>
       <p class="section-subtitle">Live catalogue of available SDMX dataflows from the NSI demo environment. Dataflows marked <strong>Monitored</strong> are actively tracked by statpulse.</p>
@@ -1607,7 +1695,7 @@
       </div>
     </section>
 
-  </main>
+  </div>
 
   <!-- Platform Reports — tabbed section with Weekly Health Reports and Catalogue Changes.
        The weekly tab fetches GitHub Issues API independently of health-log.json so it
@@ -1650,6 +1738,8 @@
       <div id="catalogue-container"><!-- Injected by JS after health-log.json loads --></div>
     </div>
   </section>
+
+  </main>
 
   <footer>
     <div>
@@ -2110,6 +2200,162 @@
     // -------------------------------------------------------------------------
     // Weekly reports — GitHub Issues integration
     // -------------------------------------------------------------------------
+
+    const OECD_ENDPOINT_ORDER = ['oecd_cli', 'oecd_gdp', 'oecd_health', 'oecd_dataflows'];
+    let _oecdCatalogueFlows = [];
+
+    function oecdBadge(record) {
+      if (!record) return { label: 'PENDING', cssClass: 'badge-pending' };
+      if (!record.ok) return { label: 'DOWN', cssClass: 'badge-down' };
+      return { label: 'OPERATIONAL', cssClass: 'badge-operational' };
+    }
+
+    function latestOecdRecords(log) {
+      const byId = {};
+      for (const record of log) {
+        if (!byId[record.id] || record.timestamp > byId[record.id].timestamp) {
+          byId[record.id] = record;
+        }
+      }
+      return byId;
+    }
+
+    async function initOecdProductionStatus() {
+      const message = document.getElementById('oecd-status-message');
+      const cards = document.getElementById('oecd-status-cards');
+
+      try {
+        const res = await fetch('./oecd-live.json');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const log = await res.json();
+        if (!Array.isArray(log) || log.length === 0) throw new Error('empty log');
+
+        const latest = latestOecdRecords(log);
+        cards.innerHTML = '';
+
+        for (const id of OECD_ENDPOINT_ORDER) {
+          const record = latest[id];
+          const badge = oecdBadge(record);
+          const article = document.createElement('article');
+          article.className = 'card';
+          article.setAttribute('role', 'listitem');
+
+          const header = document.createElement('div');
+          header.className = 'card-header';
+          const name = document.createElement('span');
+          name.className = 'card-name';
+          name.textContent = record?.name || id;
+          const status = document.createElement('span');
+          status.className = `badge ${badge.cssClass}`;
+          status.setAttribute('role', 'status');
+          status.textContent = badge.label;
+          header.append(name, status);
+
+          const metrics = document.createElement('div');
+          metrics.className = 'card-metrics';
+
+          const responseWrap = document.createElement('div');
+          const responseLabel = document.createElement('div');
+          responseLabel.className = 'metric-label';
+          responseLabel.textContent = 'Response time';
+          const responseValue = document.createElement('div');
+          responseValue.className = `metric-value ${responseClass(record?.responseTimeMs)}`;
+          responseValue.textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-';
+          const agency = document.createElement('div');
+          agency.className = 'metric-context';
+          agency.textContent = record?.agency || '-';
+          responseWrap.append(responseLabel, responseValue, agency);
+
+          const countWrap = document.createElement('div');
+          const countLabel = document.createElement('div');
+          countLabel.className = 'metric-label';
+          countLabel.textContent = record?.id === 'oecd_dataflows' ? 'Catalogue size' : 'Record count';
+          const countValue = document.createElement('div');
+          countValue.className = 'metric-value';
+          const count = record?.id === 'oecd_dataflows' ? record.catalogueSize : record?.recordCount;
+          countValue.textContent = count != null ? String(count) : '-';
+          const updated = document.createElement('div');
+          updated.className = 'metric-context';
+          updated.textContent = record?.timestamp ? `Updated ${formatLocal(record.timestamp)}` : 'First fetch pending';
+          countWrap.append(countLabel, countValue, updated);
+
+          metrics.append(responseWrap, countWrap);
+          article.append(header, metrics);
+          cards.appendChild(article);
+        }
+
+        message.classList.add('hidden');
+        cards.classList.remove('hidden');
+      } catch {
+        message.textContent = 'OECD data loading - first fetch pending';
+        cards.classList.add('hidden');
+      }
+    }
+
+    function renderOecdCatalogueRows() {
+      const tbody = document.getElementById('oecd-catalogue-tbody');
+      const search = document.getElementById('oecd-catalogue-search').value.trim().toLowerCase();
+      const agency = document.getElementById('oecd-agency-filter').value;
+      const rows = _oecdCatalogueFlows.filter(flow => {
+        const matchesSearch = !search
+          || (flow.name || '').toLowerCase().includes(search)
+          || (flow.id || '').toLowerCase().includes(search);
+        const matchesAgency = !agency || flow.agencyID === agency;
+        return matchesSearch && matchesAgency;
+      });
+
+      tbody.innerHTML = '';
+      for (const flow of rows) {
+        const tr = document.createElement('tr');
+        for (const value of [flow.agencyID, flow.id, flow.name, flow.version]) {
+          const td = document.createElement('td');
+          td.textContent = value || '-';
+          tr.appendChild(td);
+        }
+        tbody.appendChild(tr);
+      }
+    }
+
+    async function initOecdCatalogue() {
+      const message = document.getElementById('oecd-catalogue-message');
+      const content = document.getElementById('oecd-catalogue-content');
+      const agencyFilter = document.getElementById('oecd-agency-filter');
+      const search = document.getElementById('oecd-catalogue-search');
+
+      try {
+        const res = await fetch('./oecd-catalogue.json');
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const catalogue = await res.json();
+        const flows = Array.isArray(catalogue.flows) ? catalogue.flows : [];
+        if (flows.length === 0) throw new Error('empty catalogue');
+
+        _oecdCatalogueFlows = flows;
+        const agencies = [...new Set(flows.map(f => f.agencyID).filter(Boolean))].sort();
+        document.getElementById('oecd-flow-count').textContent = String(flows.length);
+        document.getElementById('oecd-agency-count').textContent = String(agencies.length);
+
+        agencyFilter.replaceChildren(agencyFilter.options[0]);
+        for (const agency of agencies) {
+          const option = document.createElement('option');
+          option.value = agency;
+          option.textContent = agency;
+          agencyFilter.appendChild(option);
+        }
+
+        search.addEventListener('input', renderOecdCatalogueRows);
+        agencyFilter.addEventListener('change', renderOecdCatalogueRows);
+        renderOecdCatalogueRows();
+
+        message.classList.add('hidden');
+        content.classList.remove('hidden');
+      } catch {
+        message.textContent = 'Catalogue fetch pending';
+        content.classList.add('hidden');
+      }
+    }
+
+    initOecdProductionStatus();
+    initOecdCatalogue();
 
     const REPORTS_API_URL =
       'https://api.github.com/repos/erenkahraman/statpulse/issues' +
@@ -2647,8 +2893,8 @@
 
       return `
         <article class="dataflow-card${isMonitored ? ' monitored' : ''}" role="listitem"
-                 aria-label="${name} dataflow${isMonitored ? ' — monitored by statpulse' : ''}">
-          <div class="dataflow-name">${name}${isMonitored ? ' <span class="dataflow-badge">● Monitored</span>' : ''}</div>
+                 aria-label="SDMX dataflow${isMonitored ? ' - monitored by statpulse' : ''}">
+          <div class="dataflow-name"><span class="dataflow-name-text"></span>${isMonitored ? ' <span class="dataflow-badge">● Monitored</span>' : ''}</div>
           <div class="dataflow-meta">${agency}/${id} v${version}</div>
           <div class="dataflow-actions">
             <a class="dataflow-btn primary" href="${dataUrl}" target="_blank" rel="noopener noreferrer">View Data</a>
@@ -2665,6 +2911,11 @@
 
       if (_dfPage === 0) $grid.innerHTML = '';
       $grid.insertAdjacentHTML('beforeend', slice.map(buildDataflowCard).join(''));
+      const nameSpans = Array.from($grid.querySelectorAll('.dataflow-name-text')).slice(-slice.length);
+      nameSpans.forEach((span, i) => {
+        const df = slice[i];
+        span.textContent = df.name || df.names?.en || df.id || '-';
+      });
       _dfPage++;
 
       const shown = Math.min((_dfPage) * PAGE_SIZE, _filteredFlows.length);

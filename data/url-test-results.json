@@ -1,0 +1,32 @@
+[
+  {
+    "label": "CLI_official_doc",
+    "status": 200,
+    "preview": "STRUCTURE,STRUCTURE_ID,STRUCTURE_NAME,ACTION,REF_AREA,Reference area,FREQ,Frequency of observation,MEASURE,Measure,UNIT_MEASURE,Unit of measure,ACTIVITY,Economic activity,ADJUSTMENT,Adjustment,TRANSFO"
+  },
+  {
+    "label": "CLI_no_version",
+    "status": 500,
+    "preview": "languageTag1"
+  },
+  {
+    "label": "CLI_all_key",
+    "status": 404,
+    "preview": "Could not find Dataflow and/or DSD related with this data request"
+  },
+  {
+    "label": "UNE_rbloggers",
+    "status": 500,
+    "preview": "languageTag1"
+  },
+  {
+    "label": "GDP_all",
+    "status": 500,
+    "preview": "languageTag1"
+  },
+  {
+    "label": "CLI_structure",
+    "status": 200,
+    "preview": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r <!--NSI Web Service v8.19.8.0-->\r <message:Structure xmlns:message=\"http://www.sdmx.org/resources/sdmxml/schemas/v2_1/message\" xmlns:structure=\"http://www.sdmx."
+  }
+]

@@ -10,7 +10,7 @@
 
 I built statpulse to demonstrate production-grade platform observability skills in the context of the SIS-CC .Stat Suite — the open-source SDMX dissemination platform that powers OECD's Data Explorer, country NSIs, and international statistical organisations.
 
-Every six hours, a GitHub Actions workflow calls three public, auth-free SDMX REST API endpoints on the SIS-CC demo environment. The results — HTTP status, response time, content-type validity, and domain-specific metrics like DSD catalogue size — are committed back to this repository as `data/health-log.json`. A self-contained GitHub Pages dashboard reads that file directly and renders uptime percentages, response-time charts, anomaly detection alerts, a Catalogue Change Report with timeline and snapshot table, a live SDMX Artefact Browser, a Dataflow Explorer, an interactive SDMX Guide Panel, and weekly automated health reports as GitHub Issues.
+Every six hours, a GitHub Actions workflow calls three public, auth-free SDMX REST API endpoints on the SIS-CC demo environment. The results — HTTP status, response time, content-type validity, and domain-specific metrics like DSD catalogue size — are committed back to this repository as `data/health-log.json`. A self-contained GitHub Pages dashboard reads that file directly and renders uptime percentages, response-time charts, anomaly detection alerts, a Catalogue Change Report with timeline and snapshot table, a Dataflow Explorer, an interactive SDMX Guide Panel, and weekly automated health reports as GitHub Issues.
 
 No backend. No database. No cloud bill.
 
@@ -56,7 +56,7 @@ flowchart LR
 | Response Time Chart | Last 20 checks as a Chart.js line chart per endpoint |
 | Anomaly Detection | 10-check rolling average — flags 2× (warning) and 3× (critical) deviations |
 | Domain Metric Trends | DSD count, response KB, Codelist count over time |
-| SDMX Artefact Browser | Live searchable, sortable DSDs and Codelists tabs fetched directly from the NSI endpoint |
+| SDMX Artefact Browser | Roadmap: searchable DSD and Codelist tabs fetched directly from the NSI endpoint |
 | Dataflow Explorer | Browse and search all available SDMX dataflows on the SIS-CC demo instance |
 | Catalogue Change Report | Timeline of structural catalogue changes with 10-check snapshot table (Timestamp, DSDs, Codelists, Change delta) |
 | Tabbed Reports Interface | Weekly Health Reports and Catalogue Changes in a unified tabbed section |
@@ -157,7 +157,7 @@ I welcome issues, ideas, and pull requests. Use the issue templates in `.github/
 ### v1.3.0 — February 2026
 
 - Catalogue Change Report: timeline view of DSD and Codelist changes with delta tables
-- SDMX Artefact Browser: live searchable, sortable table of DSDs and Codelists fetched directly from nsi-demo-stable.siscc.org
+- SDMX Artefact Browser roadmap: searchable DSD and Codelist tables fetched directly from nsi-demo-stable.siscc.org
 - SDMX Guide Panel: toggleable overlay with three-tab reference guide covering platform architecture, SDMX concepts, and dashboard usage
 - Tabbed report interface: Weekly Health Reports and Catalogue Changes in a unified reports section
 - Anomaly detection: rolling average deviation alerts at 2× and 3× thresholds

@@ -18,7 +18,8 @@ import { dirname, join } from 'path';
 /** Maximum number of check results to keep in the log file.
  *  200 entries at 6-hour intervals ≈ 50 days of history, enough for trend
  *  analysis without making the JSON file unwieldy for GitHub Pages to serve. */
-const MAX_LOG_ENTRIES = 200;
+// 201 is divisible by the three SIS-CC endpoints, keeping the capped log balanced.
+const MAX_LOG_ENTRIES = 201;
 
 /** Per-request timeout in milliseconds.
  *  15 s is generous for a well-behaved NSI but still catches hung connections

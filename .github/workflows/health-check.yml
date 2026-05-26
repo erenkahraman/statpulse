@@ -21,6 +21,7 @@ on:
       - main
     paths:
       - 'scripts/**'
+      - 'config/**'
       - '.github/workflows/health-check.yml'
 
 # contents: write is required so the workflow can commit health-log.json back.
@@ -57,6 +58,10 @@ jobs:
       - name: Run StatPulse health check
         run: node scripts/check-health.js
 
+      - name: Fetch OECD production data
+        timeout-minutes: 10
+        run: node scripts/fetch-oecd.js
+
       - name: Commit updated health log to repository
         run: |
           # Use a dedicated bot identity so commits are clearly automated and
@@ -64,7 +69,7 @@ jobs:
           git config user.name "statpulse-bot"
           git config user.email "statpulse-bot@users.noreply.github.com"
 
-          git add data/health-log.json
+          git add data/health-log.json data/oecd-live.json data/oecd-catalogue.json
 
           # --quiet suppresses output when there is nothing staged; the OR
           # short-circuit means we only commit when the file actually changed.

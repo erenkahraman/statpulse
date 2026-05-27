@@ -68,5 +68,62 @@
       "format": "xml",
       "severity": "high"
     }
+  ],
+  "extended_datasets": [
+    {
+      "id": "edu_spending_per_student",
+      "name": "Education Spending per Student",
+      "category": "education",
+      "agency": "OECD.EDU.IMEP",
+      "dataflowId": "DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE,3.1/TUR.EXP.ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13.INST_EDU.DIR_EXP.V.XDC.SOURCE?startPeriod=2018&endPeriod=2022&dimensionAtObservation=AllDimensions",
+      "description": "Government expenditure on education per student, Turkey",
+      "unit": "National currency",
+      "severity": "medium"
+    },
+    {
+      "id": "edu_gov_expenditure_share",
+      "name": "Government Education Expenditure",
+      "category": "education",
+      "agency": "OECD.EDU.IMEP",
+      "dataflowId": "DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV,3.1/..ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13..._Z..?startPeriod=2015&endPeriod=2023&dimensionAtObservation=AllDimensions",
+      "description": "Share of government expenditure on education, France and OECD average",
+      "unit": "% of total government expenditure",
+      "severity": "medium"
+    },
+    {
+      "id": "fin_household_indicators",
+      "name": "Household Economic Indicators",
+      "category": "finance",
+      "agency": "OECD.SDD.NAD",
+      "dataflowId": "DSD_HHDASH@DF_HHDASH_INDIC",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_HHDASH@DF_HHDASH_INDIC,1.0/Q..P3S1M_R_POP_GR.?startPeriod=2020-Q1&dimensionAtObservation=AllDimensions",
+      "description": "Household consumption, debt and savings indicators, quarterly",
+      "unit": "% growth",
+      "severity": "medium"
+    },
+    {
+      "id": "digital_rd_expenditure",
+      "name": "R&D Expenditure (MSTI)",
+      "category": "digital",
+      "agency": "OECD.STI.STP",
+      "dataflowId": "DSD_MSTI@DF_MSTI",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.STI.STP,DSD_MSTI@DF_MSTI,1.3/.A.G+T_RS...?startPeriod=2018&dimensionAtObservation=AllDimensions",
+      "description": "Main Science and Technology Indicators — R&D expenditure by sector",
+      "unit": "% of GDP / national currency",
+      "severity": "medium"
+    },
+    {
+      "id": "digital_ict_business",
+      "name": "ICT Usage by Businesses",
+      "category": "digital",
+      "agency": "OECD.STI.DEP",
+      "dataflowId": "DSD_ICT_B@DF_BUSINESSES",
+      "url": "https://sdmx.oecd.org/public/rest/data/OECD.STI.DEP,DSD_ICT_B@DF_BUSINESSES,1.0/.A.B1_B.._T.S_GE10+S_GE100?startPeriod=2015&dimensionAtObservation=AllDimensions",
+      "description": "ICT access and usage indicators for businesses",
+      "unit": "% of enterprises",
+      "severity": "medium"
+    }
   ]
 }

@@ -355,6 +355,50 @@
         </div>
         <div class="side-category">
           <button class="side-cat-header" type="button">
+            <span>Education</span>
+            <span class="side-cat-arrow" aria-hidden="true">▶</span>
+          </button>
+          <div class="side-cat-children collapsed">
+            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE,3.1/TUR.EXP.ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13.INST_EDU.DIR_EXP.V.XDC.SOURCE?startPeriod=2018&endPeriod=2022&dimensionAtObservation=AllDimensions" data-chart-name="Education Spending per Student" type="button">
+              <span class="dot dot-oecd"></span>Education Spending
+              <span class="side-item-sub">Turkey · Annual</span>
+            </button>
+            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV,3.1/..ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13..._Z..?startPeriod=2015&endPeriod=2023&dimensionAtObservation=AllDimensions" data-chart-name="Government Education Expenditure" type="button">
+              <span class="dot dot-oecd"></span>Gov. Education Budget
+              <span class="side-item-sub">France + OECD avg · Annual</span>
+            </button>
+          </div>
+        </div>
+        <div class="side-category">
+          <button class="side-cat-header" type="button">
+            <span>Finance & Households</span>
+            <span class="side-cat-arrow" aria-hidden="true">▶</span>
+          </button>
+          <div class="side-cat-children collapsed">
+            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_HHDASH@DF_HHDASH_INDIC,1.0/Q..P3S1M_R_POP_GR.?startPeriod=2020-Q1&dimensionAtObservation=AllDimensions" data-chart-name="Household Economic Indicators" type="button">
+              <span class="dot dot-oecd"></span>Household Indicators
+              <span class="side-item-sub">Quarterly household data</span>
+            </button>
+          </div>
+        </div>
+        <div class="side-category">
+          <button class="side-cat-header" type="button">
+            <span>Digital & Innovation</span>
+            <span class="side-cat-arrow" aria-hidden="true">▶</span>
+          </button>
+          <div class="side-cat-children collapsed">
+            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.STI.STP,DSD_MSTI@DF_MSTI,1.3/.A.G+T_RS...?startPeriod=2018&dimensionAtObservation=AllDimensions" data-chart-name="R&D Expenditure (MSTI)" type="button">
+              <span class="dot dot-oecd"></span>R&D Expenditure
+              <span class="side-item-sub">Science & technology · Annual</span>
+            </button>
+            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.STI.DEP,DSD_ICT_B@DF_BUSINESSES,1.0/.A.B1_B.._T.S_GE10+S_GE100?startPeriod=2015&dimensionAtObservation=AllDimensions" data-chart-name="ICT Usage by Businesses" type="button">
+              <span class="dot dot-oecd"></span>ICT Business Usage
+              <span class="side-item-sub">Enterprise digital adoption</span>
+            </button>
+          </div>
+        </div>
+        <div class="side-category">
+          <button class="side-cat-header" type="button">
             <span>Data Infrastructure</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
@@ -432,7 +476,7 @@
         </section>
       </section>
 
-      <section id="view-oecd" class="view" aria-labelledby="oecd-title"><div class="page-bar"><div><h1 id="oecd-title">Live Statistical Data</h1><p class="subtitle">Production OECD SDMX endpoints — monitored every 6 hours.</p></div></div><div class="grid-auto" id="oecd-detail-cards"></div><section class="panel" aria-labelledby="oecd-chart-title"><h2 id="oecd-chart-title">OECD Response Time Comparison</h2><div class="chart-panel"><canvas id="oecd-response-chart" aria-label="OECD response time comparison chart"></canvas></div></section></section>
+      <section id="view-oecd" class="view" aria-labelledby="oecd-title"><div class="page-bar"><div><h1 id="oecd-title">Live Statistical Data</h1><p class="subtitle">Production OECD SDMX endpoints — monitored every 6 hours.</p></div></div><div class="grid-auto" id="oecd-detail-cards"></div><section class="panel" aria-labelledby="oecd-chart-title"><h2 id="oecd-chart-title">OECD Response Time Comparison</h2><div class="chart-panel"><canvas id="oecd-response-chart" aria-label="OECD response time comparison chart"></canvas></div></section><section class="panel" aria-labelledby="extended-title"><h2 id="extended-title">Extended Dataset Coverage</h2><p class="subtitle" style="margin-bottom:14px">Education, Finance, and Digital indicators from OECD SDMX API. Click any card to view the interactive chart.</p><div class="grid-3" id="extended-cards"></div></section></section>
 
       <section id="view-catalogue" class="view" aria-labelledby="catalogue-title"><div class="page-bar"><div><h1 id="catalogue-title">OECD Data Catalogue</h1><p class="subtitle">Browse 2,527 statistical datasets across 47+ agencies. Click any row to inspect.</p></div></div><div class="grid-3" id="catalogue-stats"></div><section class="panel"><div class="search-row"><select id="catalogue-agency" aria-label="Filter catalogue by agency"><option value="">All agencies</option></select><input id="catalogue-search" type="search" placeholder="Search by name or ID" aria-label="Search full catalogue" /></div><div class="table-wrap scroll-table"><table><thead><tr><th>Agency</th><th>ID</th><th>Name</th><th>Version</th></tr></thead><tbody id="catalogue-body"></tbody></table></div><div class="table-toolbar"><span class="subtitle" id="catalogue-page-label">Page 1</span><div class="actions"><button class="btn" id="catalogue-prev" type="button">Prev</button><button class="btn" id="catalogue-next" type="button">Next</button></div></div></section></section>
 
@@ -1061,8 +1105,84 @@
       }
       cards.appendChild(article); }); renderSisChart(groups); }
     function renderSisChart(groups) { if (sisChart) sisChart.destroy(); const ref = (groups.Structures || []).slice(-20); sisChart = new Chart($('sis-response-chart'), { type: 'line', data: { labels: ref.map(r => utcTime(r.timestamp)), datasets: CONFIG.endpoints.sis.map((name, i) => ({ label: name, data: (groups[name] || []).slice(-20).map(r => r.responseTimeMs), borderColor: [CONFIG.colors.green, CONFIG.colors.blue, CONFIG.colors.amber][i], backgroundColor: 'transparent', tension: .25, borderWidth: 2 })) }, options: chartOptions('Response time (ms)') }); }
-    function renderOecdProduction() { const latest = latestOecdRecords(oecdLive); const cards = $('oecd-detail-cards'); cards.textContent = ''; CONFIG.endpoints.oecdOrder.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id, detail: true }))); renderOecdChart(); }
+    function renderOecdProduction() { const latest = latestOecdRecords(oecdLive); const cards = $('oecd-detail-cards'); cards.textContent = ''; CONFIG.endpoints.oecdOrder.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id, detail: true }))); renderOecdChart(); renderExtendedCards(); }
     function renderOecdChart() { if (oecdChart) oecdChart.destroy(); const ids = CONFIG.endpoints.oecdOrder; const labels = [...new Set(oecdLive.map(r => utcTime(r.timestamp)))].slice(-20); oecdChart = new Chart($('oecd-response-chart'), { type: 'line', data: { labels, datasets: ids.map((id, i) => { const rows = oecdLive.filter(r => r.id === id).slice(-20); return { label: rows[0]?.name || id, data: rows.map(r => r.responseTimeMs), borderColor: [CONFIG.colors.blue, CONFIG.colors.green, CONFIG.colors.amber, CONFIG.colors.red, CONFIG.colors.muted][i], backgroundColor: 'transparent', tension: .25, borderWidth: 2 }; }) }, options: chartOptions('Response time (ms)') }); }
+    function renderExtendedCards() {
+      const container = document.getElementById('extended-cards');
+      if (!container) return;
+
+      const EXTENDED = [
+        {
+          id: 'edu_spending_per_student',
+          name: 'Education Spending per Student',
+          sub: 'Turkey · Annual · UOE',
+          url: 'https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE,3.1/TUR.EXP.ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13.INST_EDU.DIR_EXP.V.XDC.SOURCE?startPeriod=2018&endPeriod=2022&dimensionAtObservation=AllDimensions',
+          category: 'Education',
+          color: '#a855f7'
+        },
+        {
+          id: 'edu_gov_expenditure_share',
+          name: 'Government Education Budget',
+          sub: 'France + OECD avg · Annual',
+          url: 'https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV,3.1/..ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13..._Z..?startPeriod=2015&endPeriod=2023&dimensionAtObservation=AllDimensions',
+          category: 'Education',
+          color: '#a855f7'
+        },
+        {
+          id: 'fin_household_indicators',
+          name: 'Household Economic Indicators',
+          sub: 'OECD countries · Quarterly',
+          url: 'https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_HHDASH@DF_HHDASH_INDIC,1.0/Q..P3S1M_R_POP_GR.?startPeriod=2020-Q1&dimensionAtObservation=AllDimensions',
+          category: 'Finance',
+          color: '#22c55e'
+        },
+        {
+          id: 'digital_rd_expenditure',
+          name: 'R&D Expenditure',
+          sub: 'OECD countries · Annual · MSTI',
+          url: 'https://sdmx.oecd.org/public/rest/data/OECD.STI.STP,DSD_MSTI@DF_MSTI,1.3/.A.G+T_RS...?startPeriod=2018&dimensionAtObservation=AllDimensions',
+          category: 'Digital & AI',
+          color: '#06b6d4'
+        },
+        {
+          id: 'digital_ict_business',
+          name: 'ICT Usage by Businesses',
+          sub: 'OECD countries · Annual',
+          url: 'https://sdmx.oecd.org/public/rest/data/OECD.STI.DEP,DSD_ICT_B@DF_BUSINESSES,1.0/.A.B1_B.._T.S_GE10+S_GE100?startPeriod=2015&dimensionAtObservation=AllDimensions',
+          category: 'Digital & AI',
+          color: '#06b6d4'
+        }
+      ];
+
+      container.textContent = '';
+      EXTENDED.forEach(ep => {
+        const card = document.createElement('article');
+        card.className = 'card endpoint-card';
+        card.style.cursor = 'pointer';
+        card.style.borderLeft = `3px solid ${ep.color}`;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+        card.setAttribute('aria-label', `View chart for ${ep.name}`);
+
+        card.innerHTML = `
+          <header>
+            <div>
+              <div class="dataset-name" style="color:${ep.color}">${ep.category}</div>
+              <div style="font-size:13px;font-weight:700;color:#e2e8f0;margin-top:4px">${ep.name}</div>
+            </div>
+            <span class="badge badge-blue">SDMX</span>
+          </header>
+          <div class="mono" style="margin-top:6px">${ep.sub}</div>
+          <div style="margin-top:12px;padding:10px;background:#060a0f;border:1px solid #1e2530;border-radius:6px;font-size:11px;color:#475569;text-align:center">
+            Click to view interactive chart
+          </div>
+        `;
+
+        card.addEventListener('click', () => openSdmxChart(ep.url, ep.name));
+        card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') openSdmxChart(ep.url, ep.name); });
+        container.appendChild(card);
+      });
+    }
     function chartOptions(yTitle) { return { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#64748b', font: { size: 11 } } } }, scales: { x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: '#1e2530' } }, y: { beginAtZero: true, title: { display: true, text: yTitle, color: '#64748b' }, ticks: { color: '#64748b' }, grid: { color: '#1e2530' } } } }; }
     function renderCatalogue() { const flows = oecdCatalogue?.flows || []; const stats = $('catalogue-stats'); stats.textContent = ''; appendKpi(stats, fmtNum(flows.length), 'Total flows', 'OECD public dataflow catalogue', 'blue'); appendKpi(stats, fmtNum(agencyCount()), 'Agencies', 'distinct agency IDs'); appendKpi(stats, localTime(oecdCatalogue?.fetchedAt), 'Last updated', 'catalogue fetch timestamp'); const agency = $('catalogue-agency'); agency.replaceChildren(new Option('All agencies', '')); [...new Set(flows.map(f => f.agencyID).filter(Boolean))].sort().forEach(a => agency.appendChild(new Option(a, a))); $('catalogue-search').oninput = () => { cataloguePage = 0; renderCatalogueRows(); }; agency.onchange = () => { cataloguePage = 0; renderCatalogueRows(); }; $('catalogue-prev').onclick = () => { cataloguePage = Math.max(0, cataloguePage - 1); renderCatalogueRows(); }; $('catalogue-next').onclick = () => { cataloguePage++; renderCatalogueRows(); }; renderCatalogueRows(); }
     function renderCatalogueRows() { const flows = oecdCatalogue?.flows || []; const q = $('catalogue-search').value.toLowerCase().trim(); const agency = $('catalogue-agency').value; catalogueFiltered = flows.filter(f => { const search = !q || (f.name || '').toLowerCase().includes(q) || (f.id || '').toLowerCase().includes(q); return search && (!agency || f.agencyID === agency); }); const maxPage = Math.max(0, Math.ceil(catalogueFiltered.length / 50) - 1); cataloguePage = Math.min(cataloguePage, maxPage); const body = $('catalogue-body'); body.textContent = ''; catalogueFiltered.slice(cataloguePage * 50, cataloguePage * 50 + 50).forEach(flow => { const tr = document.createElement('tr'); tr.className = 'row-click'; [flow.agencyID, flow.id, flow.name, flow.version].forEach(value => { const td = document.createElement('td'); td.textContent = value || '-'; tr.appendChild(td); }); tr.addEventListener('click', () => openDetail(flow)); body.appendChild(tr); }); if (!flows.length) body.innerHTML = '<tr><td colspan="4" class="muted">Catalogue fetch pending</td></tr>'; $('catalogue-page-label').textContent = `Page ${cataloguePage + 1} of ${maxPage + 1} · ${fmtNum(catalogueFiltered.length)} rows`; $('catalogue-prev').disabled = cataloguePage === 0; $('catalogue-next').disabled = cataloguePage >= maxPage; }
@@ -1098,6 +1218,14 @@
       header.classList.toggle('open');
       header.nextElementSibling?.classList.toggle('collapsed');
     }));
+    document.querySelectorAll('.side-chart-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const url = btn.dataset.chartUrl;
+        const name = btn.dataset.chartName;
+        showView('oecd', btn);
+        setTimeout(() => openSdmxChart(url, name), 150);
+      });
+    });
     $('nav-search').addEventListener('input', handleGlobalSearchInput);
     $('nav-search').addEventListener('keydown', e => {
       if (e.key === 'Escape') {

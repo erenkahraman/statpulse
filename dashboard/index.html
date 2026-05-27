@@ -1393,11 +1393,7 @@
         card.setAttribute('role', 'button');
         card.setAttribute('tabindex', '0');
 
-        const badge = liveRecord
-          ? (liveRecord.ok
-              ? `<span class="badge badge-ok">OPERATIONAL</span>`
-              : `<span class="badge badge-down">DOWN</span>`)
-          : `<span class="badge badge-blue">SDMX</span>`;
+        const badge = '<span class="badge badge-blue">SDMX</span>';
 
         const respTime = liveRecord?.responseTimeMs != null
           ? `<div class="metric-value ${responseClass(liveRecord.responseTimeMs)}">${liveRecord.responseTimeMs}ms</div><div class="metric-label">Response Time</div>`

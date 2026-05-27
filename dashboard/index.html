@@ -318,92 +318,90 @@
       </div>
       <div class="side-group">
         <div class="side-label">Statistical Data</div>
-        <div class="side-section-note">
-          Live production endpoints · OECD SDMX API
-        </div>
+        <div class="side-section-note">Live OECD SDMX API · updated every 6h</div>
         <div class="side-category">
-          <button class="side-cat-header open" type="button">
+          <button class="side-cat-header open" data-cat="economics" type="button">
             <span>Economics & Growth</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
           <div class="side-cat-children">
-            <button class="side-item" data-view="oecd" data-scroll-target="card-gdp" type="button">
+            <button class="side-item side-cat-item" data-cat="economics" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>National Accounts
               <span class="side-item-sub">GDP growth · Annual</span>
             </button>
-            <button class="side-item" data-view="oecd" data-scroll-target="card-cli" type="button">
+            <button class="side-item side-cat-item" data-cat="economics" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>Leading Indicators
               <span class="side-item-sub">Business cycles · Monthly</span>
             </button>
           </div>
         </div>
         <div class="side-category">
-          <button class="side-cat-header" type="button">
+          <button class="side-cat-header" data-cat="labour" type="button">
             <span>Labour & Social</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
           <div class="side-cat-children collapsed">
-            <button class="side-item" data-view="oecd" data-scroll-target="card-unemployment" type="button">
+            <button class="side-item side-cat-item" data-cat="labour" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>Labour Markets
               <span class="side-item-sub">Unemployment rates · Monthly</span>
             </button>
-            <button class="side-item" data-view="oecd" data-scroll-target="card-health" type="button">
+            <button class="side-item side-cat-item" data-cat="labour" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>Health Systems
               <span class="side-item-sub">Health expenditure · Annual</span>
             </button>
           </div>
         </div>
         <div class="side-category">
-          <button class="side-cat-header" type="button">
+          <button class="side-cat-header" data-cat="education" type="button">
             <span>Education</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
           <div class="side-cat-children collapsed">
-            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE,3.1/TUR.EXP.ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13.INST_EDU.DIR_EXP.V.XDC.SOURCE?startPeriod=2018&endPeriod=2022&dimensionAtObservation=AllDimensions" data-chart-name="Education Spending per Student" type="button">
-              <span class="dot dot-oecd"></span>Education Spending
-              <span class="side-item-sub">Turkey · Annual</span>
+            <button class="side-item side-cat-item" data-cat="education" data-view="oecd" type="button">
+              <span class="dot dot-oecd"></span>Spending per Student
+              <span class="side-item-sub">Turkey · Annual · UOE</span>
             </button>
-            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV,3.1/..ISCED11_1T8+ISCED11_1T4+ISCED11_5T8.S13..._Z..?startPeriod=2015&endPeriod=2023&dimensionAtObservation=AllDimensions" data-chart-name="Government Education Expenditure" type="button">
+            <button class="side-item side-cat-item" data-cat="education" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>Gov. Education Budget
-              <span class="side-item-sub">France + OECD avg · Annual</span>
+              <span class="side-item-sub">OECD countries · Annual</span>
             </button>
           </div>
         </div>
         <div class="side-category">
-          <button class="side-cat-header" type="button">
+          <button class="side-cat-header" data-cat="finance" type="button">
             <span>Finance & Households</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
           <div class="side-cat-children collapsed">
-            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_HHDASH@DF_HHDASH_INDIC,1.0/Q..P3S1M_R_POP_GR.?startPeriod=2020-Q1&dimensionAtObservation=AllDimensions" data-chart-name="Household Economic Indicators" type="button">
+            <button class="side-item side-cat-item" data-cat="finance" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>Household Indicators
-              <span class="side-item-sub">Quarterly household data</span>
+              <span class="side-item-sub">Debt · Savings · Consumption</span>
             </button>
           </div>
         </div>
         <div class="side-category">
-          <button class="side-cat-header" type="button">
+          <button class="side-cat-header" data-cat="digital" type="button">
             <span>Digital & Innovation</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
           <div class="side-cat-children collapsed">
-            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.STI.STP,DSD_MSTI@DF_MSTI,1.3/.A.G+T_RS...?startPeriod=2018&dimensionAtObservation=AllDimensions" data-chart-name="R&D Expenditure (MSTI)" type="button">
+            <button class="side-item side-cat-item" data-cat="digital" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>R&D Expenditure
-              <span class="side-item-sub">Science & technology · Annual</span>
+              <span class="side-item-sub">OECD countries · Annual · MSTI</span>
             </button>
-            <button class="side-item side-chart-item" data-chart-url="https://sdmx.oecd.org/public/rest/data/OECD.STI.DEP,DSD_ICT_B@DF_BUSINESSES,1.0/.A.B1_B.._T.S_GE10+S_GE100?startPeriod=2015&dimensionAtObservation=AllDimensions" data-chart-name="ICT Usage by Businesses" type="button">
+            <button class="side-item side-cat-item" data-cat="digital" data-view="oecd" type="button">
               <span class="dot dot-oecd"></span>ICT Business Usage
-              <span class="side-item-sub">Enterprise digital adoption</span>
+              <span class="side-item-sub">OECD countries · Annual</span>
             </button>
           </div>
         </div>
         <div class="side-category">
-          <button class="side-cat-header" type="button">
+          <button class="side-cat-header" data-cat="catalogue" type="button">
             <span>Data Infrastructure</span>
             <span class="side-cat-arrow" aria-hidden="true">▶</span>
           </button>
           <div class="side-cat-children collapsed">
-            <button class="side-item" data-view="catalogue" type="button">
+            <button class="side-item side-cat-item" data-view="catalogue" type="button">
               <span class="dot dot-oecd"></span>Data Catalogue
               <span class="side-item-sub">2,527 datasets · OECD</span>
             </button>
@@ -577,7 +575,129 @@
     const CONFIG = {
       endpoints: { sis: ['Structures', 'Data Query', 'Codelists'], oecdOrder: ['oecd_cli', 'oecd_unemployment', 'oecd_gdp', 'oecd_health', 'oecd_dataflows'], overviewOecd: ['oecd_cli', 'oecd_unemployment', 'oecd_gdp'], monitoredFlows: new Set(['DF_CLI', 'DF_IALFS_UNE_M', 'DF_NAAG_I', 'DF_SHA']) },
       colors: { blue: '#3b82f6', green: '#22c55e', amber: '#eab308', red: '#ef4444', muted: '#64748b', grid: '#1e2530' },
-      thresholds: { responseWarn: 2000, responseBad: 3000, uptimeTarget: 99.5, anomalyMaxRate: 5, freshnessHours: 24 }
+      thresholds: { responseWarn: 2000, responseBad: 3000, uptimeTarget: 99.5, anomalyMaxRate: 5, freshnessHours: 24 },
+      categories: {
+        economics: {
+          label: 'Economics & Growth',
+          description: 'GDP, leading indicators, and macroeconomic trends across OECD member countries.',
+          color: '#3b82f6',
+          datasets: [
+            {
+              id: 'oecd_gdp',
+              name: 'GDP — National Accounts',
+              sub: 'OECD countries · Annual · SNA 2008',
+              agency: 'OECD.SDD.NAD',
+              dataflowId: 'DSD_NAAG@DF_NAAG_I',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAAG@DF_NAAG_I,/A.AUS+AUT+BEL+CAN+CHL+COL+CRI+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA.B1GQ_R_GR..?startPeriod=2018&dimensionAtObservation=AllDimensions',
+              unit: '% growth',
+              liveId: 'oecd_gdp'
+            },
+            {
+              id: 'oecd_cli',
+              name: 'Composite Leading Indicators',
+              sub: 'OECD countries · Monthly · STS',
+              agency: 'OECD.SDD.STES',
+              dataflowId: 'DSD_STES@DF_CLI',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.SDD.STES,DSD_STES@DF_CLI/.M.LI...AA...H?startPeriod=2023-01&dimensionAtObservation=AllDimensions',
+              unit: 'Index',
+              liveId: 'oecd_cli'
+            }
+          ]
+        },
+        labour: {
+          label: 'Labour & Social',
+          description: 'Unemployment rates, health expenditure, and social indicators from OECD Labour Force Statistics.',
+          color: '#22c55e',
+          datasets: [
+            {
+              id: 'oecd_unemployment',
+              name: 'Monthly Unemployment Rates',
+              sub: 'OECD countries · Monthly · LFS',
+              agency: 'OECD.SDD.TPS',
+              dataflowId: 'DSD_LFS@DF_IALFS_UNE_M',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.SDD.TPS,DSD_LFS@DF_IALFS_UNE_M,1.0/..._Z.Y._T.Y_GE15..M?startPeriod=2020-01&lastNObservations=36&dimensionAtObservation=AllDimensions',
+              unit: '% of labour force',
+              liveId: 'oecd_unemployment'
+            },
+            {
+              id: 'oecd_health',
+              name: 'Health Expenditure (SHA)',
+              sub: 'OECD countries · Annual · SHA 2011',
+              agency: 'OECD.ELS.HD',
+              dataflowId: 'DSD_SHA@DF_SHA',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.ELS.HD,DSD_SHA@DF_SHA,/.A.EXP_HEALTH.PT_B1GQ._T.._T.._T...?startPeriod=2015&dimensionAtObservation=AllDimensions',
+              unit: '% of GDP',
+              liveId: 'oecd_health'
+            }
+          ]
+        },
+        education: {
+          label: 'Education',
+          description: 'Education expenditure and government budget allocation from the OECD/UNESCO/Eurostat joint data collection (UOE).',
+          color: '#a855f7',
+          datasets: [
+            {
+              id: 'edu_spending_per_student',
+              name: 'Education Spending per Student',
+              sub: 'Turkey · Annual · UOE',
+              agency: 'OECD.EDU.IMEP',
+              dataflowId: 'DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE,3.1/TUR.EXP.ISCED11_1T8.S13.INST_EDU.DIR_EXP.V.XDC.SOURCE?startPeriod=2018&dimensionAtObservation=AllDimensions',
+              unit: 'National currency'
+            },
+            {
+              id: 'edu_gov_share',
+              name: 'Government Education Budget',
+              sub: 'All OECD countries · Annual · UOE',
+              agency: 'OECD.EDU.IMEP',
+              dataflowId: 'DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.EDU.IMEP,DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV,3.1/..ISCED11_1T8.S13..._Z..?startPeriod=2015&dimensionAtObservation=AllDimensions',
+              unit: '% of total government expenditure'
+            }
+          ]
+        },
+        finance: {
+          label: 'Finance & Households',
+          description: 'Household consumption, debt, savings and financial indicators from OECD National Accounts quarterly data.',
+          color: '#f97316',
+          datasets: [
+            {
+              id: 'fin_household_indicators',
+              name: 'Household Economic Indicators',
+              sub: 'OECD countries · Quarterly · SNA 2008',
+              agency: 'OECD.SDD.NAD',
+              dataflowId: 'DSD_HHDASH@DF_HHDASH_INDIC',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_HHDASH@DF_HHDASH_INDIC,1.0/Q..P3S1M_R_POP_GR.?startPeriod=2020-Q1&lastNObservations=20&dimensionAtObservation=AllDimensions',
+              unit: '% growth'
+            }
+          ]
+        },
+        digital: {
+          label: 'Digital & Innovation',
+          description: 'R&D expenditure, ICT adoption, and science & technology indicators from OECD MSTI and STI datasets.',
+          color: '#06b6d4',
+          datasets: [
+            {
+              id: 'digital_rd',
+              name: 'R&D Expenditure (MSTI)',
+              sub: 'OECD countries · Annual · MSTI',
+              agency: 'OECD.STI.STP',
+              dataflowId: 'DSD_MSTI@DF_MSTI',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.STI.STP,DSD_MSTI@DF_MSTI,1.3/.A.G+T_RS...?startPeriod=2015&lastNObservations=5&dimensionAtObservation=AllDimensions',
+              unit: '% of GDP / national currency'
+            },
+            {
+              id: 'digital_ict',
+              name: 'ICT Usage by Businesses',
+              sub: 'OECD countries · Annual · DEP',
+              agency: 'OECD.STI.DEP',
+              dataflowId: 'DSD_ICT_B@DF_BUSINESSES',
+              url: 'https://sdmx.oecd.org/public/rest/data/OECD.STI.DEP,DSD_ICT_B@DF_BUSINESSES,1.0/.A.B1_B.._T.S_GE10+S_GE100?startPeriod=2015&lastNObservations=5&dimensionAtObservation=AllDimensions',
+              unit: '% of enterprises'
+            }
+          ]
+        }
+      }
     };
     let healthLog = [], oecdLive = [], oecdCatalogue = null, reportIssues = [], catalogueFiltered = [];
     let renderedViews = new Set(), sisChart = null, oecdChart = null, cataloguePage = 0;
@@ -1207,23 +1327,152 @@
     async function renderReportsView() { renderPmStats(); const state = $('reports-state'); const list = $('reports-list'); state.classList.remove('hidden'); list.textContent = ''; try { const res = await fetch(REPORTS_API_URL, { headers: { 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'statpulse-dashboard/2.0' } }); if (!res.ok) throw new Error(`HTTP ${res.status}`); reportIssues = await res.json(); renderPmStats(); if (!Array.isArray(reportIssues) || !reportIssues.length) { state.textContent = 'No weekly reports generated yet.'; return; } state.classList.add('hidden'); reportIssues.forEach(issue => { const card = document.createElement('article'); card.className = 'report-card'; card.innerHTML = `<button class="report-header" type="button"><span><span class="report-title"></span><span class="report-meta"></span></span><span class="badge ${issue.state === 'open' ? 'badge-ok' : 'badge-pending'}"></span></button><div class="report-body"></div>`; card.querySelector('.report-title').textContent = issue.title; card.querySelector('.report-meta').textContent = `#${issue.number} · ${new Date(issue.created_at).toLocaleDateString()}`; card.querySelector('.badge').textContent = issue.state; card.querySelector('.report-body').innerHTML = `${parseMarkdown(issue.body)}<p><a href="${escHtml(issue.html_url)}" target="_blank" rel="noopener">View on GitHub -></a></p>`; card.querySelector('button').addEventListener('click', () => card.classList.toggle('open')); list.appendChild(card); }); } catch { state.innerHTML = 'Unable to load reports. <a href="https://github.com/erenkahraman/statpulse/issues?q=label%3Aweekly-report" target="_blank" rel="noopener">Open GitHub Issues</a>.'; } }
     function renderPmStats() { const anomalyCount = healthLog.filter(r => r.anomaly?.detected).length; const lastReport = reportIssues[0]?.created_at || null; const box = $('pm-stats'); box.textContent = ''; appendKpi(box, fmtNum(Math.floor(healthLog.length / 3)), 'Total monitoring runs', 'SIS-CC endpoint batches'); appendKpi(box, fmtNum(anomalyCount), 'Anomaly count breakdown', 'detected in health log', anomalyCount ? 'amber' : 'green'); appendKpi(box, lastReport ? localTime(lastReport) : '-', 'Last report date', 'GitHub Issues weekly report'); const trend = document.createElement('div'); trend.className = 'card'; trend.innerHTML = '<div class="kpi-label">Uptime Trend - Last 7 Days</div>'; const row = document.createElement('div'); row.className = 'actions'; for (let i = 6; i >= 0; i--) { const start = new Date(Date.now() - i * 86400000); const day = healthLog.filter(r => new Date(r.timestamp).toDateString() === start.toDateString()); const ok = day.length && day.every(r => r.ok); const dot = document.createElement('span'); dot.className = `dot ${ok ? 'dot-sis' : 'dot-gov'}`; dot.title = start.toDateString(); row.appendChild(dot); } trend.appendChild(row); box.appendChild(trend); }
     function renderGovernance() { const up = uptimeLast48h(); const p95ms = p95(healthLog.filter(r => r.ok).map(r => r.responseTimeMs)); const anomalyRate = healthLog.length ? healthLog.filter(r => r.anomaly?.detected).length / healthLog.length * 100 : null; const latestStamp = [...healthLog.map(r => r.timestamp), ...oecdLive.map(r => r.timestamp)].filter(Boolean).sort().pop(); const freshHours = latestStamp ? (Date.now() - new Date(latestStamp).getTime()) / 3600000 : Infinity; const rows = [['API Availability', '>=99.5%', pct(up), up >= 99.5], ['Response Time p95', '<3000ms', p95ms == null ? '-' : `${Math.round(p95ms)}ms`, p95ms != null && p95ms < 3000], ['Anomaly Rate', '<5%', pct(anomalyRate), anomalyRate != null && anomalyRate < 5], ['Catalogue Coverage', '2527 flows', fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), (oecdCatalogue?.flows?.length || 0) >= 2527], ['Report Cadence', 'Weekly', 'on schedule', true], ['OECD Data Freshness', '<24h', Number.isFinite(freshHours) ? `${freshHours.toFixed(1)}h` : '-', freshHours < 24]]; const body = $('governance-kpis'); body.textContent = ''; rows.forEach(([name, target, current, ok]) => { const tr = document.createElement('tr'); [name, target, current, ok ? '●' : '○', ok ? 'Stable' : 'Needs review'].forEach((value, i) => { const td = document.createElement('td'); td.textContent = value; if (i >= 3) td.className = ok ? 'green' : 'amber'; tr.appendChild(td); }); body.appendChild(tr); }); }
+    let _activeCategoryView = null;
+
+    function renderCategoryView(categoryKey) {
+      _activeCategoryView = categoryKey;
+      const cat = CONFIG.categories[categoryKey];
+      if (!cat) return;
+
+      // Switch to oecd view
+      showView('oecd');
+
+      // Get the oecd view container
+      const view = document.getElementById('view-oecd');
+
+      // Find or create the category panel
+      let panel = document.getElementById('category-view-panel');
+      if (!panel) {
+        panel = document.createElement('section');
+        panel.id = 'category-view-panel';
+        panel.className = 'panel';
+        panel.style.marginBottom = '18px';
+        // Insert at the top of the oecd view, after the page-bar
+        const pagebar = view.querySelector('.page-bar');
+        if (pagebar && pagebar.nextSibling) {
+          view.insertBefore(panel, pagebar.nextSibling);
+        } else {
+          view.prepend(panel);
+        }
+      }
+
+      // Clear and rebuild panel
+      panel.innerHTML = '';
+
+      // Header
+      const header = document.createElement('div');
+      header.style.cssText = 'display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px';
+      header.innerHTML = `
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="width:10px;height:10px;border-radius:50%;background:${cat.color};display:inline-block;flex-shrink:0"></span>
+            <h2 style="margin:0;font-size:16px;font-weight:700;color:#e2e8f0">${cat.label}</h2>
+          </div>
+          <p style="margin:0;font-size:12px;color:#64748b;max-width:600px">${cat.description}</p>
+        </div>
+        <button id="category-view-close" class="btn" style="flex-shrink:0;font-size:11px">
+          × Clear filter
+        </button>
+      `;
+      panel.appendChild(header);
+      document.getElementById('category-view-close').addEventListener('click', () => {
+        panel.remove();
+        _activeCategoryView = null;
+      });
+
+      // Dataset cards grid
+      const grid = document.createElement('div');
+      grid.className = 'grid-auto';
+      grid.style.marginBottom = '0';
+
+      cat.datasets.forEach(ds => {
+        const liveRecord = ds.liveId ? latestOecdRecords(oecdLive)[ds.liveId] : null;
+        const card = document.createElement('article');
+        card.className = 'card endpoint-card';
+        card.style.cssText = `cursor:pointer;border-left:3px solid ${cat.color}`;
+        card.setAttribute('role', 'button');
+        card.setAttribute('tabindex', '0');
+
+        const badge = liveRecord
+          ? (liveRecord.ok
+              ? `<span class="badge badge-ok">OPERATIONAL</span>`
+              : `<span class="badge badge-down">DOWN</span>`)
+          : `<span class="badge badge-blue">SDMX</span>`;
+
+        const respTime = liveRecord?.responseTimeMs != null
+          ? `<div class="metric-value ${responseClass(liveRecord.responseTimeMs)}">${liveRecord.responseTimeMs}ms</div><div class="metric-label">Response Time</div>`
+          : `<div class="metric-value muted">—</div><div class="metric-label">Response Time</div>`;
+
+        const recCount = liveRecord
+          ? `<div class="metric-value">${fmtNum(liveRecord.recordCount || liveRecord.catalogueSize)}</div><div class="metric-label">Records</div>`
+          : `<div class="metric-value muted">—</div><div class="metric-label">Records</div>`;
+
+        card.innerHTML = `
+          <header>
+            <div>
+              <div class="dataset-name" style="color:${cat.color}">${cat.label}</div>
+              <div style="font-size:13px;font-weight:700;color:#e2e8f0;margin-top:4px">${ds.name}</div>
+            </div>
+            ${badge}
+          </header>
+          <div class="mono">${ds.agency} · ${ds.dataflowId}</div>
+          <div class="metric-grid">
+            <div class="metric-cell">${respTime}</div>
+            <div class="metric-cell">${recCount}</div>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:#475569">${ds.sub}</div>
+          <div style="margin-top:8px;font-size:11px;color:#334155;font-style:italic">Unit: ${ds.unit}</div>
+          <button class="btn btn-primary" style="margin-top:10px;width:100%;font-size:11px"
+                  data-url="${ds.url}" data-name="${ds.name}">
+            View Interactive Chart
+          </button>
+        `;
+
+        card.querySelector('.btn-primary').addEventListener('click', e => {
+          e.stopPropagation();
+          openSdmxChart(ds.url, ds.name);
+        });
+        card.addEventListener('click', () => openSdmxChart(ds.url, ds.name));
+        card.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') openSdmxChart(ds.url, ds.name);
+        });
+
+        grid.appendChild(card);
+      });
+
+      panel.appendChild(grid);
+    }
     function exportCatalogueCsv() { const flows = oecdCatalogue?.flows || []; const rows = [['Agency', 'ID', 'Name', 'Version'], ...flows.map(f => [f.agencyID, f.id, f.name, f.version])]; const csv = rows.map(r => r.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',')).join('\n'); const blob = new Blob([csv], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'oecd-catalogue.csv'; a.click(); URL.revokeObjectURL(url); }
-    document.querySelectorAll('[data-view]').forEach(el => el.addEventListener('click', () => {
+    document.querySelectorAll('[data-view]:not(.side-cat-item)').forEach(el => el.addEventListener('click', () => {
       showView(el.dataset.view, el);
       if (el.dataset.scrollTarget) {
         requestAnimationFrame(() => $(el.dataset.scrollTarget)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
       }
     }));
+    // Sidebar category header toggle
     document.querySelectorAll('.side-cat-header').forEach(header => header.addEventListener('click', () => {
-      header.classList.toggle('open');
-      header.nextElementSibling?.classList.toggle('collapsed');
+      const children = header.nextElementSibling;
+      const isOpen = header.classList.contains('open');
+      header.classList.toggle('open', !isOpen);
+      children.classList.toggle('collapsed', isOpen);
     }));
-    document.querySelectorAll('.side-chart-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const url = btn.dataset.chartUrl;
-        const name = btn.dataset.chartName;
-        showView('oecd', btn);
-        setTimeout(() => openSdmxChart(url, name), 150);
+
+    // Sidebar category items
+    document.querySelectorAll('.side-cat-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const catKey = item.dataset.cat;
+        const viewTarget = item.dataset.view || 'oecd';
+
+        // If has a category key, render category view
+        if (catKey && catKey !== 'catalogue' && CONFIG.categories[catKey]) {
+          renderCategoryView(catKey);
+        } else {
+          showView(viewTarget, item);
+        }
+
+        // Update active state
+        document.querySelectorAll('.side-item').forEach(s => s.classList.remove('active'));
+        item.classList.add('active');
       });
     });
     $('nav-search').addEventListener('input', handleGlobalSearchInput);

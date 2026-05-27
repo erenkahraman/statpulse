@@ -6,6 +6,7 @@
   <title>StatPulse - OECD API Monitoring Console</title>
   <meta name="description" content="Professional OECD and SIS-CC SDMX API monitoring dashboard." />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/lightweight-charts@4.1.1/dist/lightweight-charts.standalone.production.js"></script>
   <style>
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -156,6 +157,35 @@
       .search-row select { width: 100%; }
       .detail-panel { top: 0; height: 100vh; width: min(320px, 90vw); }
     }
+    .chart-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; }
+    .chart-modal-overlay.open { display: flex; }
+    .chart-modal-box { background: #0d1117; border: 1px solid #1e2530; border-radius: 8px; width: min(1150px, 96vw); height: min(720px, 92vh); display: flex; flex-direction: column; overflow: hidden; }
+    .chart-modal-header { display: flex; align-items: flex-start; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid #1e2530; flex-shrink: 0; gap: 16px; }
+    .chart-modal-title { font-size: 14px; font-weight: 700; color: #e2e8f0; }
+    .chart-modal-url { font-size: 10px; color: #334155; font-family: 'SFMono-Regular', Consolas, monospace; margin-top: 4px; word-break: break-all; line-height: 1.5; max-width: 760px; }
+    .chart-modal-close { background: none; border: none; color: #64748b; font-size: 22px; cursor: pointer; padding: 0 6px; line-height: 1; flex-shrink: 0; }
+    .chart-modal-close:hover { color: #e2e8f0; }
+    .chart-modal-toolbar { padding: 10px 18px; border-bottom: 1px solid #1e2530; display: flex; align-items: center; gap: 10px; flex-shrink: 0; flex-wrap: wrap; }
+    .chart-modal-toolbar label { font-size: 11px; color: #64748b; white-space: nowrap; }
+    .chart-modal-toolbar select { min-width: 150px; }
+    .chart-range-group, .chart-type-toggle { display: flex; gap: 4px; }
+    .chart-type-toggle { margin-left: auto; }
+    .chart-mini-btn { padding: 4px 12px; border: 1px solid #1e2530; border-radius: 4px; background: transparent; color: #64748b; font-size: 11px; cursor: pointer; }
+    .chart-mini-btn.active { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+    .chart-modal-body { flex: 1; min-height: 0; display: flex; flex-direction: column; position: relative; }
+    .chart-state { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #64748b; font-size: 13px; gap: 12px; flex-direction: column; text-align: center; padding: 24px; }
+    .chart-state.error { color: #ef4444; }
+    .chart-spinner { width: 22px; height: 22px; border: 2px solid #1e2530; border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #sdmx-chart-container { flex: 1; min-height: 0; background: #060a0f; }
+    .chart-legend { display: flex; flex-wrap: wrap; gap: 10px 16px; padding: 10px 18px; border-top: 1px solid #1e2530; flex-shrink: 0; max-height: 96px; overflow-y: auto; }
+    .chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #94a3b8; cursor: pointer; user-select: none; }
+    .chart-legend-item.disabled { opacity: 0.35; }
+    .chart-legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+    .chart-modal-stats { display: flex; gap: 24px; padding: 10px 18px; border-top: 1px solid #1e2530; flex-shrink: 0; flex-wrap: wrap; }
+    .chart-stat { font-size: 11px; }
+    .chart-stat-label { color: #475569; margin-right: 6px; }
+    .chart-stat-value { color: #e2e8f0; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -307,6 +337,44 @@
     </div>
   </div>
 
+  <div class="chart-modal-overlay" id="chart-modal-overlay" role="dialog" aria-modal="true" aria-label="SDMX Data Chart">
+    <div class="chart-modal-box">
+      <div class="chart-modal-header">
+        <div>
+          <div class="chart-modal-title" id="chart-modal-title">SDMX Data</div>
+          <div class="chart-modal-url" id="chart-modal-url"></div>
+        </div>
+        <button class="chart-modal-close" id="chart-modal-close" aria-label="Close chart">×</button>
+      </div>
+      <div class="chart-modal-toolbar hidden" id="chart-toolbar">
+        <label>Group by</label>
+        <select id="chart-group-select" aria-label="Group series by dimension"></select>
+        <div class="chart-range-group" id="chart-range-group">
+          <button class="chart-mini-btn" data-range="1Y">1Y</button>
+          <button class="chart-mini-btn" data-range="5Y">5Y</button>
+          <button class="chart-mini-btn" data-range="10Y">10Y</button>
+          <button class="chart-mini-btn active" data-range="ALL">All</button>
+        </div>
+        <div class="chart-type-toggle">
+          <button class="chart-mini-btn active" data-type="line">Line</button>
+          <button class="chart-mini-btn" data-type="area">Area</button>
+          <button class="chart-mini-btn" data-type="bar">Bar</button>
+        </div>
+      </div>
+      <div class="chart-modal-body">
+        <div class="chart-state" id="chart-state"><div class="chart-spinner"></div><div>Fetching SDMX data...</div></div>
+        <div id="sdmx-chart-container" class="hidden"></div>
+      </div>
+      <div class="chart-legend hidden" id="chart-legend"></div>
+      <div class="chart-modal-stats hidden" id="chart-modal-stats">
+        <div class="chart-stat"><span class="chart-stat-label">Observations</span><span class="chart-stat-value" id="stat-obs">-</span></div>
+        <div class="chart-stat"><span class="chart-stat-label">Range</span><span class="chart-stat-value" id="stat-range">-</span></div>
+        <div class="chart-stat"><span class="chart-stat-label">Series</span><span class="chart-stat-value" id="stat-series">-</span></div>
+        <div class="chart-stat"><span class="chart-stat-label">Frequency</span><span class="chart-stat-value" id="stat-freq">-</span></div>
+      </div>
+    </div>
+  </div>
+
   <script>
     const CONFIG = {
       endpoints: { sis: ['Structures', 'Data Query', 'Codelists'], oecdOrder: ['oecd_cli', 'oecd_unemployment', 'oecd_gdp', 'oecd_health', 'oecd_dataflows'], overviewOecd: ['oecd_cli', 'oecd_unemployment', 'oecd_gdp'], monitoredFlows: new Set(['DF_CLI', 'DF_IALFS_UNE_M', 'DF_NAAG_I', 'DF_SHA']) },
@@ -316,12 +384,207 @@
     let healthLog = [], oecdLive = [], oecdCatalogue = null, reportIssues = [], catalogueFiltered = [];
     let renderedViews = new Set(), sisChart = null, oecdChart = null, cataloguePage = 0;
     let modalPage = 0, modalFiltered = [];
+    const SIS_URLS = {
+      'Data Query': 'https://nsi-demo-stable.siscc.org/rest/data/OECD.CFE,INBOUND@TOURISM_TRIPS,2.0'
+    };
     const $ = id => document.getElementById(id);
     const fmtNum = n => n == null || Number.isNaN(Number(n)) ? '-' : Number(n).toLocaleString();
     const pct = n => n == null ? '-' : `${Number(n).toFixed(1)}%`;
     const utcTime = iso => { if (!iso) return '--:--'; try { return new Date(iso).toLocaleTimeString('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }); } catch { return '--:--'; } };
     const localTime = iso => { if (!iso) return '-'; try { return new Date(iso).toLocaleString(); } catch { return iso; } };
     async function fetchJson(path) { try { const res = await fetch(path); if (!res.ok) return null; return await res.json(); } catch { return null; } }
+
+    const CHART_COLORS = ['#3b82f6','#22c55e','#eab308','#ef4444','#a855f7','#06b6d4','#f97316','#ec4899','#10b981','#f59e0b','#8b5cf6','#14b8a6'];
+    let _lwChart = null, _lwSeriesMap = new Map(), _sdmxData = null, _chartType = 'line', _chartRange = 'ALL', _disabledSeries = new Set(), _chartResizeObserver = null;
+
+    function normalizeTimeFE(t) {
+      if (!t) return null;
+      const s = String(t).trim();
+      if (/^\d{4}$/.test(s)) return `${s}-01-01`;
+      if (/^\d{4}-\d{2}$/.test(s)) return `${s}-01`;
+      if (/^\d{4}-Q[1-4]$/.test(s)) { const q = parseInt(s.slice(-1),10); return `${s.slice(0,4)}-${String((q-1)*3+1).padStart(2,'0')}-01`; }
+      if (/^\d{4}-S[1-2]$/.test(s)) { return `${s.slice(0,4)}-${s.slice(-1)==='1'?'01':'07'}-01`; }
+      if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+      return null;
+    }
+
+    function detectFrequency(obs) {
+      const freq = obs.find(o => o.FREQ)?.FREQ;
+      const map = { A: 'Annual', M: 'Monthly', Q: 'Quarterly', S: 'Semi-annual', D: 'Daily', W: 'Weekly' };
+      if (freq && map[freq]) return map[freq];
+      const sample = obs[0]?.TIME_PERIOD || '';
+      if (/^\d{4}$/.test(sample)) return 'Annual';
+      if (/^\d{4}-\d{2}$/.test(sample)) return 'Monthly';
+      if (/Q/.test(sample)) return 'Quarterly';
+      return 'Mixed';
+    }
+
+    function buildSeries(obs, groupDim) {
+      const groups = {};
+      for (const o of obs) {
+        const key = groupDim ? (o[groupDim] || 'Unknown') : 'Series';
+        (groups[key] = groups[key] || []).push({ time: normalizeTimeFE(o.TIME_PERIOD), value: o.OBS_VALUE });
+      }
+      return Object.entries(groups).map(([name, data]) => ({
+        name,
+        data: data.filter(d => d.time).sort((a,b) => a.time.localeCompare(b.time))
+          .filter((d,i,arr) => i===0 || d.time !== arr[i-1].time)
+      })).filter(s => s.data.length).sort((a,b) => a.name.localeCompare(b.name));
+    }
+
+    function applyRange(series, range) {
+      if (range === 'ALL') return series;
+      const years = { '1Y': 1, '5Y': 5, '10Y': 10 }[range];
+      if (!years) return series;
+      const allTimes = series.flatMap(s => s.data.map(d => d.time)).sort();
+      if (!allTimes.length) return series;
+      const maxDate = new Date(allTimes[allTimes.length - 1]);
+      const cutoff = new Date(maxDate); cutoff.setFullYear(cutoff.getFullYear() - years);
+      const cutoffStr = cutoff.toISOString().slice(0, 10);
+      return series.map(s => ({ name: s.name, data: s.data.filter(d => d.time >= cutoffStr) })).filter(s => s.data.length);
+    }
+
+    function renderChart() {
+      if (!_sdmxData) return;
+      const groupDim = $('chart-group-select').value;
+      let series = buildSeries(_sdmxData.observations, groupDim);
+      series = applyRange(series, _chartRange);
+
+      const container = $('sdmx-chart-container');
+      container.textContent = '';
+      if (_lwChart) { try { _lwChart.remove(); } catch {} _lwChart = null; }
+      _lwSeriesMap.clear();
+
+      if (!series.length) { showChartState('No data in this range', true); return; }
+      hideChartState();
+
+      _lwChart = LightweightCharts.createChart(container, {
+        width: container.clientWidth, height: container.clientHeight,
+        layout: { background: { color: '#060a0f' }, textColor: '#64748b', fontSize: 11 },
+        grid: { vertLines: { color: '#1e2530' }, horzLines: { color: '#1e2530' } },
+        crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
+        rightPriceScale: { borderColor: '#1e2530' },
+        timeScale: { borderColor: '#1e2530', timeVisible: _sdmxData.meta.frequency !== 'Annual' }
+      });
+
+      const visible = series.slice(0, 12);
+      visible.forEach((s, i) => {
+        if (_disabledSeries.has(s.name)) return;
+        const color = CHART_COLORS[i % CHART_COLORS.length];
+        let ls;
+        if (_chartType === 'area') ls = _lwChart.addAreaSeries({ lineColor: color, topColor: color+'40', bottomColor: color+'05', lineWidth: 2, title: s.name });
+        else if (_chartType === 'bar') ls = _lwChart.addHistogramSeries({ color: color+'cc', title: s.name });
+        else ls = _lwChart.addLineSeries({ color, lineWidth: 2, title: s.name });
+        try { ls.setData(s.data.map(d => ({ time: d.time, value: d.value }))); _lwSeriesMap.set(s.name, ls); } catch {}
+      });
+
+      _lwChart.timeScale().fitContent();
+      renderLegend(visible);
+      updateStats(_sdmxData.observations, series);
+
+      if (_chartResizeObserver) _chartResizeObserver.disconnect();
+      _chartResizeObserver = new ResizeObserver(() => { try { _lwChart.applyOptions({ width: container.clientWidth, height: container.clientHeight }); } catch {} });
+      _chartResizeObserver.observe(container);
+    }
+
+    function renderLegend(series) {
+      const legend = $('chart-legend');
+      legend.textContent = '';
+      legend.classList.remove('hidden');
+      series.forEach((s, i) => {
+        const color = CHART_COLORS[i % CHART_COLORS.length];
+        const item = document.createElement('div');
+        item.className = 'chart-legend-item' + (_disabledSeries.has(s.name) ? ' disabled' : '');
+        const sw = document.createElement('span'); sw.className = 'chart-legend-swatch'; sw.style.background = color;
+        const lbl = document.createElement('span'); lbl.textContent = s.name;
+        item.append(sw, lbl);
+        item.addEventListener('click', () => {
+          if (_disabledSeries.has(s.name)) _disabledSeries.delete(s.name); else _disabledSeries.add(s.name);
+          renderChart();
+        });
+        legend.appendChild(item);
+      });
+    }
+
+    function updateStats(obs, series) {
+      $('chart-modal-stats').classList.remove('hidden');
+      $('stat-obs').textContent = obs.length.toLocaleString();
+      const r = _sdmxData.meta.timeRange;
+      $('stat-range').textContent = r && r.length ? `${r[0]} — ${r[1]}` : '-';
+      $('stat-series').textContent = series.length;
+      $('stat-freq').textContent = _sdmxData.meta.frequency || '-';
+    }
+
+    function showChartState(msg, isError) {
+      const st = $('chart-state');
+      st.classList.remove('hidden');
+      st.classList.toggle('error', !!isError);
+      st.innerHTML = isError ? `<div>${msg}</div>` : `<div class="chart-spinner"></div><div>${msg}</div>`;
+      $('sdmx-chart-container').classList.add('hidden');
+    }
+    function hideChartState() { $('chart-state').classList.add('hidden'); $('sdmx-chart-container').classList.remove('hidden'); }
+
+    async function openSdmxChart(url, title) {
+      if (!url) { return; }
+      const overlay = $('chart-modal-overlay');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      $('chart-modal-title').textContent = title || 'SDMX Data';
+      $('chart-modal-url').textContent = url;
+      $('chart-toolbar').classList.add('hidden');
+      $('chart-legend').classList.add('hidden');
+      $('chart-modal-stats').classList.add('hidden');
+      _disabledSeries.clear(); _chartRange = 'ALL'; _chartType = 'line';
+      document.querySelectorAll('[data-range]').forEach(b => b.classList.toggle('active', b.dataset.range === 'ALL'));
+      document.querySelectorAll('[data-type]').forEach(b => b.classList.toggle('active', b.dataset.type === 'line'));
+      showChartState('Fetching SDMX data...', false);
+
+      try {
+        const res = await fetch(`/api/sdmx?url=${encodeURIComponent(url)}`);
+        const data = await res.json();
+        if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
+        if (!data.observations || !data.observations.length) throw new Error('No observations available for this query.');
+
+        data.meta.frequency = detectFrequency(data.observations);
+        _sdmxData = data;
+
+        const groupSelect = $('chart-group-select');
+        groupSelect.replaceChildren(new Option('None (single series)', ''));
+        data.dimensions.forEach(d => groupSelect.appendChild(new Option(d, d)));
+        groupSelect.value = data.dimensions[0] || '';
+        groupSelect.onchange = renderChart;
+
+        $('chart-toolbar').classList.remove('hidden');
+        renderChart();
+      } catch (err) {
+        showChartState(`Unable to load chart: ${err.message}`, true);
+        $('chart-toolbar').classList.add('hidden');
+        $('chart-legend').classList.add('hidden');
+        $('chart-modal-stats').classList.add('hidden');
+      }
+    }
+
+    function closeSdmxChart() {
+      $('chart-modal-overlay').classList.remove('open');
+      document.body.style.overflow = '';
+      if (_lwChart) { try { _lwChart.remove(); } catch {} _lwChart = null; }
+      if (_chartResizeObserver) { _chartResizeObserver.disconnect(); _chartResizeObserver = null; }
+      _sdmxData = null;
+    }
+
+    document.querySelectorAll('[data-type]').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('[data-type]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active'); _chartType = b.dataset.type; renderChart();
+    }));
+    document.querySelectorAll('[data-range]').forEach(b => b.addEventListener('click', () => {
+      document.querySelectorAll('[data-range]').forEach(x => x.classList.remove('active'));
+      b.classList.add('active'); _chartRange = b.dataset.range; renderChart();
+    }));
+    $('chart-modal-close').addEventListener('click', closeSdmxChart);
+    $('chart-modal-overlay').addEventListener('click', e => { if (e.target === $('chart-modal-overlay')) closeSdmxChart(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('chart-modal-overlay').classList.contains('open')) closeSdmxChart(); });
+    window.openSdmxChart = openSdmxChart;
+
     async function loadData() { const [health, live, catalogue] = await Promise.all([fetchJson('./health-log.json'), fetchJson('./oecd-live.json'), fetchJson('./oecd-catalogue.json')]); healthLog = Array.isArray(health) ? health : []; oecdLive = Array.isArray(live) ? live : []; oecdCatalogue = catalogue && Array.isArray(catalogue.flows) ? catalogue : null; updateTimestamp(); showView('overview'); }
     function updateTimestamp() { const stamps = [...healthLog.map(r => r.timestamp), ...oecdLive.map(r => r.timestamp), oecdCatalogue?.fetchedAt].filter(Boolean).sort(); $('nav-updated').textContent = `Updated ${utcTime(stamps[stamps.length - 1])} UTC`; }
     function showView(viewId, sourceEl = null) { document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${viewId}`)); document.querySelectorAll('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.view === viewId)); const sideTarget = sourceEl?.classList?.contains('side-item') ? sourceEl : document.querySelector(`.side-item[data-view="${viewId}"]`); document.querySelectorAll('.side-item').forEach(s => s.classList.toggle('active', s === sideTarget)); if (!renderedViews.has(viewId)) { ({ overview: renderOverview, oecd: renderOecdProduction, catalogue: renderCatalogue, reports: renderReportsView, governance: renderGovernance })[viewId]?.(); renderedViews.add(viewId); } }
@@ -335,7 +598,16 @@
     function responseClass(ms) { if (ms == null) return 'muted'; if (ms < CONFIG.thresholds.responseWarn) return 'green'; if (ms < CONFIG.thresholds.responseBad) return 'amber'; return 'red'; }
     function appendKpi(container, value, label, delta, colorClass = '') { const card = document.createElement('article'); card.className = 'card'; card.innerHTML = '<div class="kpi-value"></div><div class="kpi-label"></div><div class="kpi-delta"></div>'; card.querySelector('.kpi-value').className = `kpi-value ${colorClass}`; card.querySelector('.kpi-value').textContent = value; card.querySelector('.kpi-label').textContent = label; card.querySelector('.kpi-delta').textContent = delta; container.appendChild(card); }
     function renderSparkline(container, values, color) { container.textContent = ''; const nums = values.filter(v => Number.isFinite(v)); if (!nums.length) { container.textContent = 'Pending first fetch'; container.classList.add('muted'); return; } container.classList.remove('muted'); const max = Math.max(...nums, 1); nums.slice(-10).forEach(v => { const bar = document.createElement('div'); bar.className = 'spark-bar'; bar.style.height = `${Math.max(12, (v / max) * 100)}%`; bar.style.backgroundColor = color; bar.title = `${v}ms`; container.appendChild(bar); }); }
-    function makeEndpointCard(record, options = {}) { const article = document.createElement('article'); article.className = 'card endpoint-card'; const badge = statusBadge(record); const id = record?.id || options.id || '-'; const title = record?.name || options.name || id; const count = id === 'oecd_dataflows' ? record?.catalogueSize : record?.recordCount; const series = oecdLive.filter(r => r.id === id).map(r => r.responseTimeMs); article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><span class="mono"></span>${options.detail ? '<span class="url"></span>' : ''}<div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">${id === 'oecd_dataflows' ? 'Catalogue Size' : 'Record Count'}</div></div></div><div class="sparkline" aria-label="Response time sparkline"></div>${options.detail ? '<div class="subtitle"></div><a class="oecd-link" target="_blank" rel="noopener">View in OECD Data Explorer -></a>' : ''}`; article.querySelector('.dataset-name').textContent = title; article.querySelector('.mono').textContent = record?.dataflowId || id; const metricValues = article.querySelectorAll('.metric-value'); metricValues[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; metricValues[0].classList.add(responseClass(record?.responseTimeMs)); metricValues[1].textContent = fmtNum(count); if (options.detail) { const url = article.querySelector('.url'); url.textContent = record?.url || '-'; url.title = record?.url || ''; article.querySelector('.subtitle').textContent = `HTTP ${record?.status ?? '-'} - Updated ${localTime(record?.timestamp)}`; article.querySelector('.oecd-link').href = record?.url || 'https://sdmx.oecd.org/'; } renderSparkline(article.querySelector('.sparkline'), series, record?.ok === false ? CONFIG.colors.red : CONFIG.colors.blue); return article; }
+    function makeEndpointCard(record, options = {}) { const article = document.createElement('article'); article.className = 'card endpoint-card'; const badge = statusBadge(record); const id = record?.id || options.id || '-'; const title = record?.name || options.name || id; const count = id === 'oecd_dataflows' ? record?.catalogueSize : record?.recordCount; const series = oecdLive.filter(r => r.id === id).map(r => r.responseTimeMs); article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><span class="mono"></span>${options.detail ? '<span class="url"></span>' : ''}<div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">${id === 'oecd_dataflows' ? 'Catalogue Size' : 'Record Count'}</div></div></div><div class="sparkline" aria-label="Response time sparkline"></div>${options.detail ? '<div class="subtitle"></div><a class="oecd-link" target="_blank" rel="noopener">View in OECD Data Explorer -></a>' : ''}`; article.querySelector('.dataset-name').textContent = title; article.querySelector('.mono').textContent = record?.dataflowId || id; const metricValues = article.querySelectorAll('.metric-value'); metricValues[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; metricValues[0].classList.add(responseClass(record?.responseTimeMs)); metricValues[1].textContent = fmtNum(count); if (options.detail) { const url = article.querySelector('.url'); url.textContent = record?.url || '-'; url.title = record?.url || ''; article.querySelector('.subtitle').textContent = `HTTP ${record?.status ?? '-'} - Updated ${localTime(record?.timestamp)}`; article.querySelector('.oecd-link').href = record?.url || 'https://sdmx.oecd.org/'; } renderSparkline(article.querySelector('.sparkline'), series, record?.ok === false ? CONFIG.colors.red : CONFIG.colors.blue);
+      if (options.detail) {
+        const chartBtn = document.createElement('button');
+        chartBtn.className = 'btn';
+        chartBtn.textContent = 'View Chart';
+        chartBtn.style.cssText = 'margin-top:8px;font-size:11px;display:block;width:100%';
+        chartBtn.addEventListener('click', () => openSdmxChart(record?.url || '', record?.name || id));
+        article.querySelector('.oecd-link').insertAdjacentElement('afterend', chartBtn);
+      }
+      return article; }
     function renderOverview() { const latest = latestOecdRecords(oecdLive); const anomalyCount = healthLog.filter(r => r.anomaly?.detected).length; const uptime48 = uptimeLast48h(); const kpis = $('overview-kpis'); kpis.textContent = ''; appendKpi(kpis, pct(uptime48), 'Platform Uptime', 'last 48h SIS-CC checks', uptime48 === 100 ? 'green' : uptime48 >= 99.5 ? 'green' : 'amber'); appendKpi(kpis, fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), 'OECD Dataflows', `${agencyCount()} agencies`, 'blue'); appendKpi(kpis, fmtNum(latest.oecd_cli?.recordCount), 'CLI Observations', 'latest production fetch'); appendKpi(kpis, fmtNum(latest.oecd_unemployment?.recordCount), 'Unemployment Obs.', 'latest production fetch'); appendKpi(kpis, fmtNum(anomalyCount), 'Anomalies Detected', 'all health-log records', anomalyCount > 0 ? 'amber' : 'green'); const cards = $('overview-oecd-cards'); cards.textContent = ''; CONFIG.endpoints.overviewOecd.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id }))); renderOverviewCatalogue(); renderSisHealth(); $('export-csv').addEventListener('click', exportCatalogueCsv); }
     function agencyCount() { const flows = oecdCatalogue?.flows || []; return new Set(flows.map(f => f.agencyID).filter(Boolean)).size; }
     function flowStatus(flow) { return CONFIG.endpoints.monitoredFlows.has(flow.id) ? ['Monitored', 'green'] : ['Available', 'blue']; }
@@ -425,14 +697,35 @@
       $('modal-prev').disabled = modalPage === 0;
       $('modal-next').disabled = modalPage >= maxPage;
     }
-    function renderSisHealth() { const groups = groupByEndpoint(healthLog); const latest = latestSisRecords(); const cards = $('sis-cards'); cards.textContent = ''; CONFIG.endpoints.sis.forEach(name => { const record = latest[name]; const badge = statusBadge(record); const article = document.createElement('article'); article.className = 'card endpoint-card'; article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Uptime</div></div></div>`; article.querySelector('.dataset-name').textContent = name; const vals = article.querySelectorAll('.metric-value'); vals[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; vals[0].classList.add(responseClass(record?.responseTimeMs)); vals[1].textContent = pct(uptime(groups[name] || [])); cards.appendChild(article); }); renderSisChart(groups); }
+    function renderSisHealth() { const groups = groupByEndpoint(healthLog); const latest = latestSisRecords(); const cards = $('sis-cards'); cards.textContent = ''; CONFIG.endpoints.sis.forEach(name => { const record = latest[name]; const badge = statusBadge(record); const article = document.createElement('article'); article.className = 'card endpoint-card'; article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Uptime</div></div></div>`; article.querySelector('.dataset-name').textContent = name; const vals = article.querySelectorAll('.metric-value'); vals[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; vals[0].classList.add(responseClass(record?.responseTimeMs)); vals[1].textContent = pct(uptime(groups[name] || []));
+      if (name === 'Data Query') {
+        const b = document.createElement('button');
+        b.className = 'btn';
+        b.textContent = 'View Chart';
+        b.style.cssText = 'margin-top:8px;font-size:11px;width:100%';
+        b.addEventListener('click', () => openSdmxChart(SIS_URLS['Data Query'], name));
+        article.appendChild(b);
+      }
+      cards.appendChild(article); }); renderSisChart(groups); }
     function renderSisChart(groups) { if (sisChart) sisChart.destroy(); const ref = (groups.Structures || []).slice(-20); sisChart = new Chart($('sis-response-chart'), { type: 'line', data: { labels: ref.map(r => utcTime(r.timestamp)), datasets: CONFIG.endpoints.sis.map((name, i) => ({ label: name, data: (groups[name] || []).slice(-20).map(r => r.responseTimeMs), borderColor: [CONFIG.colors.green, CONFIG.colors.blue, CONFIG.colors.amber][i], backgroundColor: 'transparent', tension: .25, borderWidth: 2 })) }, options: chartOptions('Response time (ms)') }); }
     function renderOecdProduction() { const latest = latestOecdRecords(oecdLive); const cards = $('oecd-detail-cards'); cards.textContent = ''; CONFIG.endpoints.oecdOrder.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id, detail: true }))); renderOecdChart(); }
     function renderOecdChart() { if (oecdChart) oecdChart.destroy(); const ids = CONFIG.endpoints.oecdOrder; const labels = [...new Set(oecdLive.map(r => utcTime(r.timestamp)))].slice(-20); oecdChart = new Chart($('oecd-response-chart'), { type: 'line', data: { labels, datasets: ids.map((id, i) => { const rows = oecdLive.filter(r => r.id === id).slice(-20); return { label: rows[0]?.name || id, data: rows.map(r => r.responseTimeMs), borderColor: [CONFIG.colors.blue, CONFIG.colors.green, CONFIG.colors.amber, CONFIG.colors.red, CONFIG.colors.muted][i], backgroundColor: 'transparent', tension: .25, borderWidth: 2 }; }) }, options: chartOptions('Response time (ms)') }); }
     function chartOptions(yTitle) { return { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#64748b', font: { size: 11 } } } }, scales: { x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { color: '#1e2530' } }, y: { beginAtZero: true, title: { display: true, text: yTitle, color: '#64748b' }, ticks: { color: '#64748b' }, grid: { color: '#1e2530' } } } }; }
     function renderCatalogue() { const flows = oecdCatalogue?.flows || []; const stats = $('catalogue-stats'); stats.textContent = ''; appendKpi(stats, fmtNum(flows.length), 'Total flows', 'OECD public dataflow catalogue', 'blue'); appendKpi(stats, fmtNum(agencyCount()), 'Agencies', 'distinct agency IDs'); appendKpi(stats, localTime(oecdCatalogue?.fetchedAt), 'Last updated', 'catalogue fetch timestamp'); const agency = $('catalogue-agency'); agency.replaceChildren(new Option('All agencies', '')); [...new Set(flows.map(f => f.agencyID).filter(Boolean))].sort().forEach(a => agency.appendChild(new Option(a, a))); $('catalogue-search').oninput = () => { cataloguePage = 0; renderCatalogueRows(); }; agency.onchange = () => { cataloguePage = 0; renderCatalogueRows(); }; $('catalogue-prev').onclick = () => { cataloguePage = Math.max(0, cataloguePage - 1); renderCatalogueRows(); }; $('catalogue-next').onclick = () => { cataloguePage++; renderCatalogueRows(); }; renderCatalogueRows(); }
     function renderCatalogueRows() { const flows = oecdCatalogue?.flows || []; const q = $('catalogue-search').value.toLowerCase().trim(); const agency = $('catalogue-agency').value; catalogueFiltered = flows.filter(f => { const search = !q || (f.name || '').toLowerCase().includes(q) || (f.id || '').toLowerCase().includes(q); return search && (!agency || f.agencyID === agency); }); const maxPage = Math.max(0, Math.ceil(catalogueFiltered.length / 50) - 1); cataloguePage = Math.min(cataloguePage, maxPage); const body = $('catalogue-body'); body.textContent = ''; catalogueFiltered.slice(cataloguePage * 50, cataloguePage * 50 + 50).forEach(flow => { const tr = document.createElement('tr'); tr.className = 'row-click'; [flow.agencyID, flow.id, flow.name, flow.version].forEach(value => { const td = document.createElement('td'); td.textContent = value || '-'; tr.appendChild(td); }); tr.addEventListener('click', () => openDetail(flow)); body.appendChild(tr); }); if (!flows.length) body.innerHTML = '<tr><td colspan="4" class="muted">Catalogue fetch pending</td></tr>'; $('catalogue-page-label').textContent = `Page ${cataloguePage + 1} of ${maxPage + 1} · ${fmtNum(catalogueFiltered.length)} rows`; $('catalogue-prev').disabled = cataloguePage === 0; $('catalogue-next').disabled = cataloguePage >= maxPage; }
-    function openDetail(flow) { const url = `https://sdmx.oecd.org/public/rest/dataflow/${flow.agencyID}/${flow.id}/${flow.version || 'all'}`; $('detail-name').textContent = flow.name || flow.id; $('detail-agency').textContent = flow.agencyID || '-'; $('detail-version').textContent = flow.version || '-'; $('detail-url').textContent = url; $('detail-url').href = url; $('detail-panel').classList.add('open'); $('detail-panel').setAttribute('aria-hidden', 'false'); }
+    function openDetail(flow) { const url = `https://sdmx.oecd.org/public/rest/dataflow/${flow.agencyID}/${flow.id}/${flow.version || 'all'}`; $('detail-name').textContent = flow.name || flow.id; $('detail-agency').textContent = flow.agencyID || '-'; $('detail-version').textContent = flow.version || '-'; $('detail-url').textContent = url; $('detail-url').href = url;
+      const detailUrl = `https://sdmx.oecd.org/public/rest/data/${flow.agencyID},${flow.id},${flow.version || '1.0'}/all?lastNObservations=200`;
+      let chartBtn = $('detail-chart-btn');
+      if (!chartBtn) {
+        chartBtn = document.createElement('button');
+        chartBtn.id = 'detail-chart-btn';
+        chartBtn.className = 'btn btn-primary';
+        chartBtn.textContent = 'View Chart';
+        chartBtn.style.cssText = 'margin-top:12px;width:100%';
+        $('detail-url').insertAdjacentElement('afterend', chartBtn);
+      }
+      chartBtn.onclick = () => openSdmxChart(detailUrl, flow.name || flow.id);
+      $('detail-panel').classList.add('open'); $('detail-panel').setAttribute('aria-hidden', 'false'); }
     $('detail-close').addEventListener('click', () => { $('detail-panel').classList.remove('open'); $('detail-panel').setAttribute('aria-hidden', 'true'); });
     const REPORTS_API_URL = 'https://api.github.com/repos/erenkahraman/statpulse/issues?labels=weekly-report&state=all&per_page=20&sort=created&direction=desc';
     function escHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }

@@ -1,5 +1,4 @@
 {
-  "buildCommand": "",
   "outputDirectory": "dashboard",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" }

@@ -1,198 +1,194 @@
-# statpulse
+# StatPulse — OECD SDMX Intelligence Platform
 
 [![API Health Check](https://github.com/erenkahraman/statpulse/actions/workflows/health-check.yml/badge.svg)](https://github.com/erenkahraman/statpulse/actions/workflows/health-check.yml)
-[![Live Dashboard](https://img.shields.io/badge/dashboard-live-3fb950?logo=github)](https://erenkahraman.github.io/statpulse)
+[![Live Dashboard](https://img.shields.io/badge/dashboard-live-3fb950?logo=vercel)](https://statpulse.erenkahraman.work)
 [![License: MIT](https://img.shields.io/badge/License-MIT-2f81f7.svg)](LICENSE)
 
-**Real-time API health monitoring for the SIS-CC .Stat Suite SDMX platform.**
+Real-time monitoring and data intelligence for the OECD SDMX ecosystem.
 
-## What is this?
+---
 
-I built statpulse to demonstrate production-grade platform observability skills in the context of the SIS-CC .Stat Suite — the open-source SDMX dissemination platform that powers OECD's Data Explorer, country NSIs, and international statistical organisations.
+## What is StatPulse?
 
-Every six hours, a GitHub Actions workflow calls three public, auth-free SDMX REST API endpoints on the SIS-CC demo environment. The results — HTTP status, response time, content-type validity, and domain-specific metrics like DSD catalogue size — are committed back to this repository as `data/health-log.json`. A self-contained GitHub Pages dashboard reads that file directly and renders uptime percentages, response-time charts, anomaly detection alerts, a Catalogue Change Report with timeline and snapshot table, a Dataflow Explorer, an interactive SDMX Guide Panel, and weekly automated health reports as GitHub Issues.
+StatPulse monitors and visualizes live data from the OECD SDMX production API and the SIS-CC .Stat Suite demo environment. It is designed as a small, inspectable open source platform for understanding API health, catalogue coverage, and time-series data availability across OECD statistical services.
 
-No backend. No database. No cloud bill.
+The platform currently covers five production OECD endpoints: Composite Leading Indicators, Monthly Unemployment Rates, GDP, Health SHA, and the full OECD dataflow catalogue. It also monitors three SIS-CC demo endpoints. Automated health checks run every six hours through GitHub Actions and commit the resulting JSON snapshots back to the repository.
 
-This is also a portfolio project for an OECD SDD/SDPS Product Manager role — it demonstrates hands-on familiarity with SDMX artefacts, the .Stat Suite module architecture, GSBPM-aligned data lifecycle thinking, and the kind of automated governance tooling a PM should be able to commission and own.
+Beyond monitoring, StatPulse provides an interactive chart viewer for SDMX datasets, a searchable browser of 2,527 OECD dataflows across 47+ agencies, and dataset coverage across Economics, Labour, Education, Finance, and Digital & Innovation categories. It is built with Vercel static hosting and Edge Functions, GitHub Actions, Lightweight Charts, and Chart.js. There is no database and no long-running backend service.
 
-## Why I Built This
+---
 
-Rather than describing these capabilities in a cover letter, I built a working system that exercises them directly — using AI-assisted development to accelerate implementation while owning all architectural decisions, domain research, and product thinking. The project is a practical demonstration of the skills required for the OECD SDD/SDPS Product Manager role.
+## Live Platform
 
-### How statpulse maps to the role requirements
+https://statpulse.erenkahraman.work
 
-| Role Requirement (from JD) | How this project addresses it |
-|---|---|
-| "Collect, analyse and identify user's behavioural patterns through usability tests, users surveys/feedback and analytics" | The KPI framework in `governance/kpis.yaml` defines 6 measurable indicators — including WCAG compliance and community issue resolution time — that mirror the analytics-driven product feedback loop described in the role |
-| "Develop and monitor key performance indicators to assess user satisfaction and product quality in terms of functions, accessibility, performance, scalability and security" | `governance/kpis.yaml` defines structured, machine-readable KPIs with targets, measurement methods, and owners. The automated health-check pipeline operationalises two of them (api-availability, api-response-time) with real data collected every 6 hours |
-| "Oversee, coordinate and continuously improve the lean/agile development process with the developers ensuring the successful and efficient delivery of high-quality solutions" | The GitHub Actions CI/CD pipeline, Conventional Commits discipline, and issue templates (user stories with Definition of Done, SDMX artefact change requests) reflect the Agile delivery process a PM would own and continuously improve |
-| "Perform quality assurance testing to ensure the correct functioning of the products, incl. accessibility, contribute to develop related automated tests, and define acceptance criteria" | The health-check script performs automated API validation on every run — checking HTTP status, SDMX content-type headers, and response time thresholds. An automated axe-core accessibility audit pipeline enforces WCAG 2.1 AA compliance as a CI gate (0 critical violations). Acceptance criteria are embedded in the user-story issue template |
-| "Excellent experience is required with the DevSecOps platform GitLab or GitHub and its issue, epic, board, milestone, pipeline, runner, dashboard and analytics management tools" | This project is built entirely on GitHub's DevSecOps surface: Actions pipelines, scheduled runners, Pages deployment, issue templates with labels, and a data-driven dashboard — all configured from scratch |
-| "Familiarity with Statistical Data and Metadata eXchange (SDMX) standard with a commitment to reach a good working knowledge" | The monitoring script parses live SDMX-ML XML responses, counting DataStructure and Codelist artefacts. The governance layer references SDMX-specific concepts: DSDs, Codelists, Content Constraints, the NSI web service, and the Transfer service `/init/dataflow` endpoint |
-| "Good experience working with analytical tools and key indicator dashboards, such as Google Analytics, PowerBi and Grafana" | The GitHub Pages dashboard is a purpose-built observability tool: real-time uptime cards, Chart.js response-time visualisation, domain metric trend tables, and anomaly detection alerts — conceptually equivalent to a Grafana dashboard, implemented without infrastructure cost |
-| "Contribute to setting up collaboration frameworks and best practices with SIS-CC members" | `.github/ISSUE_TEMPLATE/` includes three structured templates (user stories, SDMX artefact change requests, API health alerts) that codify collaboration norms — the same kind of framework a PM would establish with SIS-CC community members |
-| "Provide regular reporting as required" | The automated weekly report workflow opens a GitHub Issue every Monday with platform health metrics — uptime percentage, average response times, catalogue stability — structured as a stakeholder-ready summary |
-| "Innovate and Embrace Change (Level 2)" | The entire project was built using AI-assisted development (Claude Code), with architectural decisions, domain research, and product framing owned by me. Using AI as a productivity multiplier while maintaining quality ownership is precisely the kind of innovation this competency describes |
+The live dashboard opens on a platform overview with API availability, indexed dataset counts, latest observation metrics, anomaly status, and key economic indicators. From there, you can browse live OECD production endpoints, search the full data catalogue, inspect dataset metadata, open SDMX time-series charts, review automated reports, and read governance documentation from the same interface.
 
-*Built with Claude Code (Anthropic) — AI-assisted implementation, human-directed architecture and product thinking.*
+---
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    A[GitHub Actions\ncron every 6h] -->|fetch| B[SIS-CC NSI\nPublic SDMX API]
-    B -->|results| C[health-log.json\ncommitted to repo]
-    C -->|served via| D[GitHub Pages\nDashboard]
-    D -->|weekly| E[GitHub Issues\nHealth Reports]
+    A[GitHub Actions\ncron every 6h] -->|fetch| B[OECD SDMX\nProduction API]
+    A -->|fetch| C[SIS-CC NSI\nDemo API]
+    B -->|parsed XML/JSON| D[data/oecd-live.json\ndata/oecd-catalogue.json]
+    C -->|parsed XML| E[data/health-log.json]
+    D -->|committed to repo| F[Vercel\nStatic Dashboard]
+    E -->|committed to repo| F
+    F -->|on demand via| G[Vercel Edge Function\napi/sdmx.js proxy]
+    G -->|fetches & parses| B
+    F -->|weekly| H[GitHub Issues\nHealth Reports]
 ```
-
-## Dashboard Features
-
-| Feature | Description |
-|---|---|
-| Platform Health Score | Composite 0–100 score (availability 50%, response time 30%, anomaly-free 20%) with letter grade and score breakdown bars |
-| Endpoint Status Cards | Live uptime % and response time per SDMX endpoint with operational/degraded/down badge |
-| Response Time Chart | Last 20 checks as a Chart.js line chart per endpoint |
-| Anomaly Detection | 10-check rolling average — flags 2× (warning) and 3× (critical) deviations |
-| Domain Metric Trends | DSD count, response KB, Codelist count over time |
-| SDMX Artefact Browser | Roadmap: searchable DSD and Codelist tabs fetched directly from the NSI endpoint |
-| Dataflow Explorer | Browse and search all available SDMX dataflows on the SIS-CC demo instance |
-| Catalogue Change Report | Timeline of structural catalogue changes with 10-check snapshot table (Timestamp, DSDs, Codelists, Change delta) |
-| Tabbed Reports Interface | Weekly Health Reports and Catalogue Changes in a unified tabbed section |
-| Weekly Health Reports | GitHub Issues auto-generated every Monday 09:00 UTC |
-| SDMX Guide Panel | Toggleable 3-tab overlay covering platform architecture, SDMX concepts, and dashboard usage |
-| Accessibility Status Banner | Live WCAG 2.1 AA status — 0 critical, 0 serious violations; links to full audit report |
-| GitHub Header Link | Direct link to this repository from the dashboard header |
-
-## Monitored Endpoints
-
-| Endpoint | URL | What I measure |
-|---|---|---|
-| Structures | `https://nsi-demo-stable.siscc.org/rest/datastructure/all/all/all?detail=allstubs` | Uptime, response time, DSD catalogue count |
-| Data Query | `https://nsi-demo-stable.siscc.org/rest/data/OECD.CFE,INBOUND@TOURISM_TRIPS,2.0` | Uptime, response time, response size KB |
-| Codelists | `https://nsi-demo-stable.siscc.org/rest/codelist/all/all/latest?detail=allstubs` | Uptime, response time, Codelist catalogue count |
-
-All three endpoints are public and require no authentication — they represent the live SIS-CC demo environment.
-
-## Product Management Layer
-
-The `governance/` directory contains the artefacts a PM owns alongside the code:
-
-| File | Purpose |
-|---|---|
-| `governance/kpis.yaml` | Six measurable KPIs tied to platform reliability, data quality, accessibility, and community health |
-| `governance/dsd-audit-checklist.md` | Pre-promotion checklist for SDMX Data Structure Definitions |
-| `governance/data-lifecycle.md` | GSBPM-aligned end-to-end data lifecycle with Mermaid flowchart |
-| `governance/accessibility-audit.md` | WCAG 2.1 AA compliance report — automated axe-core scan, 0 critical violations |
-| `governance/user-research/` | Usability test plan (5-task moderated sessions), SUS survey questions, GA4 analytics tracking plan |
-
-Issue templates in `.github/ISSUE_TEMPLATE/` cover user stories, SDMX artefact change requests, and API health alerts.
-
-## KPIs Tracked
-
-| KPI | Target | Frequency |
-|---|---|---|
-| API Availability | ≥ 99.5% | Every 6h |
-| API Response Time (p95) | < 3000ms | Every 6h |
-| SDMX Content-Type Validity | 100% | Every 6h |
-| DataStructure Catalogue Stability | ±5 of 30-day rolling avg | Daily |
-| Dashboard WCAG 2.1 AA | Zero critical violations | Per PR |
-| Community Issue Resolution | Bugs < 30d, Features < 90d | Monthly |
-
-*Catalogue stability is now tracked with per-check granularity via the Catalogue Change Report tab in the dashboard.*
-
-## Local Development
-
-```bash
-# Clone the repository
-git clone https://github.com/erenkahraman/statpulse.git
-cd statpulse
-
-# No runtime dependencies — Node 20 built-in fetch handles everything
-npm install
-
-# Run a health check manually and populate health-log.json
-npm run check
-
-# Run the WCAG 2.1 AA accessibility audit (requires Chrome/Chromium)
-npm run audit:a11y
-# Output: governance/accessibility-audit.md
-
-# Preview the dashboard locally (copy data file alongside HTML)
-cp data/health-log.json dashboard/health-log.json
-# Open dashboard/index.html in your browser
-open dashboard/index.html
-```
-
-Node.js 20 or later is required. The script uses the built-in `fetch` API — no `node-fetch` or other HTTP libraries needed.
-
-## About .Stat Suite
-
-[.Stat Suite](https://sis-cc.gitlab.io/dotstatsuite-documentation/) is the SIS-CC open-source platform for statistical data dissemination. It implements the SDMX standard and consists of several modules:
-
-- **.Stat Core** — the NSI (National Statistics Institute) component that exposes the SDMX REST API
-- **Data Lifecycle Manager (DLM)** — governance UI for creating and versioning SDMX artefacts
-- **Data Explorer (SDE)** — end-user data discovery and download interface
-- **Search & Facet Service (SFS)** — indexing and faceted search engine
-
-statpulse monitors the .Stat Core REST API layer, which is the shared foundation all other modules depend on.
-
-## Contributing
-
-I welcome issues, ideas, and pull requests. Use the issue templates in `.github/ISSUE_TEMPLATE/` to structure requests — the API health alert template is especially useful if you spot a monitoring gap.
-
-## Changelog
-
-### v1.4.0 — February 2026
-
-- Automated WCAG 2.1 AA accessibility audit pipeline (`scripts/accessibility-audit.js`, axe-core + Puppeteer, GitHub Actions workflow)
-- Dashboard accessibility fixes: resolved `aria-hidden-focus` and `color-contrast` violations — 0 critical, 0 serious remaining
-- WCAG 2.1 AA status banner added to dashboard (links to `governance/accessibility-audit.md`)
-- User research templates: usability test plan, SUS survey, GA4 analytics tracking plan (`governance/user-research/`)
-- Docs directory: onboarding guide, add-new-endpoint tutorial, product decision log (`docs/`)
-- Catalogue Change Report: replaced Chart.js sparkline with stable HTML snapshot table (last 10 checks)
-- GitHub repository link added to dashboard header
-
-### v1.3.0 — February 2026
-
-- Catalogue Change Report: timeline view of DSD and Codelist changes with delta tables
-- SDMX Artefact Browser roadmap: searchable DSD and Codelist tables fetched directly from nsi-demo-stable.siscc.org
-- SDMX Guide Panel: toggleable overlay with three-tab reference guide covering platform architecture, SDMX concepts, and dashboard usage
-- Tabbed report interface: Weekly Health Reports and Catalogue Changes in a unified reports section
-- Anomaly detection: rolling average deviation alerts at 2× and 3× thresholds
-
-### v1.2.0 — February 2026
-
-- Anomaly detection with configurable rolling average window
-- Weekly automated platform health reports as GitHub Issues
-- Interactive report viewer fetching GitHub Issues API
-
-### v1.1.0 — 2026
-
-- Rolling-average anomaly detection with warning/critical severity levels
-- Automated weekly platform health report as a GitHub Issue every Monday
-- Job description alignment section in README
-
-### v1.0.0 — 2025
-
-- Initial release: three-endpoint SDMX monitoring via GitHub Actions
-- Self-contained GitHub Pages dashboard with Chart.js response-time visualisation
-- Governance layer: KPI framework, DSD audit checklist, GSBPM lifecycle diagram
-- Issue templates for user stories, SDMX artefact changes, and health alerts
-
-## Documentation
-
-| File | Purpose |
-|---|---|
-| [`docs/onboarding-guide.md`](docs/onboarding-guide.md) | Getting started with statpulse — dashboard sections, alert interpretation, manual checks, and escalation decision tree |
-| [`docs/add-new-endpoint.md`](docs/add-new-endpoint.md) | How to extend monitoring to new .Stat Suite instances — step-by-step with real code snippets |
-| [`docs/product-decision-log.md`](docs/product-decision-log.md) | Architectural decision rationale — GitHub Issues reporting, JSON health log, rolling anomaly detection, snapshot table |
-| [`governance/user-research/usability-test-plan.md`](governance/user-research/usability-test-plan.md) | 5-task moderated usability test plan with SUS metrics and session structure |
-| [`governance/user-research/survey-questions.md`](governance/user-research/survey-questions.md) | SUS questionnaire, task-satisfaction survey, in-product popup, and accessibility feedback |
-| [`governance/user-research/analytics-tracking-plan.md`](governance/user-research/analytics-tracking-plan.md) | GA4 event schema, KPI dashboard config, and EU privacy compliance checklist |
-| [`governance/accessibility-audit.md`](governance/accessibility-audit.md) | WCAG 2.1 AA compliance report — automated axe-core scan, 0 critical violations |
 
 ---
 
-*Built as a portfolio project for OECD SDD/SDPS PM role | Not officially affiliated with OECD or SIS-CC*
+## Features
+
+### Monitoring
+
+| Feature | Description |
+|---|---|
+| OECD production monitoring | Five OECD production endpoints are checked every six hours. |
+| SIS-CC demo monitoring | Three .Stat Suite demo endpoints are checked for uptime, latency, and SDMX response shape. |
+| Anomaly detection | A 10-check rolling average flags 2x warning and 3x critical response-time deviations. |
+| Weekly health reports | GitHub Issues are generated automatically with platform health summaries. |
+| KPI scorecard | Tracks availability, p95 response time, anomaly rate, catalogue coverage, report cadence, and data freshness. |
+
+### Data Intelligence
+
+| Feature | Description |
+|---|---|
+| Universal SDMX chart viewer | Fetches OECD SDMX dataflows and renders them as interactive time series with Lightweight Charts. |
+| Dimension grouping | Supports grouping by SDMX dimensions such as `REF_AREA`, `MEASURE`, and `FREQ`. |
+| Time range controls | Provides 1Y, 5Y, 10Y, and All range filters for visible series. |
+| Chart types | Supports line, area, and bar views. |
+| CSV export | Downloads the currently visible chart data with date, series, and value columns. |
+| Serverless proxy | `api/sdmx.js` removes CORS friction, centralizes XML parsing, and enforces payload limits. |
+
+### Data Coverage
+
+| Category | Datasets | Source |
+|---|---|---|
+| Economics & Growth | GDP — Expenditure Approach, Composite Leading Indicators | OECD.SDD.NAD, OECD.SDD.STES |
+| Labour & Social | Monthly Unemployment Rates, Health Expenditure (SHA) | OECD.SDD.TPS, OECD.ELS.HD |
+| Education | Government Education Budget, Public Service Satisfaction | OECD.EDU.IMEP, OECD.GOV.GIP |
+| Finance & Households | Household Economic Indicators | OECD.SDD.NAD |
+| Digital & Innovation | R&D Expenditure (MSTI), ICT Usage by Businesses | OECD.STI.STP, OECD.STI.DEP |
+
+### Catalogue
+
+| Feature | Description |
+|---|---|
+| Full OECD catalogue | Indexes 2,527 dataflows across 47+ agencies. |
+| Search and filtering | Filters catalogue rows by keyword and agency. |
+| Dataset inspection | Opens a detail panel for any selected dataflow. |
+| Modal browser | Provides paginated catalogue browsing with 50 rows per page. |
+| CSV export | Exports the full catalogue for offline review. |
+
+### Governance
+
+| Feature | Description |
+|---|---|
+| Accessibility audit | WCAG 2.1 AA audit using axe-core and Puppeteer, wired into CI. |
+| KPI framework | `governance/kpis.yaml` defines measurable reliability, quality, accessibility, and freshness indicators. |
+| Data lifecycle documentation | GSBPM-aligned lifecycle notes describe how SDMX data moves through the system. |
+| User research templates | Includes a usability test plan, SUS survey, and GA4 analytics tracking plan. |
+| Issue templates | Structured templates cover user stories, SDMX artefact changes, and API health alerts. |
+
+---
+
+## Monitored Endpoints
+
+### OECD Production API (sdmx.oecd.org)
+
+| Dataset | Agency | Dataflow | Frequency |
+|---|---|---|---|
+| Composite Leading Indicators | OECD.SDD.STES | DSD_STES@DF_CLI | Monthly |
+| Monthly Unemployment Rates | OECD.SDD.TPS | DSD_LFS@DF_IALFS_UNE_M | Monthly |
+| GDP — Expenditure Approach | OECD.SDD.NAD | DSD_NAAG@DF_NAAG_I | Annual |
+| Health Expenditure (SHA) | OECD.ELS.HD | DSD_SHA@DF_SHA | Annual |
+| Full Dataflow Catalogue | OECD | all | On demand |
+
+### SIS-CC .Stat Suite Demo (nsi-demo-stable.siscc.org)
+
+| Endpoint | URL path | What is measured |
+|---|---|---|
+| Structures | `/rest/datastructure/all/all/all` | Uptime, response time, DSD count |
+| Data Query | `/rest/data/OECD.CFE,INBOUND@TOURISM_TRIPS,2.0` | Uptime, response time, KB |
+| Codelists | `/rest/codelist/all/all/latest` | Uptime, response time, Codelist count |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Hosting | Vercel static hosting and Edge Functions |
+| CI/CD | GitHub Actions |
+| Data storage | JSON files committed to the repository |
+| Charts | Lightweight Charts v4.1.1, Chart.js v4.4.1 |
+| SDMX proxy | Vercel Edge Function (`api/sdmx.js`) |
+| Accessibility | axe-core v4.11.1 and Puppeteer |
+| Runtime | Node.js 20 with built-in `fetch` |
+
+---
+
+## Local Development
+
+```powershell
+git clone https://github.com/erenkahraman/statpulse.git
+cd statpulse
+npm install
+
+# Run SIS-CC health check
+npm run check
+
+# Fetch OECD production data
+node scripts/fetch-oecd.js
+
+# Copy data files for local dashboard preview
+copy data\health-log.json dashboard\health-log.json
+copy data\oecd-live.json dashboard\oecd-live.json
+copy data\oecd-catalogue.json dashboard\oecd-catalogue.json
+
+# Serve dashboard locally (Node 20)
+node -e "const h=require('http'),f=require('fs'),p=require('path'); h.createServer((q,r)=>{let fp=p.join('dashboard',q.url==='/'?'index.html':q.url),ext=p.extname(fp),ct={'html':'text/html','json':'application/json','js':'text/javascript','css':'text/css','svg':'image/svg+xml'}[ext.slice(1)]||'text/plain'; try{r.writeHead(200,{'Content-Type':ct});r.end(f.readFileSync(fp))}catch{r.writeHead(404);r.end('not found')}}).listen(3000,()=>console.log('http://localhost:3000'))"
+
+# Run accessibility audit (requires Chrome)
+npm run audit:a11y
+```
+
+Node.js 20 or later is required. The monitoring and data-fetch scripts use the runtime's built-in `fetch` API.
+
+---
+
+## Governance
+
+The repository keeps operational documentation close to the code so changes to data coverage, monitoring behavior, and product quality controls can be reviewed together.
+
+| File | Purpose |
+|---|---|
+| [`governance/kpis.yaml`](governance/kpis.yaml) | Machine-readable KPI definitions for availability, latency, content validity, catalogue stability, accessibility, and issue resolution. |
+| [`governance/dsd-audit-checklist.md`](governance/dsd-audit-checklist.md) | Checklist for reviewing SDMX Data Structure Definitions before promotion or publication. |
+| [`governance/data-lifecycle.md`](governance/data-lifecycle.md) | GSBPM-aligned data lifecycle notes with an end-to-end process diagram. |
+| [`governance/accessibility-audit.md`](governance/accessibility-audit.md) | Latest automated WCAG 2.1 AA accessibility audit report. |
+| [`governance/user-research/usability-test-plan.md`](governance/user-research/usability-test-plan.md) | Moderated usability test plan for dashboard workflows. |
+| [`governance/user-research/survey-questions.md`](governance/user-research/survey-questions.md) | SUS and task-satisfaction survey questions. |
+| [`governance/user-research/analytics-tracking-plan.md`](governance/user-research/analytics-tracking-plan.md) | GA4 event schema and privacy-aware analytics plan. |
+| [`docs/onboarding-guide.md`](docs/onboarding-guide.md) | Operator-oriented guide for using the dashboard and interpreting alerts. |
+| [`docs/add-new-endpoint.md`](docs/add-new-endpoint.md) | Procedure for adding another monitored endpoint. |
+| [`docs/product-decision-log.md`](docs/product-decision-log.md) | Rationale for architecture and product decisions. |
+| [`.github/ISSUE_TEMPLATE/user-story.md`](.github/ISSUE_TEMPLATE/user-story.md) | Issue template for user stories and acceptance criteria. |
+| [`.github/ISSUE_TEMPLATE/sdmx-artifact-change.md`](.github/ISSUE_TEMPLATE/sdmx-artifact-change.md) | Issue template for SDMX artefact changes. |
+| [`.github/ISSUE_TEMPLATE/api-health-alert.md`](.github/ISSUE_TEMPLATE/api-health-alert.md) | Issue template for API health incidents and monitoring gaps. |
+
+---
+
+## About SDMX
+
+SDMX, Statistical Data and Metadata eXchange, is the ISO 17369 standard for exchanging official statistics and related metadata. It defines common structures for datasets, dimensions, codelists, dataflows, and machine-readable API responses. StatPulse uses SDMX because it is the native publication format for OECD statistical services and many other international data providers.
+
+---
+
+Not officially affiliated with OECD or SIS-CC.

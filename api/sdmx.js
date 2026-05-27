@@ -10,7 +10,8 @@ function jsonResponse(data, status = 200) {
     status,
     headers: {
       'Content-Type': 'application/json',
-      'Cache-Control': 'public, max-age=300'
+      'Cache-Control': 'public, max-age=900',
+      'Vary': 'Accept-Encoding'
     }
   });
 }
@@ -96,6 +97,8 @@ function detectVaryingDimensions(obs) {
 export default async function handler(req) {
   const { searchParams } = new URL(req.url);
   const target = searchParams.get('url');
+  const requestedLimit = Number.parseInt(searchParams.get('limit') || '500', 10);
+  const limit = Math.min(Math.max(Number.isFinite(requestedLimit) ? requestedLimit : 500, 1), 2000);
 
   if (!target) return jsonResponse({ error: 'Missing url parameter' }, 400);
 
@@ -119,7 +122,10 @@ export default async function handler(req) {
 
   try {
     const upstream = await fetch(fetchUrl, {
-      headers: { 'Accept': 'application/vnd.sdmx.genericdata+xml;version=2.1, application/xml, */*' },
+      headers: {
+        'Accept': 'application/vnd.sdmx.genericdata+xml;version=2.1, application/xml, */*',
+        'Accept-Encoding': 'gzip, deflate, br'
+      },
       signal: AbortSignal.timeout(25000)
     });
 
@@ -139,15 +145,24 @@ export default async function handler(req) {
       return jsonResponse({ error: 'No observations found', observations: [] }, 200);
     }
 
-    const dimensions = detectVaryingDimensions(observations);
-    const times = observations.map(o => normalizeTimePeriod(o.TIME_PERIOD)).filter(Boolean);
+    const limitedObservations = observations
+      .map(o => ({ observation: o, time: normalizeTimePeriod(o.TIME_PERIOD) }))
+      .sort((a, b) => String(b.time?.sort || '').localeCompare(String(a.time?.sort || '')))
+      .slice(0, limit)
+      .sort((a, b) => String(a.time?.sort || '').localeCompare(String(b.time?.sort || '')))
+      .map(item => item.observation);
+
+    const dimensions = detectVaryingDimensions(limitedObservations);
+    const times = limitedObservations.map(o => normalizeTimePeriod(o.TIME_PERIOD)).filter(Boolean);
     const sortedTimes = [...new Set(times.map(t => t.label))];
 
     return jsonResponse({
-      observations,
+      observations: limitedObservations,
       dimensions,
       meta: {
-        count: observations.length,
+        count: limitedObservations.length,
+        totalCount: observations.length,
+        limit,
         timeRange: sortedTimes.length ? [sortedTimes[0], sortedTimes[sortedTimes.length - 1]] : [],
         sourceUrl: target
       }

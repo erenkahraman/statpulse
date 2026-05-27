@@ -31,6 +31,65 @@
     .nav-links { display: flex; height: 48px; }
     .nav-link { height: 48px; padding: 0 16px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #64748b; font-size: 12px; }
     .nav-link:hover, .nav-link.active { color: #e2e8f0; border-bottom-color: #3b82f6; background: rgba(59,130,246,0.04); }
+    .nav-search-wrap {
+      position: relative;
+      margin: 0 16px;
+      flex: 1;
+      max-width: 420px;
+    }
+    .nav-search-input {
+      width: 100%;
+      height: 30px;
+      background: #060a0f;
+      border: 1px solid #1e2530;
+      border-radius: 6px;
+      color: #e2e8f0;
+      font-size: 12px;
+      padding: 0 10px 0 30px;
+      outline: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cpath d='m21 21-4.35-4.35'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 8px center;
+    }
+    .nav-search-input:focus { border-color: #3b82f6; }
+    .nav-search-dropdown {
+      position: absolute;
+      top: 34px;
+      left: 0;
+      right: 0;
+      background: #0d1117;
+      border: 1px solid #1e2530;
+      border-radius: 6px;
+      z-index: 50;
+      max-height: 320px;
+      overflow-y: auto;
+      display: none;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    .nav-search-dropdown.open { display: block; }
+    .search-result-item {
+      padding: 9px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #1e2530;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .search-result-item:last-child { border-bottom: 0; }
+    .search-result-item:hover, .search-result-item.active { background: rgba(59,130,246,0.08); }
+    .search-result-name { font-size: 12px; color: #e2e8f0; font-weight: 500; }
+    .search-result-meta { font-size: 10px; color: #475569; }
+    .search-result-match { color: #3b82f6; }
+    .search-no-results { padding: 12px; color: #475569; font-size: 12px; text-align: center; }
+    .search-section-label {
+      padding: 6px 12px 4px;
+      font-size: 10px;
+      color: #334155;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      background: #060a0f;
+    }
     .nav-status { margin-left: auto; display: flex; align-items: center; gap: 12px; padding: 0 18px; color: #64748b; font-size: 12px; }
     .live-pill { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border: 1px solid #1e2530; border-radius: 8px; color: #22c55e; background: #060a0f; font-size: 10px; font-weight: 700; letter-spacing: 1px; }
     .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; }
@@ -38,14 +97,45 @@
     .sidebar { background: #0d1117; border-right: 1px solid #1e2530; position: sticky; top: 48px; height: calc(100vh - 48px); overflow-y: auto; padding: 16px 0; }
     .side-group { margin-bottom: 22px; }
     .side-label { color: #334155; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; padding: 0 16px 8px; }
+    .side-label-subtitle { font-size: 10px; color: #334155; padding: 0 16px 8px; line-height: 1.4; }
     .side-item { width: 100%; border: 0; border-left: 2px solid transparent; background: transparent; color: #64748b; display: flex; align-items: center; gap: 8px; padding: 7px 16px 7px 14px; text-align: left; font-size: 12px; }
     .side-item:hover, .side-item.active { color: #e2e8f0; background: rgba(59,130,246,0.08); border-left-color: #3b82f6; }
     .side-section-note { font-size: 10px; color: #334155; padding: 0 16px 8px; line-height: 1.4; }
     .side-item { flex-wrap: wrap; }
     .side-item-sub { font-size: 10px; color: #334155; width: 100%; padding-left: 14px; margin-top: 1px; }
     .side-item:hover .side-item-sub, .side-item.active .side-item-sub { color: #475569; }
+    .side-status { cursor: default; justify-content: space-between; }
+    .side-status:hover { color: #64748b; background: transparent; border-left-color: transparent; }
+    .side-status-main { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
+    .side-status-code { color: #334155; font-size: 10px; font-family: 'SFMono-Regular', Consolas, monospace; font-weight: 700; }
+    .side-status.operational .side-status-code { color: #22c55e; }
+    .side-status.down .side-status-code { color: #ef4444; }
+    .side-category { border-top: 1px solid #0f1823; }
+    .side-cat-header {
+      width: 100%;
+      border: 0;
+      border-left: 2px solid transparent;
+      background: transparent;
+      color: #475569;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px 8px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .side-cat-header:hover { color: #94a3b8; }
+    .side-cat-arrow { font-size: 9px; transition: transform .18s; }
+    .side-cat-header.open .side-cat-arrow { transform: rotate(90deg); }
+    .side-cat-children { overflow: hidden; }
+    .side-cat-children.collapsed { display: none; }
     .dot { width: 6px; height: 6px; border-radius: 50%; flex: 0 0 auto; }
     .dot-sis { background: #22c55e; }
+    .dot-down { background: #ef4444; }
+    .dot-pending { background: #475569; }
     .dot-oecd { background: #3b82f6; }
     .dot-gov { background: #475569; }
     main { min-width: 0; padding: 20px; }
@@ -148,6 +238,7 @@
       .top-nav { height: auto; flex-wrap: wrap; }
       .logo { width: 100%; border-right: 0; border-bottom: 1px solid #1e2530; }
       .nav-links { overflow-x: auto; width: 100%; }
+      .nav-search-wrap { width: calc(100% - 28px); max-width: none; margin: 10px 14px 0; }
       .nav-status { width: 100%; margin-left: 0; padding-bottom: 10px; }
       .app-shell { grid-template-columns: 1fr; }
       .sidebar { position: static; height: auto; border-right: 0; border-bottom: 1px solid #1e2530; }
@@ -177,7 +268,8 @@
     .chart-state.error { color: #ef4444; }
     .chart-spinner { width: 22px; height: 22px; border: 2px solid #1e2530; border-top-color: #3b82f6; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    #sdmx-chart-container { flex: 1; min-height: 0; background: #060a0f; }
+    #sdmx-chart-container { flex: 1; min-height: 0; background: #060a0f; position: relative; }
+    .chart-y-axis-title { position: absolute; top: 10px; right: 58px; z-index: 2; color: #64748b; font-size: 11px; font-weight: 600; background: rgba(6,10,15,0.78); padding: 2px 6px; border-radius: 4px; pointer-events: none; }
     .chart-legend { display: flex; flex-wrap: wrap; gap: 10px 16px; padding: 10px 18px; border-top: 1px solid #1e2530; flex-shrink: 0; max-height: 96px; overflow-y: auto; }
     .chart-legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #94a3b8; cursor: pointer; user-select: none; }
     .chart-legend-item.disabled { opacity: 0.35; }
@@ -186,6 +278,7 @@
     .chart-stat { font-size: 11px; }
     .chart-stat-label { color: #475569; margin-right: 6px; }
     .chart-stat-value { color: #e2e8f0; font-weight: 600; }
+    .chart-download-btn { margin-left: auto; min-height: 26px; }
   </style>
 </head>
 <body>
@@ -193,53 +286,111 @@
     <div class="logo" aria-label="StatPulse"><span class="logo-stat">STAT</span><span class="logo-pulse">PULSE</span></div>
     <div class="nav-links" role="tablist" aria-label="Views">
       <button class="nav-link active" data-view="overview" type="button">Overview</button>
-      <button class="nav-link" data-view="oecd" type="button">OECD Production</button>
-      <button class="nav-link" data-view="catalogue" type="button">Catalogue</button>
-      <button class="nav-link" data-view="reports" type="button">Reports</button>
+      <button class="nav-link" data-view="oecd" type="button">Live Data</button>
+      <button class="nav-link" data-view="catalogue" type="button">Data Catalogue</button>
+      <button class="nav-link" data-view="reports" type="button">Reports & Analytics</button>
       <button class="nav-link" data-view="governance" type="button">Governance</button>
+    </div>
+    <div class="nav-search-wrap">
+      <input class="nav-search-input" id="nav-search" type="search" placeholder="Search datasets, indicators, agencies..." autocomplete="off" aria-label="Search OECD datasets" />
+      <div class="nav-search-dropdown" id="nav-search-dropdown"></div>
     </div>
     <div class="nav-status"><span class="live-pill"><span class="live-dot" aria-hidden="true"></span>LIVE</span><span id="nav-updated">Updated --:-- UTC</span></div>
   </nav>
 
   <div class="app-shell">
     <aside class="sidebar" aria-label="Monitoring navigation">
-      <div class="side-group"><div class="side-label">SIS-CC Endpoints</div><button class="side-item active" data-view="overview" type="button"><span class="dot dot-sis"></span>Structures</button><button class="side-item" data-view="overview" type="button"><span class="dot dot-sis"></span>Data Query</button><button class="side-item" data-view="overview" type="button"><span class="dot dot-sis"></span>Codelists</button></div>
       <div class="side-group">
-        <div class="side-label">OECD Production</div>
-        <div class="side-section-note">
-          Live production endpoints actively monitored every 6h
+        <div class="side-label">Platform Health</div>
+        <div class="side-label-subtitle">Live API status · checks every 6h</div>
+        <div class="side-item side-status" data-sis-endpoint="Structures">
+          <span class="side-status-main"><span class="dot dot-pending" aria-hidden="true"></span>Structures</span>
+          <span class="side-status-code">—</span>
         </div>
-        <button class="side-item" data-view="oecd" type="button">
-          <span class="dot dot-oecd"></span>CLI
-          <span class="side-item-sub">Leading Indicators</span>
+        <div class="side-item side-status" data-sis-endpoint="Data Query">
+          <span class="side-status-main"><span class="dot dot-pending" aria-hidden="true"></span>Data Query</span>
+          <span class="side-status-code">—</span>
+        </div>
+        <div class="side-item side-status" data-sis-endpoint="Codelists">
+          <span class="side-status-main"><span class="dot dot-pending" aria-hidden="true"></span>Codelists</span>
+          <span class="side-status-code">—</span>
+        </div>
+      </div>
+      <div class="side-group">
+        <div class="side-label">Statistical Data</div>
+        <div class="side-section-note">
+          Live production endpoints · OECD SDMX API
+        </div>
+        <div class="side-category">
+          <button class="side-cat-header open" type="button">
+            <span>Economics & Growth</span>
+            <span class="side-cat-arrow" aria-hidden="true">▶</span>
+          </button>
+          <div class="side-cat-children">
+            <button class="side-item" data-view="oecd" data-scroll-target="card-gdp" type="button">
+              <span class="dot dot-oecd"></span>National Accounts
+              <span class="side-item-sub">GDP growth · Annual</span>
+            </button>
+            <button class="side-item" data-view="oecd" data-scroll-target="card-cli" type="button">
+              <span class="dot dot-oecd"></span>Leading Indicators
+              <span class="side-item-sub">Business cycles · Monthly</span>
+            </button>
+          </div>
+        </div>
+        <div class="side-category">
+          <button class="side-cat-header" type="button">
+            <span>Labour & Social</span>
+            <span class="side-cat-arrow" aria-hidden="true">▶</span>
+          </button>
+          <div class="side-cat-children collapsed">
+            <button class="side-item" data-view="oecd" data-scroll-target="card-unemployment" type="button">
+              <span class="dot dot-oecd"></span>Labour Markets
+              <span class="side-item-sub">Unemployment rates · Monthly</span>
+            </button>
+            <button class="side-item" data-view="oecd" data-scroll-target="card-health" type="button">
+              <span class="dot dot-oecd"></span>Health Systems
+              <span class="side-item-sub">Health expenditure · Annual</span>
+            </button>
+          </div>
+        </div>
+        <div class="side-category">
+          <button class="side-cat-header" type="button">
+            <span>Data Infrastructure</span>
+            <span class="side-cat-arrow" aria-hidden="true">▶</span>
+          </button>
+          <div class="side-cat-children collapsed">
+            <button class="side-item" data-view="catalogue" type="button">
+              <span class="dot dot-oecd"></span>Data Catalogue
+              <span class="side-item-sub">2,527 datasets · OECD</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="side-group">
+        <div class="side-label">Analytics & Reports</div>
+        <button class="side-item" data-view="reports" type="button">
+          <span class="dot dot-gov"></span>Health Reports
+          <span class="side-item-sub">Auto-generated · Weekly</span>
         </button>
-        <button class="side-item" data-view="oecd" type="button">
-          <span class="dot dot-oecd"></span>Unemployment
-          <span class="side-item-sub">Monthly LFS</span>
+        <button class="side-item" data-view="governance" type="button">
+          <span class="dot dot-gov"></span>KPI Scorecard
+          <span class="side-item-sub">Platform metrics</span>
         </button>
-        <button class="side-item" data-view="oecd" type="button">
-          <span class="dot dot-oecd"></span>GDP
-          <span class="side-item-sub">National Accounts</span>
-        </button>
-        <button class="side-item" data-view="oecd" type="button">
-          <span class="dot dot-oecd"></span>Health SHA
-          <span class="side-item-sub">Expenditure</span>
-        </button>
-        <button class="side-item" data-view="catalogue" type="button">
-          <span class="dot dot-oecd"></span>Dataflow Cat.
-          <span class="side-item-sub">2,527 flows</span>
+        <button class="side-item" data-view="governance" type="button">
+          <span class="dot dot-gov"></span>Governance Docs
+          <span class="side-item-sub">Standards & compliance</span>
         </button>
       </div>
-      <div class="side-group"><div class="side-label">Governance</div><button class="side-item" data-view="reports" type="button"><span class="dot dot-gov"></span>Weekly Reports</button><button class="side-item" data-view="governance" type="button"><span class="dot dot-gov"></span>KPI Dashboard</button><button class="side-item" data-view="governance" type="button"><span class="dot dot-gov"></span>Audit Log</button></div>
     </aside>
 
     <main id="main-content">
       <section id="view-overview" class="view active" aria-labelledby="overview-title">
-        <div class="page-bar"><div><h1 id="overview-title">Platform Overview</h1><p class="subtitle">Production OECD SDMX data, SIS-CC demo health, and governance signals in one console.</p></div><div class="actions"><button class="btn" id="export-csv" type="button">Export CSV</button><button class="btn btn-primary" type="button">Run Check Now</button></div></div>
+        <div class="page-bar"><div><h1 id="overview-title">Platform Overview</h1><p class="subtitle">Real-time monitoring of OECD statistical data infrastructure and API health.</p></div><div class="actions"><button class="btn" id="export-csv" type="button">Export CSV</button><button class="btn btn-primary" type="button">Run Check Now</button></div></div>
         <div class="grid-5" id="overview-kpis"></div>
+        <div class="section-header"><div><h2>Key Economic Indicators</h2><p class="subtitle">Latest values from OECD production SDMX API</p></div></div>
         <div class="grid-3" id="overview-oecd-cards"></div>
-        <section class="panel" aria-labelledby="overview-catalogue-title"><div class="table-toolbar"><h2 id="overview-catalogue-title" class="table-title">OECD Dataflow Catalogue</h2><span class="badge badge-blue">LIVE</span></div><div class="search-row"><input id="overview-catalogue-search" type="search" placeholder="Search dataflows by name or ID" aria-label="Search OECD catalogue" /></div><div class="table-wrap"><table><thead><tr><th>Dataset name</th><th>Agency</th><th>Dataflow ID</th><th>Version</th><th>Status</th></tr></thead><tbody id="overview-catalogue-body"></tbody></table></div><button class="btn" id="overview-show-all" type="button">Show all</button></section>
-        <section class="panel" aria-labelledby="sis-title"><h2 id="sis-title">SIS-CC .Stat Suite - Demo Instance</h2><div class="grid-3" id="sis-cards"></div><div class="chart-panel"><canvas id="sis-response-chart" aria-label="SIS-CC response time chart"></canvas></div></section>
+        <section class="panel" aria-labelledby="overview-catalogue-title"><div class="table-toolbar"><h2 id="overview-catalogue-title" class="table-title">Dataset Index</h2><span class="badge badge-blue">LIVE</span></div><div class="search-row"><input id="overview-catalogue-search" type="search" placeholder="Search dataflows by name or ID" aria-label="Search OECD catalogue" /></div><div class="table-wrap"><table><thead><tr><th>Dataset name</th><th>Agency</th><th>Dataflow ID</th><th>Version</th><th>Status</th></tr></thead><tbody id="overview-catalogue-body"></tbody></table></div><button class="btn" id="overview-show-all" type="button">Show all</button></section>
+        <section class="panel" aria-labelledby="sis-title"><div class="section-header"><div><h2 id="sis-title">.Stat Suite API Health</h2><p class="subtitle">SIS-CC demo environment · nsi-demo-stable.siscc.org</p></div></div><div class="grid-3" id="sis-cards"></div><div class="chart-panel"><canvas id="sis-response-chart" aria-label="SIS-CC response time chart"></canvas></div></section>
         <section class="panel" aria-labelledby="about-title">
           <h2 id="about-title">About This Platform</h2>
           <div class="grid-3">
@@ -254,20 +405,22 @@
               </p>
             </div>
             <div class="card">
-              <div class="dataset-name">What is SDMX?</div>
+              <div class="dataset-name">SDMX Standard</div>
               <p style="color:#94a3b8;font-size:12px;margin-top:8px;line-height:1.6">
-                SDMX (Statistical Data and Metadata eXchange) is the international
-                standard used by OECD, Eurostat, IMF, World Bank, and national
-                statistics offices to share official statistics. StatPulse monitors
-                2,527 OECD dataflows across 47+ agencies via the SDMX REST API.
+                SDMX (Statistical Data and Metadata eXchange) is the ISO 17369
+                international standard for sharing official statistics. Every OECD
+                dataset on this platform is accessible through the SDMX REST API —
+                the same standard used by Eurostat, IMF, World Bank, and 150+
+                national statistics offices.
               </p>
             </div>
             <div class="card">
-              <div class="dataset-name">Monitored Datasets</div>
+              <div class="dataset-name">Coverage</div>
               <p style="color:#94a3b8;font-size:12px;margin-top:8px;line-height:1.6">
                 Composite Leading Indicators (CLI) · Monthly Unemployment Rates (LFS) ·
                 GDP National Accounts · Health Expenditure (SHA) · Full Dataflow
-                Catalogue · SIS-CC Structures, Data Query, and Codelists
+                Catalogue · SIS-CC Structures, Data Query, and Codelists.
+                Updated every 6 hours via GitHub Actions.
               </p>
               <a href="https://github.com/erenkahraman/statpulse"
                  target="_blank" rel="noopener"
@@ -279,13 +432,13 @@
         </section>
       </section>
 
-      <section id="view-oecd" class="view" aria-labelledby="oecd-title"><div class="page-bar"><div><h1 id="oecd-title">OECD Production</h1><p class="subtitle">Detailed monitoring for all production OECD SDMX endpoints.</p></div></div><div class="grid-auto" id="oecd-detail-cards"></div><section class="panel" aria-labelledby="oecd-chart-title"><h2 id="oecd-chart-title">OECD Response Time Comparison</h2><div class="chart-panel"><canvas id="oecd-response-chart" aria-label="OECD response time comparison chart"></canvas></div></section></section>
+      <section id="view-oecd" class="view" aria-labelledby="oecd-title"><div class="page-bar"><div><h1 id="oecd-title">Live Statistical Data</h1><p class="subtitle">Production OECD SDMX endpoints — monitored every 6 hours.</p></div></div><div class="grid-auto" id="oecd-detail-cards"></div><section class="panel" aria-labelledby="oecd-chart-title"><h2 id="oecd-chart-title">OECD Response Time Comparison</h2><div class="chart-panel"><canvas id="oecd-response-chart" aria-label="OECD response time comparison chart"></canvas></div></section></section>
 
-      <section id="view-catalogue" class="view" aria-labelledby="catalogue-title"><div class="page-bar"><div><h1 id="catalogue-title">Catalogue</h1><p class="subtitle">Full OECD dataflow catalogue browser with agency filtering and row detail inspection.</p></div></div><div class="grid-3" id="catalogue-stats"></div><section class="panel"><div class="search-row"><select id="catalogue-agency" aria-label="Filter catalogue by agency"><option value="">All agencies</option></select><input id="catalogue-search" type="search" placeholder="Search by name or ID" aria-label="Search full catalogue" /></div><div class="table-wrap scroll-table"><table><thead><tr><th>Agency</th><th>ID</th><th>Name</th><th>Version</th></tr></thead><tbody id="catalogue-body"></tbody></table></div><div class="table-toolbar"><span class="subtitle" id="catalogue-page-label">Page 1</span><div class="actions"><button class="btn" id="catalogue-prev" type="button">Prev</button><button class="btn" id="catalogue-next" type="button">Next</button></div></div></section></section>
+      <section id="view-catalogue" class="view" aria-labelledby="catalogue-title"><div class="page-bar"><div><h1 id="catalogue-title">OECD Data Catalogue</h1><p class="subtitle">Browse 2,527 statistical datasets across 47+ agencies. Click any row to inspect.</p></div></div><div class="grid-3" id="catalogue-stats"></div><section class="panel"><div class="search-row"><select id="catalogue-agency" aria-label="Filter catalogue by agency"><option value="">All agencies</option></select><input id="catalogue-search" type="search" placeholder="Search by name or ID" aria-label="Search full catalogue" /></div><div class="table-wrap scroll-table"><table><thead><tr><th>Agency</th><th>ID</th><th>Name</th><th>Version</th></tr></thead><tbody id="catalogue-body"></tbody></table></div><div class="table-toolbar"><span class="subtitle" id="catalogue-page-label">Page 1</span><div class="actions"><button class="btn" id="catalogue-prev" type="button">Prev</button><button class="btn" id="catalogue-next" type="button">Next</button></div></div></section></section>
 
-      <section id="view-reports" class="view" aria-labelledby="reports-title"><div class="page-bar"><div><h1 id="reports-title">Reports</h1><p class="subtitle">Weekly health reports and PM governance telemetry.</p></div></div><div class="two-col"><section class="panel" aria-labelledby="weekly-title"><h2 id="weekly-title">Weekly Reports</h2><div id="reports-state" class="empty">Loading weekly reports...</div><div id="reports-list"></div></section><section class="panel" aria-labelledby="pm-title"><h2 id="pm-title">PM Governance Stats</h2><div id="pm-stats"></div></section></div></section>
+      <section id="view-reports" class="view" aria-labelledby="reports-title"><div class="page-bar"><div><h1 id="reports-title">Reports & Analytics</h1><p class="subtitle">Weekly automated health reports and platform governance telemetry.</p></div></div><div class="two-col"><section class="panel" aria-labelledby="weekly-title"><h2 id="weekly-title">Weekly Reports</h2><div id="reports-state" class="empty">Loading weekly reports...</div><div id="reports-list"></div></section><section class="panel" aria-labelledby="pm-title"><h2 id="pm-title">PM Governance Stats</h2><div id="pm-stats"></div></section></div></section>
 
-      <section id="view-governance" class="view" aria-labelledby="governance-title"><div class="page-bar"><div><h1 id="governance-title">Governance</h1><p class="subtitle">KPI status, accessibility audit posture, and governance documentation links.</p></div></div><section class="panel"><h2>KPI Scorecard</h2><div class="table-wrap"><table class="gov-table"><thead><tr><th>KPI Name</th><th>Target</th><th>Current</th><th>Status</th><th>Trend</th></tr></thead><tbody id="governance-kpis"></tbody></table></div></section><section class="panel"><h2>Accessibility Audit Status</h2><div class="audit-grid"><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Critical</div><div class="kpi-delta">axe-core v4.11.1</div></div><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Serious</div><div class="kpi-delta">WCAG 2.1 AA</div></div><div class="card"><div class="kpi-value blue">AA</div><div class="kpi-label">Standard</div><div class="kpi-delta">Last run: 2026-02-19</div></div><div class="card"><div class="kpi-value green">PASS</div><div class="kpi-label">Status</div><div class="kpi-delta">No blocker violations</div></div></div><a href="https://github.com/erenkahraman/statpulse/blob/main/governance/accessibility-audit.md" target="_blank" rel="noopener">View full accessibility audit</a></section><section class="panel"><h2>Governance Docs</h2><div class="grid-3"><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance" target="_blank" rel="noopener">Governance folder</a><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance/user-research" target="_blank" rel="noopener">User research</a><a class="card" href="https://github.com/erenkahraman/statpulse/issues?q=label%3Aweekly-report" target="_blank" rel="noopener">Weekly report issues</a></div></section></section>
+      <section id="view-governance" class="view" aria-labelledby="governance-title"><div class="page-bar"><div><h1 id="governance-title">Governance</h1><p class="subtitle">KPI scorecard, accessibility audit status, and compliance documentation.</p></div></div><section class="panel"><h2>KPI Scorecard</h2><div class="table-wrap"><table class="gov-table"><thead><tr><th>KPI Name</th><th>Target</th><th>Current</th><th>Status</th><th>Trend</th></tr></thead><tbody id="governance-kpis"></tbody></table></div></section><section class="panel"><h2>Accessibility Audit Status</h2><div class="audit-grid"><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Critical</div><div class="kpi-delta">axe-core v4.11.1</div></div><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Serious</div><div class="kpi-delta">WCAG 2.1 AA</div></div><div class="card"><div class="kpi-value blue">AA</div><div class="kpi-label">Standard</div><div class="kpi-delta">Last run: 2026-02-19</div></div><div class="card"><div class="kpi-value green">PASS</div><div class="kpi-label">Status</div><div class="kpi-delta">No blocker violations</div></div></div><a href="https://github.com/erenkahraman/statpulse/blob/main/governance/accessibility-audit.md" target="_blank" rel="noopener">View full accessibility audit</a></section><section class="panel"><h2>Governance Docs</h2><div class="grid-3"><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance" target="_blank" rel="noopener">Governance folder</a><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance/user-research" target="_blank" rel="noopener">User research</a><a class="card" href="https://github.com/erenkahraman/statpulse/issues?q=label%3Aweekly-report" target="_blank" rel="noopener">Weekly report issues</a></div></section></section>
       <p class="footer-note">Built as a portfolio project for OECD SDD/SDPS PM role. Not officially affiliated with OECD or SIS-CC.</p>
     </main>
   </div>
@@ -371,6 +524,7 @@
         <div class="chart-stat"><span class="chart-stat-label">Range</span><span class="chart-stat-value" id="stat-range">-</span></div>
         <div class="chart-stat"><span class="chart-stat-label">Series</span><span class="chart-stat-value" id="stat-series">-</span></div>
         <div class="chart-stat"><span class="chart-stat-label">Frequency</span><span class="chart-stat-value" id="stat-freq">-</span></div>
+        <button class="btn chart-download-btn" id="chart-download-csv" type="button">Download CSV</button>
       </div>
     </div>
   </div>
@@ -395,7 +549,8 @@
     async function fetchJson(path) { try { const res = await fetch(path); if (!res.ok) return null; return await res.json(); } catch { return null; } }
 
     const CHART_COLORS = ['#3b82f6','#22c55e','#eab308','#ef4444','#a855f7','#06b6d4','#f97316','#ec4899','#10b981','#f59e0b','#8b5cf6','#14b8a6'];
-    let _lwChart = null, _lwSeriesMap = new Map(), _sdmxData = null, _chartType = 'line', _chartRange = 'ALL', _disabledSeries = new Set(), _chartResizeObserver = null;
+    let _lwChart = null, _lwSeriesMap = new Map(), _sdmxData = null, _chartType = 'line', _chartRange = 'ALL', _disabledSeries = new Set(), _chartResizeObserver = null, _visibleChartSeries = [], _chartDatasetName = 'dataset';
+    let searchTimer = null, searchResults = [], searchActiveIndex = -1;
 
     function normalizeTimeFE(t) {
       if (!t) return null;
@@ -417,6 +572,26 @@
       if (/^\d{4}-\d{2}$/.test(sample)) return 'Monthly';
       if (/Q/.test(sample)) return 'Quarterly';
       return 'Mixed';
+    }
+
+    function detectUnitLabel(obs) {
+      const unit = obs.find(o => o.UNIT_MEASURE)?.UNIT_MEASURE;
+      const map = {
+        PC: '% (Percentage)',
+        PT_LF_SUB: '% (Percentage)',
+        XDC: 'National Currency (millions)',
+        USD: 'USD (millions)',
+        PT_B1GQ: '% of GDP'
+      };
+      return map[unit] || 'Value';
+    }
+
+    function chooseBestGroupDimension(obs, dimensions) {
+      const distinctCount = dim => new Set(obs.map(o => o[dim]).filter(Boolean)).size;
+      if (dimensions.includes('REF_AREA') && distinctCount('REF_AREA') <= 30) return 'REF_AREA';
+      if (dimensions.includes('MEASURE')) return 'MEASURE';
+      if (dimensions.includes('FREQ')) return 'FREQ';
+      return dimensions[0] || '';
     }
 
     function buildSeries(obs, groupDim) {
@@ -455,7 +630,7 @@
       if (_lwChart) { try { _lwChart.remove(); } catch {} _lwChart = null; }
       _lwSeriesMap.clear();
 
-      if (!series.length) { showChartState('No data in this range', true); return; }
+      if (!series.length) { showChartError('This dataset returned no observations. Try adjusting the time range or select a different grouping.'); return; }
       hideChartState();
 
       _lwChart = LightweightCharts.createChart(container, {
@@ -464,12 +639,21 @@
         grid: { vertLines: { color: '#1e2530' }, horzLines: { color: '#1e2530' } },
         crosshair: { mode: LightweightCharts.CrosshairMode.Normal },
         rightPriceScale: { borderColor: '#1e2530' },
-        timeScale: { borderColor: '#1e2530', timeVisible: _sdmxData.meta.frequency !== 'Annual' }
+        timeScale: {
+          borderColor: '#1e2530',
+          timeVisible: _sdmxData.meta.frequency !== 'Annual',
+          tickMarkFormatter: time => typeof time === 'string' ? time.slice(0, 4) : time?.year ? String(time.year) : String(time).slice(0, 4)
+        }
       });
 
+      const axisTitle = document.createElement('div');
+      axisTitle.className = 'chart-y-axis-title';
+      axisTitle.textContent = _sdmxData.meta.unitLabel || 'Value';
+      container.appendChild(axisTitle);
+
       const visible = series.slice(0, 12);
-      visible.forEach((s, i) => {
-        if (_disabledSeries.has(s.name)) return;
+      _visibleChartSeries = visible.filter(s => !_disabledSeries.has(s.name));
+      _visibleChartSeries.forEach((s, i) => {
         const color = CHART_COLORS[i % CHART_COLORS.length];
         let ls;
         if (_chartType === 'area') ls = _lwChart.addAreaSeries({ lineColor: color, topColor: color+'40', bottomColor: color+'05', lineWidth: 2, title: s.name });
@@ -480,7 +664,7 @@
 
       _lwChart.timeScale().fitContent();
       renderLegend(visible);
-      updateStats(_sdmxData.observations, series);
+      updateStats(_sdmxData.observations, _visibleChartSeries);
 
       if (_chartResizeObserver) _chartResizeObserver.disconnect();
       _chartResizeObserver = new ResizeObserver(() => { try { _lwChart.applyOptions({ width: container.clientWidth, height: container.clientHeight }); } catch {} });
@@ -519,45 +703,201 @@
       const st = $('chart-state');
       st.classList.remove('hidden');
       st.classList.toggle('error', !!isError);
-      st.innerHTML = isError ? `<div>${msg}</div>` : `<div class="chart-spinner"></div><div>${msg}</div>`;
+      st.innerHTML = isError ? `<div>${escHtml(msg)}</div>` : `<div class="chart-spinner"></div><div>${escHtml(msg)}</div>`;
       $('sdmx-chart-container').classList.add('hidden');
+    }
+    function showChartError(msg, retryUrl = null, title = null) {
+      const st = $('chart-state');
+      st.classList.remove('hidden');
+      st.classList.add('error');
+      st.innerHTML = retryUrl
+        ? `<div>${escHtml(msg)}</div><button class="btn" id="chart-retry" type="button">Retry</button>`
+        : `<div>${escHtml(msg)}</div>`;
+      $('sdmx-chart-container').classList.add('hidden');
+      if (retryUrl) $('chart-retry').addEventListener('click', () => openSdmxChart(retryUrl, title));
     }
     function hideChartState() { $('chart-state').classList.add('hidden'); $('sdmx-chart-container').classList.remove('hidden'); }
 
+    function downloadVisibleChartCsv() {
+      if (!_visibleChartSeries.length) return;
+      const rows = [['Date', 'Series', 'Value']];
+      _visibleChartSeries.forEach(series => {
+        series.data.forEach(point => rows.push([point.time, series.name, point.value]));
+      });
+      const csv = rows.map(r => r.map(v => `"${String(v ?? '').replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      const safeName = String(_chartDatasetName || 'dataset').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 80) || 'dataset';
+      a.href = url;
+      a.download = `statpulse-${safeName}-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    const SEARCH_PAGES = [
+      { name: 'Overview', view: 'overview', meta: 'Platform health summary' },
+      { name: 'Live Data', view: 'oecd', meta: 'Production OECD SDMX endpoints' },
+      { name: 'Data Catalogue', view: 'catalogue', meta: 'OECD dataflow browser' },
+      { name: 'Reports & Analytics', view: 'reports', meta: 'Health reports and telemetry' },
+      { name: 'Governance', view: 'governance', meta: 'KPI scorecard and compliance' }
+    ];
+
+    function highlightMatch(text, query) {
+      const value = String(text || '');
+      const idx = value.toLowerCase().indexOf(query.toLowerCase());
+      if (idx < 0) return escHtml(value);
+      return `${escHtml(value.slice(0, idx))}<span class="search-result-match">${escHtml(value.slice(idx, idx + query.length))}</span>${escHtml(value.slice(idx + query.length))}`;
+    }
+
+    function closeSearchDropdown() {
+      $('nav-search-dropdown').classList.remove('open');
+      searchActiveIndex = -1;
+    }
+
+    function updateSearchActiveItem() {
+      document.querySelectorAll('.search-result-item').forEach((item, index) => {
+        item.classList.toggle('active', index === searchActiveIndex);
+      });
+    }
+
+    function selectSearchResult(result) {
+      if (!result) return;
+      closeSearchDropdown();
+      $('nav-search').value = '';
+      if (result.type === 'dataset') {
+        showView('catalogue');
+        openDetail(result.flow);
+      } else {
+        showView(result.view);
+      }
+    }
+
+    function renderSearchResults(query) {
+      const dropdown = $('nav-search-dropdown');
+      dropdown.textContent = '';
+      searchResults = [];
+
+      const flows = oecdCatalogue?.flows || [];
+      const datasetMatches = flows.filter(flow =>
+        (flow.name || '').toLowerCase().includes(query) ||
+        (flow.id || '').toLowerCase().includes(query)
+      ).slice(0, 8);
+      const pageMatches = SEARCH_PAGES.filter(page => page.name.toLowerCase().includes(query));
+
+      if (datasetMatches.length) {
+        const label = document.createElement('div');
+        label.className = 'search-section-label';
+        label.textContent = 'Datasets';
+        dropdown.appendChild(label);
+        datasetMatches.forEach(flow => {
+          const result = { type: 'dataset', flow };
+          const item = document.createElement('div');
+          item.className = 'search-result-item';
+          item.setAttribute('role', 'option');
+          item.innerHTML = `<div class="search-result-name">${highlightMatch(flow.name || flow.id, query)}</div><div class="search-result-meta">${escHtml(flow.agencyID || '-')} · ${escHtml(flow.id || '-')}</div>`;
+          item.addEventListener('click', () => selectSearchResult(result));
+          dropdown.appendChild(item);
+          searchResults.push(result);
+        });
+      }
+
+      if (pageMatches.length) {
+        const label = document.createElement('div');
+        label.className = 'search-section-label';
+        label.textContent = 'Pages';
+        dropdown.appendChild(label);
+        pageMatches.forEach(page => {
+          const result = { type: 'page', view: page.view };
+          const item = document.createElement('div');
+          item.className = 'search-result-item';
+          item.setAttribute('role', 'option');
+          item.innerHTML = `<div class="search-result-name">${highlightMatch(page.name, query)}</div><div class="search-result-meta">${escHtml(page.meta)}</div>`;
+          item.addEventListener('click', () => selectSearchResult(result));
+          dropdown.appendChild(item);
+          searchResults.push(result);
+        });
+      }
+
+      if (!searchResults.length) {
+        const empty = document.createElement('div');
+        empty.className = 'search-no-results';
+        empty.textContent = 'No results';
+        dropdown.appendChild(empty);
+      }
+
+      searchActiveIndex = searchResults.length ? 0 : -1;
+      dropdown.classList.add('open');
+      updateSearchActiveItem();
+    }
+
+    function handleGlobalSearchInput() {
+      const query = $('nav-search').value.trim().toLowerCase();
+      clearTimeout(searchTimer);
+      if (query.length < 2) {
+        closeSearchDropdown();
+        return;
+      }
+      searchTimer = setTimeout(() => renderSearchResults(query), 200);
+    }
+
     async function openSdmxChart(url, title) {
       if (!url) { return; }
+      let chartUrl = url;
+      if (!/[?&]lastNObservations=/i.test(chartUrl)) {
+        chartUrl += (chartUrl.includes('?') ? '&' : '?') + 'lastNObservations=200';
+      }
       const overlay = $('chart-modal-overlay');
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
       $('chart-modal-title').textContent = title || 'SDMX Data';
-      $('chart-modal-url').textContent = url;
+      $('chart-modal-url').textContent = chartUrl;
+      _chartDatasetName = title || 'dataset';
       $('chart-toolbar').classList.add('hidden');
       $('chart-legend').classList.add('hidden');
       $('chart-modal-stats').classList.add('hidden');
       _disabledSeries.clear(); _chartRange = 'ALL'; _chartType = 'line';
       document.querySelectorAll('[data-range]').forEach(b => b.classList.toggle('active', b.dataset.range === 'ALL'));
       document.querySelectorAll('[data-type]').forEach(b => b.classList.toggle('active', b.dataset.type === 'line'));
-      showChartState('Fetching SDMX data...', false);
+      showChartState('Fetching from OECD API...', false);
 
       try {
-        const res = await fetch(`/api/sdmx?url=${encodeURIComponent(url)}`);
+        const res = await fetch(`/api/sdmx?url=${encodeURIComponent(chartUrl)}&limit=200`);
+        showChartState('Rendering chart...', false);
         const data = await res.json();
-        if (!res.ok || data.error) throw new Error(data.error || `HTTP ${res.status}`);
-        if (!data.observations || !data.observations.length) throw new Error('No observations available for this query.');
+        if (!res.ok || data.error) {
+          const error = new Error(data.error || `HTTP ${res.status}`);
+          error.status = data.status || res.status;
+          throw error;
+        }
+        if (!data.observations || !data.observations.length) {
+          const error = new Error('No observations found');
+          error.code = 'NO_OBSERVATIONS';
+          throw error;
+        }
 
         data.meta.frequency = detectFrequency(data.observations);
+        data.meta.unitLabel = detectUnitLabel(data.observations);
         _sdmxData = data;
 
         const groupSelect = $('chart-group-select');
         groupSelect.replaceChildren(new Option('None (single series)', ''));
         data.dimensions.forEach(d => groupSelect.appendChild(new Option(d, d)));
-        groupSelect.value = data.dimensions[0] || '';
+        groupSelect.value = chooseBestGroupDimension(data.observations, data.dimensions);
         groupSelect.onchange = renderChart;
 
         $('chart-toolbar').classList.remove('hidden');
         renderChart();
       } catch (err) {
-        showChartState(`Unable to load chart: ${err.message}`, true);
+        let message = err.message;
+        if (err.code === 'NO_OBSERVATIONS' || /No observations/i.test(err.message)) {
+          message = 'This dataset returned no observations. Try adjusting the time range or select a different grouping.';
+        } else if (err.status === 504 || /timed out|timeout/i.test(err.message)) {
+          message = 'Request timed out. OECD API may be slow. Try again.';
+        } else if (err.status === 422) {
+          message = 'Invalid query parameters. This endpoint requires specific dimension filters.';
+        }
+        showChartError(message, chartUrl, title);
         $('chart-toolbar').classList.add('hidden');
         $('chart-legend').classList.add('hidden');
         $('chart-modal-stats').classList.add('hidden');
@@ -581,12 +921,25 @@
       b.classList.add('active'); _chartRange = b.dataset.range; renderChart();
     }));
     $('chart-modal-close').addEventListener('click', closeSdmxChart);
+    $('chart-download-csv').addEventListener('click', downloadVisibleChartCsv);
     $('chart-modal-overlay').addEventListener('click', e => { if (e.target === $('chart-modal-overlay')) closeSdmxChart(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && $('chart-modal-overlay').classList.contains('open')) closeSdmxChart(); });
     window.openSdmxChart = openSdmxChart;
 
-    async function loadData() { const [health, live, catalogue] = await Promise.all([fetchJson('./health-log.json'), fetchJson('./oecd-live.json'), fetchJson('./oecd-catalogue.json')]); healthLog = Array.isArray(health) ? health : []; oecdLive = Array.isArray(live) ? live : []; oecdCatalogue = catalogue && Array.isArray(catalogue.flows) ? catalogue : null; updateTimestamp(); showView('overview'); }
+    async function loadData() { const [health, live, catalogue] = await Promise.all([fetchJson('./health-log.json'), fetchJson('./oecd-live.json'), fetchJson('./oecd-catalogue.json')]); healthLog = Array.isArray(health) ? health : []; oecdLive = Array.isArray(live) ? live : []; oecdCatalogue = catalogue && Array.isArray(catalogue.flows) ? catalogue : null; updateTimestamp(); updateSisSidebarStatus(); showView('overview'); }
     function updateTimestamp() { const stamps = [...healthLog.map(r => r.timestamp), ...oecdLive.map(r => r.timestamp), oecdCatalogue?.fetchedAt].filter(Boolean).sort(); $('nav-updated').textContent = `Updated ${utcTime(stamps[stamps.length - 1])} UTC`; }
+    function updateSisSidebarStatus() {
+      const latest = latestSisRecords();
+      document.querySelectorAll('[data-sis-endpoint]').forEach(item => {
+        const record = latest[item.dataset.sisEndpoint];
+        const dot = item.querySelector('.dot');
+        const code = item.querySelector('.side-status-code');
+        item.classList.toggle('operational', !!record?.ok);
+        item.classList.toggle('down', !!record && !record.ok);
+        dot.className = `dot ${!record ? 'dot-pending' : record.ok ? 'dot-sis' : 'dot-down'}`;
+        code.textContent = record?.ok && record.status ? `${record.status} OK` : '—';
+      });
+    }
     function showView(viewId, sourceEl = null) { document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === `view-${viewId}`)); document.querySelectorAll('.nav-link').forEach(n => n.classList.toggle('active', n.dataset.view === viewId)); const sideTarget = sourceEl?.classList?.contains('side-item') ? sourceEl : document.querySelector(`.side-item[data-view="${viewId}"]`); document.querySelectorAll('.side-item').forEach(s => s.classList.toggle('active', s === sideTarget)); if (!renderedViews.has(viewId)) { ({ overview: renderOverview, oecd: renderOecdProduction, catalogue: renderCatalogue, reports: renderReportsView, governance: renderGovernance })[viewId]?.(); renderedViews.add(viewId); } }
     function groupByEndpoint(log) { const groups = {}; for (const name of CONFIG.endpoints.sis) groups[name] = log.filter(r => r.endpoint === name).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)); return groups; }
     function latestOecdRecords(log) { const byId = {}; for (const record of log) if (!byId[record.id] || record.timestamp > byId[record.id].timestamp) byId[record.id] = record; return byId; }
@@ -598,7 +951,7 @@
     function responseClass(ms) { if (ms == null) return 'muted'; if (ms < CONFIG.thresholds.responseWarn) return 'green'; if (ms < CONFIG.thresholds.responseBad) return 'amber'; return 'red'; }
     function appendKpi(container, value, label, delta, colorClass = '') { const card = document.createElement('article'); card.className = 'card'; card.innerHTML = '<div class="kpi-value"></div><div class="kpi-label"></div><div class="kpi-delta"></div>'; card.querySelector('.kpi-value').className = `kpi-value ${colorClass}`; card.querySelector('.kpi-value').textContent = value; card.querySelector('.kpi-label').textContent = label; card.querySelector('.kpi-delta').textContent = delta; container.appendChild(card); }
     function renderSparkline(container, values, color) { container.textContent = ''; const nums = values.filter(v => Number.isFinite(v)); if (!nums.length) { container.textContent = 'Pending first fetch'; container.classList.add('muted'); return; } container.classList.remove('muted'); const max = Math.max(...nums, 1); nums.slice(-10).forEach(v => { const bar = document.createElement('div'); bar.className = 'spark-bar'; bar.style.height = `${Math.max(12, (v / max) * 100)}%`; bar.style.backgroundColor = color; bar.title = `${v}ms`; container.appendChild(bar); }); }
-    function makeEndpointCard(record, options = {}) { const article = document.createElement('article'); article.className = 'card endpoint-card'; const badge = statusBadge(record); const id = record?.id || options.id || '-'; const title = record?.name || options.name || id; const count = id === 'oecd_dataflows' ? record?.catalogueSize : record?.recordCount; const series = oecdLive.filter(r => r.id === id).map(r => r.responseTimeMs); article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><span class="mono"></span>${options.detail ? '<span class="url"></span>' : ''}<div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">${id === 'oecd_dataflows' ? 'Catalogue Size' : 'Record Count'}</div></div></div><div class="sparkline" aria-label="Response time sparkline"></div>${options.detail ? '<div class="subtitle"></div><a class="oecd-link" target="_blank" rel="noopener">View in OECD Data Explorer -></a>' : ''}`; article.querySelector('.dataset-name').textContent = title; article.querySelector('.mono').textContent = record?.dataflowId || id; const metricValues = article.querySelectorAll('.metric-value'); metricValues[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; metricValues[0].classList.add(responseClass(record?.responseTimeMs)); metricValues[1].textContent = fmtNum(count); if (options.detail) { const url = article.querySelector('.url'); url.textContent = record?.url || '-'; url.title = record?.url || ''; article.querySelector('.subtitle').textContent = `HTTP ${record?.status ?? '-'} - Updated ${localTime(record?.timestamp)}`; article.querySelector('.oecd-link').href = record?.url || 'https://sdmx.oecd.org/'; } renderSparkline(article.querySelector('.sparkline'), series, record?.ok === false ? CONFIG.colors.red : CONFIG.colors.blue);
+    function makeEndpointCard(record, options = {}) { const article = document.createElement('article'); article.className = 'card endpoint-card'; const badge = statusBadge(record); const id = record?.id || options.id || '-'; const cardIds = { oecd_cli: 'card-cli', oecd_unemployment: 'card-unemployment', oecd_gdp: 'card-gdp', oecd_health: 'card-health', oecd_dataflows: 'card-dataflows' }; if (options.detail && cardIds[id]) article.id = cardIds[id]; const title = record?.name || options.name || id; const count = id === 'oecd_dataflows' ? record?.catalogueSize : record?.recordCount; const series = oecdLive.filter(r => r.id === id).map(r => r.responseTimeMs); article.innerHTML = `<header><div class="dataset-name"></div><span class="badge ${badge.cls}">${badge.text}</span></header><span class="mono"></span>${options.detail ? '<span class="url"></span>' : ''}<div class="metric-grid"><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">Response Time</div></div><div class="metric-cell"><div class="metric-value"></div><div class="metric-label">${id === 'oecd_dataflows' ? 'Catalogue Size' : 'Record Count'}</div></div></div><div class="sparkline" aria-label="Response time sparkline"></div>${options.detail ? '<div class="subtitle"></div><a class="oecd-link" target="_blank" rel="noopener">View in OECD Data Explorer -></a>' : ''}`; article.querySelector('.dataset-name').textContent = title; article.querySelector('.mono').textContent = record?.dataflowId || id; const metricValues = article.querySelectorAll('.metric-value'); metricValues[0].textContent = record?.responseTimeMs != null ? `${record.responseTimeMs}ms` : '-'; metricValues[0].classList.add(responseClass(record?.responseTimeMs)); metricValues[1].textContent = fmtNum(count); if (options.detail) { const url = article.querySelector('.url'); url.textContent = record?.url || '-'; url.title = record?.url || ''; article.querySelector('.subtitle').textContent = `HTTP ${record?.status ?? '-'} - Updated ${localTime(record?.timestamp)}`; article.querySelector('.oecd-link').href = record?.url || 'https://sdmx.oecd.org/'; } renderSparkline(article.querySelector('.sparkline'), series, record?.ok === false ? CONFIG.colors.red : CONFIG.colors.blue);
       if (options.detail) {
         const chartBtn = document.createElement('button');
         chartBtn.className = 'btn';
@@ -608,7 +961,7 @@
         article.querySelector('.oecd-link').insertAdjacentElement('afterend', chartBtn);
       }
       return article; }
-    function renderOverview() { const latest = latestOecdRecords(oecdLive); const anomalyCount = healthLog.filter(r => r.anomaly?.detected).length; const uptime48 = uptimeLast48h(); const kpis = $('overview-kpis'); kpis.textContent = ''; appendKpi(kpis, pct(uptime48), 'Platform Uptime', 'last 48h SIS-CC checks', uptime48 === 100 ? 'green' : uptime48 >= 99.5 ? 'green' : 'amber'); appendKpi(kpis, fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), 'OECD Dataflows', `${agencyCount()} agencies`, 'blue'); appendKpi(kpis, fmtNum(latest.oecd_cli?.recordCount), 'CLI Observations', 'latest production fetch'); appendKpi(kpis, fmtNum(latest.oecd_unemployment?.recordCount), 'Unemployment Obs.', 'latest production fetch'); appendKpi(kpis, fmtNum(anomalyCount), 'Anomalies Detected', 'all health-log records', anomalyCount > 0 ? 'amber' : 'green'); const cards = $('overview-oecd-cards'); cards.textContent = ''; CONFIG.endpoints.overviewOecd.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id }))); renderOverviewCatalogue(); renderSisHealth(); $('export-csv').addEventListener('click', exportCatalogueCsv); }
+    function renderOverview() { const latest = latestOecdRecords(oecdLive); const anomalyCount = healthLog.filter(r => r.anomaly?.detected).length; const uptime48 = uptimeLast48h(); const kpis = $('overview-kpis'); kpis.textContent = ''; appendKpi(kpis, pct(uptime48), 'API Availability', 'SIS-CC demo · last 48h', uptime48 === 100 ? 'green' : uptime48 >= 99.5 ? 'green' : 'amber'); appendKpi(kpis, fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), 'Indexed Datasets', 'OECD public catalogue', 'blue'); appendKpi(kpis, fmtNum(latest.oecd_cli?.recordCount), 'Leading Indicators', 'Latest fetch · observations'); appendKpi(kpis, fmtNum(latest.oecd_unemployment?.recordCount), 'Labour Market Data', 'Latest fetch · observations'); appendKpi(kpis, fmtNum(anomalyCount), 'Anomalies', 'Detected in health log', anomalyCount > 0 ? 'amber' : 'green'); const cards = $('overview-oecd-cards'); cards.textContent = ''; CONFIG.endpoints.overviewOecd.forEach(id => cards.appendChild(makeEndpointCard(latest[id], { id }))); renderOverviewCatalogue(); renderSisHealth(); $('export-csv').addEventListener('click', exportCatalogueCsv); }
     function agencyCount() { const flows = oecdCatalogue?.flows || []; return new Set(flows.map(f => f.agencyID).filter(Boolean)).size; }
     function flowStatus(flow) { return CONFIG.endpoints.monitoredFlows.has(flow.id) ? ['Monitored', 'green'] : ['Available', 'blue']; }
     function renderOverviewCatalogue() {
@@ -620,7 +973,7 @@
         (f.id || '').toLowerCase().includes(query)
       );
       $('overview-catalogue-title').textContent =
-        `OECD Dataflow Catalogue — ${fmtNum(flows.length)} dataflows · ${fmtNum(agencyCount())} agencies`;
+        `Dataset Index — ${fmtNum(flows.length)} dataflows · ${fmtNum(agencyCount())} agencies`;
       const body = $('overview-catalogue-body');
       body.textContent = '';
       rows.slice(0, 20).forEach(flow => {
@@ -735,7 +1088,41 @@
     function renderPmStats() { const anomalyCount = healthLog.filter(r => r.anomaly?.detected).length; const lastReport = reportIssues[0]?.created_at || null; const box = $('pm-stats'); box.textContent = ''; appendKpi(box, fmtNum(Math.floor(healthLog.length / 3)), 'Total monitoring runs', 'SIS-CC endpoint batches'); appendKpi(box, fmtNum(anomalyCount), 'Anomaly count breakdown', 'detected in health log', anomalyCount ? 'amber' : 'green'); appendKpi(box, lastReport ? localTime(lastReport) : '-', 'Last report date', 'GitHub Issues weekly report'); const trend = document.createElement('div'); trend.className = 'card'; trend.innerHTML = '<div class="kpi-label">Uptime Trend - Last 7 Days</div>'; const row = document.createElement('div'); row.className = 'actions'; for (let i = 6; i >= 0; i--) { const start = new Date(Date.now() - i * 86400000); const day = healthLog.filter(r => new Date(r.timestamp).toDateString() === start.toDateString()); const ok = day.length && day.every(r => r.ok); const dot = document.createElement('span'); dot.className = `dot ${ok ? 'dot-sis' : 'dot-gov'}`; dot.title = start.toDateString(); row.appendChild(dot); } trend.appendChild(row); box.appendChild(trend); }
     function renderGovernance() { const up = uptimeLast48h(); const p95ms = p95(healthLog.filter(r => r.ok).map(r => r.responseTimeMs)); const anomalyRate = healthLog.length ? healthLog.filter(r => r.anomaly?.detected).length / healthLog.length * 100 : null; const latestStamp = [...healthLog.map(r => r.timestamp), ...oecdLive.map(r => r.timestamp)].filter(Boolean).sort().pop(); const freshHours = latestStamp ? (Date.now() - new Date(latestStamp).getTime()) / 3600000 : Infinity; const rows = [['API Availability', '>=99.5%', pct(up), up >= 99.5], ['Response Time p95', '<3000ms', p95ms == null ? '-' : `${Math.round(p95ms)}ms`, p95ms != null && p95ms < 3000], ['Anomaly Rate', '<5%', pct(anomalyRate), anomalyRate != null && anomalyRate < 5], ['Catalogue Coverage', '2527 flows', fmtNum(oecdCatalogue?.totalFlows || oecdCatalogue?.flows?.length), (oecdCatalogue?.flows?.length || 0) >= 2527], ['Report Cadence', 'Weekly', 'on schedule', true], ['OECD Data Freshness', '<24h', Number.isFinite(freshHours) ? `${freshHours.toFixed(1)}h` : '-', freshHours < 24]]; const body = $('governance-kpis'); body.textContent = ''; rows.forEach(([name, target, current, ok]) => { const tr = document.createElement('tr'); [name, target, current, ok ? '●' : '○', ok ? 'Stable' : 'Needs review'].forEach((value, i) => { const td = document.createElement('td'); td.textContent = value; if (i >= 3) td.className = ok ? 'green' : 'amber'; tr.appendChild(td); }); body.appendChild(tr); }); }
     function exportCatalogueCsv() { const flows = oecdCatalogue?.flows || []; const rows = [['Agency', 'ID', 'Name', 'Version'], ...flows.map(f => [f.agencyID, f.id, f.name, f.version])]; const csv = rows.map(r => r.map(v => `"${String(v || '').replace(/"/g, '""')}"`).join(',')).join('\n'); const blob = new Blob([csv], { type: 'text/csv' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'oecd-catalogue.csv'; a.click(); URL.revokeObjectURL(url); }
-    document.querySelectorAll('[data-view]').forEach(el => el.addEventListener('click', () => showView(el.dataset.view, el)));
+    document.querySelectorAll('[data-view]').forEach(el => el.addEventListener('click', () => {
+      showView(el.dataset.view, el);
+      if (el.dataset.scrollTarget) {
+        requestAnimationFrame(() => $(el.dataset.scrollTarget)?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      }
+    }));
+    document.querySelectorAll('.side-cat-header').forEach(header => header.addEventListener('click', () => {
+      header.classList.toggle('open');
+      header.nextElementSibling?.classList.toggle('collapsed');
+    }));
+    $('nav-search').addEventListener('input', handleGlobalSearchInput);
+    $('nav-search').addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        closeSearchDropdown();
+        return;
+      }
+      if (!$('nav-search-dropdown').classList.contains('open') || !searchResults.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        searchActiveIndex = (searchActiveIndex + 1) % searchResults.length;
+        updateSearchActiveItem();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        searchActiveIndex = (searchActiveIndex - 1 + searchResults.length) % searchResults.length;
+        updateSearchActiveItem();
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        selectSearchResult(searchResults[searchActiveIndex]);
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!$('nav-search-dropdown').contains(e.target) && e.target !== $('nav-search')) {
+        closeSearchDropdown();
+      }
+    });
     $('modal-close').addEventListener('click', closeCatalogueModal);
     $('catalogue-modal').addEventListener('click', e => {
       if (e.target === $('catalogue-modal')) closeCatalogueModal();

@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-05-28T07:30:14.664Z",
-  "totalFlows": 2527,
+  "fetchedAt": "2026-05-28T13:23:59.893Z",
+  "totalFlows": 2529,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -219,6 +219,12 @@
       "name": "Greenhouse gas emissions - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_ENV@DF_GHG",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.5",
+      "name": "Greenhouse gas emissions - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_ENV@DF_GREEN_AREA",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -252,6 +258,12 @@
       "id": "DSD_FUA_ENV@DF_POLLUTION",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.2",
+      "name": "Air pollution - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_ENV@DF_POLLUTION",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.5",
       "name": "Air pollution - Cities and FUAs"
     },
     {

@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-03T19:27:13.765Z",
-  "totalFlows": 2523,
+  "fetchedAt": "2026-06-04T01:11:25.206Z",
+  "totalFlows": 2525,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -6087,6 +6087,12 @@
       "name": "Economic Outlook No 118"
     },
     {
+      "id": "DSD_EO@DF_EO",
+      "agencyID": "OECD.ECO.MAD",
+      "version": "1.5",
+      "name": "Economic Outlook 119"
+    },
+    {
       "id": "DSD_EO_114@DF_EO_114",
       "agencyID": "OECD.ECO.MAD",
       "version": "1.0",
@@ -6109,6 +6115,12 @@
       "agencyID": "OECD.ECO.MAD",
       "version": "1.0",
       "name": "Economic Outlook No 117"
+    },
+    {
+      "id": "DSD_EO_118@DF_EO_118",
+      "agencyID": "OECD.ECO.MAD",
+      "version": "1.0",
+      "name": "Economic Outlook No 118"
     },
     {
       "id": "DSD_EO_LTB@DF_EO_LTB",

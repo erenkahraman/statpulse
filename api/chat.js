@@ -85,7 +85,8 @@ async function geminiGenerate(apiKey, model, prompt, expectJson = false) {
     contents: [{ parts: [{ text: prompt }] }],
     generationConfig: {
       temperature: expectJson ? 0.0 : 0.2,
-      maxOutputTokens: expectJson ? 256 : 1024,
+      maxOutputTokens: expectJson ? 512 : 1536,
+      thinkingConfig: { thinkingBudget: 0 },
       ...(expectJson ? { responseMimeType: 'application/json' } : {})
     }
   };
@@ -210,7 +211,7 @@ export default async function handler(req) {
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return jsonResponse({ error: 'AI service not configured' }, 503);
-  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
 
   // Step 1: intent mapping
   let intent;

@@ -57,6 +57,47 @@ A PM artifact that makes architectural choices transparent and reviewable.
 
 ---
 
+## 2026-06 — Grounded chat + AI-visibility measurement design
+
+**Context:** The product brief required two connected capabilities: (a) a chat panel that answers OECD statistical questions using live SDMX data, and (b) a measurement layer that scores how public AI systems represent OECD content.
+
+**Design chosen:** Single grounded-answer pipeline (`api/chat.js`) powers both capabilities. The chat panel calls it live; the AI-visibility probe (`scripts/ai-visibility-probe.js`) calls it to get the SDMX ground truth, then compares it against an ungrounded Gemini call using a third Gemini "judge" call with thinking enabled.
+
+**Rationale:** Reusing the grounded pipeline for the probe means the ground truth is always the same authoritative SDMX data the dashboard already fetches — no separate data-sourcing logic. The judge's thinking mode is left enabled so it can reason through nuanced accuracy calls (e.g. "stale but directionally right") rather than pattern-matching on keywords.
+
+**Tradeoff accepted:** Each probe question makes 3 Gemini calls (grounded intent + ungrounded + judge), so a 10-question battery costs ~30 API calls/day. Kept at daily cadence to control cost.
+
+**Outcome:** Probe, workflow, and dashboard AI-visibility section all operational in Phase 3–4.
+
+---
+
+## 2026-06 — Gemini model choice: gemini-2.5-flash + thinkingBudget: 0 for chat
+
+**Context:** During Phase 1 development, the initial model (`gemini-2.0-flash`) returned HTTP 404 on the project's API key (model deprecated/unavailable). Switching to `gemini-2.5-flash` resolved this. However, `gemini-2.5-flash` with default settings consumed the entire `maxOutputTokens` budget on internal reasoning ("thinking tokens"), leaving no tokens for the actual answer text — returning an empty `parts` array.
+
+**Decision:** Set `thinkingConfig: { thinkingBudget: 0 }` in `generationConfig` for the chat path (intent mapping and grounded-answer generation). For the AI-visibility judge, `thinkingBudget` is intentionally NOT set to zero, so the judge can reason through accuracy scoring.
+
+**Rationale:** Chat responses need to be fast and deterministic; thinking tokens add latency and cost with no benefit for straightforward grounding tasks. The judge benefits from reasoning because accuracy scoring is genuinely ambiguous (stale vs. wrong, regional vs. national averages). Configuring them differently keeps each path optimised for its task.
+
+**Outcome:** Baked into `api/chat.js` as a documented constant. Judge calls in `scripts/ai-visibility-probe.js` omit `thinkingBudget` to let the model use its default.
+
+---
+
+## 2026-06 — Phase 2 accessibility baseline fixes
+
+**Context:** After adding the AI chat panel to `dashboard/index.html` in Phase 2, the automated axe-core audit revealed three classes of WCAG 2.1 AA violations that had existed before the panel was added: `aria-required-children` (critical), `aria-hidden-focus` (serious), and widespread low-contrast text (serious, 6+ occurrences).
+
+**Fixes applied:**
+- `aria-required-children`: removed `role="tablist"` from `.nav-links` (buttons had no `role="tab"`)
+- `aria-hidden-focus`: replaced `aria-hidden="true"` on `#detail-panel` with the `inert` attribute, and toggled `inert` in JS open/close handlers
+- Color contrast: replaced all `#64748b`, `#334155`, `#475569` (failing at ~2–4:1 on `#0d1117`) with `#7b8ea4` (~5.9:1) across ~20 CSS rules
+
+**Rationale:** `inert` is the correct modern approach for panels that should be invisible to focus traversal — it suppresses both tab focus and screen-reader interaction, unlike `aria-hidden` alone which only hides from the accessibility tree but lets keyboard focus enter. The `#7b8ea4` value was chosen as the minimum contrast-compliant muted color that still reads as secondary on the dark background.
+
+**Outcome:** Zero critical violations on audit (was 3 before fix). Documented in governance/accessibility-audit.md.
+
+---
+
 ## 2026-02 — Dual sparkline charts instead of shared Y-axis
 
 **Context:** The Catalogue Change Report needed to visualise both DSD count (~530) and Codelist count (~2591) on the same chart. The 5× magnitude difference between the two series created a layout problem.

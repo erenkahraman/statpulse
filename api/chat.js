@@ -1,6 +1,7 @@
 export const config = { runtime: 'edge' };
 
 import { fetchSdmxObservations } from './_lib/sdmx.js';
+import { CATALOGUE_FLOWS } from './_lib/catalogue-index.js';
 
 const GEMINI_API_BASE = 'https://generativelanguage.googleapis.com/v1beta';
 
@@ -197,6 +198,109 @@ function labelUnit(code) {
   return UNIT_LABELS[code] || code;
 }
 
+// ── Out-of-scope helpers ─────────────────────────────────────────────────────
+
+// Words too generic to use for catalogue matching
+const OOS_STOP_WORDS = new Set([
+  'what','is','the','are','how','why','when','where','who','which','does','do',
+  'can','could','would','should','have','has','had','was','were','been','will',
+  'for','with','about','from','than','that','this','these','those','and','but',
+  'not','oecd','data','statistics','rate','rates','number','numbers','level',
+  'levels','per','across','compared','comparison','between','among','into',
+  'like','such','some','more','most','any','all','each','many','much','very',
+  'also','still','just','only','then','than','over','under','above','below'
+]);
+
+// Return the best-matching catalogue flow for the question, or null
+function searchCatalogue(question) {
+  const raw = question.toLowerCase().replace(/[^\w\s]/g, ' ');
+  const terms = raw.split(/\s+/).filter(t => t.length > 2 && !OOS_STOP_WORDS.has(t));
+  if (!terms.length) return null;
+  let best = null, bestScore = 0;
+  for (const flow of CATALOGUE_FLOWS) {
+    const name = (flow.name || '').toLowerCase();
+    const score = terms.reduce((acc, t) => acc + (name.includes(t) ? 1 : 0), 0);
+    if (score > bestScore) { bestScore = score; best = flow; }
+  }
+  return best; // null if no keyword hit
+}
+
+// Build an OECD Data Explorer deep link for a catalogue flow
+function buildDataExplorerUrl(flow) {
+  const flowId = flow.id.includes('@') ? flow.id.split('@')[1] : flow.id;
+  return `https://data-explorer.oecd.org/vis?df[ds]=diss-disseminate&df[id]=${encodeURIComponent(flowId)}&df[ag]=${encodeURIComponent(flow.agencyID)}`;
+}
+
+// Build a guaranteed-valid OECD Data Explorer search URL
+function buildSearchUrl(question) {
+  const terms = question.replace(/[^\w\s]/g, ' ').trim().slice(0, 80);
+  return `https://data-explorer.oecd.org/catalog/datasets?search=${encodeURIComponent(terms)}`;
+}
+
+// HEAD then GET fallback; returns true only on HTTP 200-299
+async function verifyUrl(url) {
+  try {
+    let res = await fetch(url, { method: 'HEAD', signal: AbortSignal.timeout(5000), redirect: 'follow' });
+    if (!res.ok) res = await fetch(url, { method: 'GET', signal: AbortSignal.timeout(5000), redirect: 'follow' });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+// Resolve + verify the best OECD link for an OOS question.
+// Returns { link, linkType, linkVerified, catalogueMatch }
+async function resolveOosLink(question) {
+  const catalogueMatch = searchCatalogue(question);
+  if (catalogueMatch) {
+    const deepLink = buildDataExplorerUrl(catalogueMatch);
+    if (await verifyUrl(deepLink)) {
+      return { link: deepLink, linkType: 'dataflow', linkVerified: true, catalogueMatch };
+    }
+  }
+  // Deep link unverified or no catalogue match — try search URL
+  const searchLink = buildSearchUrl(question);
+  const searchOk = await verifyUrl(searchLink);
+  return {
+    link: searchOk ? searchLink : null,
+    linkType: searchOk ? 'search' : null,
+    linkVerified: searchOk,
+    catalogueMatch
+  };
+}
+
+// Fire-and-forget log to Vercel KV (Upstash REST pipeline) — skipped if not configured
+async function logOosQuery(entry) {
+  const kvUrl = process.env.KV_REST_API_URL;
+  const kvToken = process.env.KV_REST_API_TOKEN;
+  if (!kvUrl || !kvToken) return; // graceful degradation — no store provisioned
+  try {
+    await fetch(`${kvUrl}/pipeline`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${kvToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify([['LPUSH', 'oos_queries', JSON.stringify(entry)]]),
+      signal: AbortSignal.timeout(3000)
+    });
+  } catch { /* never fail the main response */ }
+}
+
+// General-knowledge OOS answer — clearly flagged as not grounded in live OECD data
+async function generateOosAnswer(question, apiKey, model) {
+  const prompt = `You are a helpful statistical research assistant. Answer the user question using your general knowledge.
+
+RULES — apply all of them:
+1. Do NOT state specific numbers as verified OECD data. You are not accessing live OECD databases.
+2. If you cite any figures, prefix them with "estimates suggest" or "roughly" to signal uncertainty.
+3. Answer conceptually and helpfully in 2–4 sentences maximum.
+4. Do not mention that you are an AI or that you lack real-time access — that is handled by the UI.
+
+User question: "${question.replace(/"/g, '\\"')}"`;
+
+  return geminiGenerate(apiKey, model, prompt, false);
+}
+
+// ── End OOS helpers ──────────────────────────────────────────────────────────
+
 async function generateGroundedAnswer(question, indicator, sdmxResult, apiKey, model) {
   const recent = sdmxResult.observations.slice(-50);
 
@@ -282,11 +386,42 @@ export default async function handler(req) {
   }
 
   if (!intent.matched) {
-    const topicList = INDICATORS.map(i => i.name).join(', ');
+    // Run general-knowledge answer + link resolution in parallel
+    const [oosAnswer, oosLink] = await Promise.all([
+      generateOosAnswer(question, apiKey, model).catch(() => null),
+      resolveOosLink(question)
+    ]);
+
+    const answer = oosAnswer
+      ? (oosAnswer.length > 2000 ? oosAnswer.slice(0, 1997) + '…' : oosAnswer)
+      : 'This topic is outside our curated OECD statistical indicators. Visit OECD Data Explorer to search for relevant datasets.';
+
+    // Log asynchronously — does not block response
+    logOosQuery({
+      timestamp: new Date().toISOString(),
+      question,
+      catalogueMatchFound: !!oosLink.catalogueMatch,
+      catalogueMatchName: oosLink.catalogueMatch?.name || null,
+      linkType: oosLink.linkType || 'none',
+      link: oosLink.link || null
+    });
+
     return jsonResponse({
-      answer: `I can only answer questions about these OECD statistical indicators: ${topicList}. Your question appears to be outside this scope.`,
+      answer,
       matched: false,
+      isGrounded: false,
       outOfScopeNote: intent.reason || 'Question does not match any curated indicator.',
+      suggestion: oosLink.link
+        ? {
+            link: oosLink.link,
+            linkVerified: oosLink.linkVerified,
+            linkType: oosLink.linkType,
+            label: oosLink.linkType === 'dataflow' && oosLink.catalogueMatch
+              ? `Explore "${oosLink.catalogueMatch.name}" on OECD`
+              : 'Search OECD Data Explorer',
+            note: 'This is a general-knowledge answer, not sourced from live OECD data.'
+          }
+        : null,
       series: []
     });
   }

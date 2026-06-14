@@ -1,1 +1,44 @@
-[]
+[
+  {
+    "timestamp": "2026-06-14T17:48:32.938Z",
+    "question": "What is the current unemployment rate in OECD countries?",
+    "topic": "oecd_unemployment",
+    "matched": true,
+    "indicatorId": "oecd_unemployment",
+    "indicatorName": "Monthly Unemployment Rates",
+    "sdmxSeriesCount": 200,
+    "groundedAnswer": "The unemployment rate for the OECD aggregate was 4.9% of the active population in 2026-04. For individual countries, the unemployment rate in the United States was 4.3% of the active population in 2026-05, and in Canada, it was 6.6% of the active population in 2026-05.",
+    "ungroundedAnswer": "Based on the latest available data from the OECD, the unemployment rate for the OECD area was **4.9%** in **April 2024**.\n\nThis rate has remained broadly stable since January 2022.",
+    "groundTruthSummary": "Indicator: Monthly Unemployment Rates\nLatest 12 of 200 total observations:\n  Period range: 2026-04 → 2026-05\n  Reference areas (sample): KOR, LVA, FIN, SVN, USA, EST, BGR, HRV, ROU, EA …\n  Unit: PT_LF_SUB\n  Sample values: 2.8, 6.5, 10.7, 4.1, 4.3, 6.3",
+    "judgment": {
+      "factualAccuracy": "stale",
+      "recency": "stale",
+      "oecdCited": true,
+      "otherSourcesCited": [],
+      "reasoning": "The AI provides an unemployment rate for April 2024, which is two years older than the latest available ground-truth data from April-May 2026. While the figure might have been accurate for 2024, it is not current, making the information stale."
+    },
+    "error": null,
+    "probeVersion": "1.0"
+  },
+  {
+    "timestamp": "2026-06-14T17:48:32.938Z",
+    "question": "How does GDP growth compare across OECD nations?",
+    "topic": "oecd_gdp",
+    "matched": true,
+    "indicatorId": "oecd_gdp",
+    "indicatorName": "GDP — Expenditure Approach",
+    "sdmxSeriesCount": 200,
+    "groundedAnswer": "In 2024, GDP growth varied among the provided OECD nations. Costa Rica had the highest growth at 4.3%, followed by Spain at 3.5% and Turkey at 3.3%. Germany experienced negative growth at -0.5%. For 2025, Ireland is projected to have the highest GDP growth at 12.3%, while Finland is projected to have the lowest at 0.2%. All figures are in %.",
+    "ungroundedAnswer": "Based on recent OECD statistics, GDP growth across member nations shows a varied picture, with some general trends and specific outliers. It's important to note that these figures are subject to revision and can change rapidly due to global economic conditions.\n\nHere's a breakdown of how GDP growth generally compares, with specific numbers and time periods where available from my training data, which typically extends up to late 2023 or early 2024 for the most recent projections:\n\n**General Trends and Key Figures (as of late 2023 / early 2024 projections):**\n\n*   **Overall OECD Average:** The OECD has generally projected a **moderation in GDP growth** for its member countries in 2023 and 2024 compared to the post-pandemic rebound years. For instance, the OECD's Economic Outlook from November 2023 projected **OECD-wide GDP growth of 2.9% in 2023**, slowing to **1.7% in 2024**, and then picking up slightly to **2.1% in 2025**. This indicates a slowdown from the higher growth rates seen in 2021 and 2022.\n\n*   **Major Economies (G7):**\n    *   **United States:** Has shown surprising resilience. The OECD projected US GDP growth of **2.4% in 2023**, moderating to **1.5% in 2024**, and **1.7% in 2025**. This has often been stronger than the Euro Area.\n    *   **Euro Area:** Generally experienced slower growth, grappling with higher energy prices and inflation. The OECD projected Euro Area GDP growth of **0.6% in 2023**, picking up slightly to **0.9% in 2024**, and **1.5% in 2025**.\n        *   **Germany:** Often a drag on Euro Area growth, with the OECD projecting a **contraction of -0.1% in 2023**, followed by modest growth of **0.6% in 2024** and **1.2% in 2025**.\n        *   **France:** Projected for **1.0% growth in 2023**, **0.8% in 2024**, and **1.2% in 2025**.\n        *   **Italy:** Projected for **0.7% growth in 2023**, **0.7% in 2024**, and **1.2% in 2025**.\n    *   **United Kingdom:** Also facing headwinds, with the OECD projecting **0.5% growth in 2023**, **",
+    "groundTruthSummary": "Indicator: GDP — Expenditure Approach\nLatest 12 of 200 total observations:\n  Period range: 2025 → 2025\n  Reference areas (sample): FRA, DEU, GRC, HUN, JPN, KOR, LUX, MEX, NZL, PRT …\n  Unit: PC\n  Sample values: 0.8045, 0.2204, 2.0731, 0.5095, 1.1931, 1.007",
+    "judgment": {
+      "factualAccuracy": "stale",
+      "recency": "stale",
+      "oecdCited": true,
+      "otherSourcesCited": [],
+      "reasoning": "The AI's projections for 2025, particularly for France (1.2% vs 0.80%) and Germany (1.2% vs 0.22%), differ significantly from the provided ground-truth SDMX data for 2025. While the AI correctly identifies its data source as the OECD's November 2023 Economic Outlook, these figures are stale compared to the latest authoritative data provided."
+    },
+    "error": null,
+    "probeVersion": "1.0"
+  }
+]

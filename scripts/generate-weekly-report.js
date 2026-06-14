@@ -38,6 +38,7 @@ const ENDPOINT_NAMES = ['Structures', 'Data Query', 'Codelists'];
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const LOG_PATH = join(__dirname, '..', 'data', 'health-log.json');
+const AIV_LOG_PATH = join(__dirname, '..', 'data', 'ai-visibility-log.json');
 
 // ---------------------------------------------------------------------------
 // Logging helpers
@@ -80,6 +81,64 @@ function readLog() {
     }
     return [];
   }
+}
+
+/**
+ * Reads and parses ai-visibility-log.json.
+ * Returns an empty array on missing file or parse error.
+ *
+ * @returns {Array<Object>}
+ */
+function readAiLog() {
+  try {
+    const raw = readFileSync(AIV_LOG_PATH, 'utf8');
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      logWarn('ai-visibility-log.json is not an array — treating as empty');
+      return [];
+    }
+    return parsed;
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      logWarn('ai-visibility-log.json not found — no AI visibility data to report');
+    } else {
+      logWarn(`Could not parse ai-visibility-log.json (${err.message})`);
+    }
+    return [];
+  }
+}
+
+/**
+ * Computes AI visibility summary statistics for the report window.
+ *
+ * @param {Array<Object>} aiLog   - Full AI visibility log.
+ * @param {number} days           - Number of days to include.
+ * @returns {Object}              - { sovPct, accPct, totalJudged, notable, lastRun }
+ */
+function computeAiStats(aiLog, days) {
+  const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+  const recent = aiLog.filter(e => new Date(e.timestamp) >= cutoff);
+  const judged = recent.filter(e => e.matched && e.judgment);
+
+  if (judged.length === 0) {
+    return { sovPct: null, accPct: null, totalJudged: 0, notable: [], lastRun: null };
+  }
+
+  const sovCount = judged.filter(e => e.judgment.oecdCited === true).length;
+  const sovPct = parseFloat(((sovCount / judged.length) * 100).toFixed(1));
+
+  const accCount = judged.filter(e => ['correct', 'stale'].includes(e.judgment.factualAccuracy)).length;
+  const accPct = parseFloat(((accCount / judged.length) * 100).toFixed(1));
+
+  // Notable misrepresentations: entries where accuracy is 'wrong' and OECD not cited
+  const notable = judged
+    .filter(e => e.judgment.factualAccuracy === 'wrong' && !e.judgment.oecdCited)
+    .slice(0, 3)
+    .map(e => ({ question: e.question, indicator: e.indicatorName || e.topic, reasoning: e.judgment.reasoning || '' }));
+
+  const lastRun = judged.reduce((a, b) => (b.timestamp > a ? b.timestamp : a), '').split('T')[0];
+
+  return { sovPct, accPct, totalJudged: judged.length, notable, lastRun };
 }
 
 /**
@@ -182,7 +241,7 @@ function kpiEmoji(value, target, direction) {
  * @param {string} dashboardUrl     - Derived from GITHUB_REPOSITORY at call time.
  * @returns {string} Markdown string ready to POST as a GitHub Issue body.
  */
-function buildIssueBody(stats, recentRecords, reportStart, reportEnd, dashboardUrl) {
+function buildIssueBody(stats, recentRecords, reportStart, reportEnd, dashboardUrl, aiStats = null) {
   const totalChecks = recentRecords.length;
   const runsCount = Math.round(totalChecks / ENDPOINT_NAMES.length);
 
@@ -262,8 +321,39 @@ function buildIssueBody(stats, recentRecords, reportStart, reportEnd, dashboardU
     `| Content-Type Validity | 100% | ${contentTypeValidityPct !== null ? contentTypeValidityPct.toFixed(1) + '%' : '—'} | ${kpiEmoji(contentTypeValidityPct, 100, 'higher')} |`,
     '',
     '---',
-    `*Generated automatically by [statpulse](${dashboardUrl}) — SDMX API monitoring for the SIS-CC .Stat Suite platform.*`,
+    '',
+    '### AI Visibility Metrics (OECD Share of Voice)',
+    '',
   ];
+
+  if (!aiStats || aiStats.totalJudged === 0) {
+    lines.push('*No AI visibility data for this period — probe may not have run yet.*');
+  } else {
+    const sovEmoji = aiStats.sovPct >= 50 ? '✅' : aiStats.sovPct >= 25 ? '⚠️' : '🔴';
+    const accEmoji = aiStats.accPct >= 70 ? '✅' : aiStats.accPct >= 40 ? '⚠️' : '🔴';
+    lines.push(
+      `| KPI | Target | This Week | Status |`,
+      `|---|---|---|---|`,
+      `| AI Share of Voice | ≥ 50% | ${aiStats.sovPct !== null ? aiStats.sovPct.toFixed(1) + '%' : '—'} | ${sovEmoji} |`,
+      `| AI Factual Accuracy Rate | ≥ 70% | ${aiStats.accPct !== null ? aiStats.accPct.toFixed(1) + '%' : '—'} | ${accEmoji} |`,
+      '',
+      `**Questions judged:** ${aiStats.totalJudged} | **Last probe run:** ${aiStats.lastRun || '—'}`,
+    );
+
+    if (aiStats.notable.length > 0) {
+      lines.push('', '#### Notable Misrepresentations (wrong + OECD not cited)', '');
+      aiStats.notable.forEach(n => {
+        lines.push(`- **${n.indicator}** — "${n.question}"`);
+        if (n.reasoning) lines.push(`  > ${n.reasoning}`);
+      });
+    }
+  }
+
+  lines.push(
+    '',
+    '---',
+    `*Generated automatically by [statpulse](${dashboardUrl}) — SDMX API monitoring for the SIS-CC .Stat Suite platform.*`,
+  );
 
   return lines.join('\n');
 }
@@ -299,6 +389,7 @@ async function main() {
   logInfo(`Generating weekly report for ${repo}`);
 
   const log = readLog();
+  const aiLog = readAiLog();
   const recentRecords = filterRecentRecords(log, REPORT_WINDOW_DAYS);
 
   if (!recentRecords.length) {
@@ -328,8 +419,9 @@ async function main() {
   const [owner, repoName] = repo.split('/');
   const dashboardUrl = `https://${owner}.github.io/${repoName}`;
 
+  const aiStats = computeAiStats(aiLog, REPORT_WINDOW_DAYS);
   const title = `Weekly Platform Health Report — week of ${mondayStr}`;
-  const body = buildIssueBody(stats, recentRecords, reportStart, reportEnd, dashboardUrl);
+  const body = buildIssueBody(stats, recentRecords, reportStart, reportEnd, dashboardUrl, aiStats);
 
   logInfo(`Creating issue: "${title}"`);
 

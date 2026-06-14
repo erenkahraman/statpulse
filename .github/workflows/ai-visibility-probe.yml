@@ -1,0 +1,66 @@
+# ai-visibility-probe.yml
+# Runs the AI visibility probe on a schedule: for each curated policy question,
+# measures how well an ungrounded AI answer aligns with live SDMX ground truth.
+# Results are appended to data/ai-visibility-log.json and committed via bot identity.
+
+name: AI Visibility Probe
+
+on:
+  # Daily at 06:00 UTC — modest cadence to control Gemini API cost.
+  schedule:
+    - cron: '0 6 * * *'
+
+  # Manual trigger from the Actions tab, with an optional batch size for spot checks.
+  workflow_dispatch:
+    inputs:
+      batch:
+        description: 'Number of questions to run (leave empty for all 10)'
+        required: false
+        default: ''
+
+# contents: write so the bot can commit the updated log back to the branch.
+permissions:
+  contents: write
+
+jobs:
+  probe:
+    name: Run AI visibility probe
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies (skip devDeps to avoid large Chromium download)
+        run: npm ci --omit=dev
+
+      - name: Run AI visibility probe
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: gemini-2.5-flash
+        run: |
+          if [ -n "${{ github.event.inputs.batch }}" ]; then
+            node scripts/ai-visibility-probe.js --batch ${{ github.event.inputs.batch }}
+          else
+            node scripts/ai-visibility-probe.js
+          fi
+
+      - name: Commit updated AI visibility log
+        run: |
+          git config user.name "statpulse-bot"
+          git config user.email "statpulse-bot@users.noreply.github.com"
+
+          git add data/ai-visibility-log.json
+
+          git diff --staged --quiet || git commit -m "chore(data): update ai-visibility log [skip ci]"
+
+          git push

@@ -93,7 +93,67 @@ kpis:
       Dashboard layer — EU Directive 2016/2102 and OECD digital accessibility
       requirements
 
-  # 6 — Community issue resolution. Proxy for PM responsiveness and community
+  # 6 — AI Share of Voice. Measures how often public AI systems cite OECD as a
+  # source when answering statistical questions that OECD data covers. Low SoV
+  # means OECD data is underrepresented in AI-generated answers — a comms risk.
+  - id: ai-share-of-voice
+    name: AI Share of Voice
+    category: AI Representation Intelligence
+    description: >
+      Percentage of ungrounded AI answers (plain Gemini with no OECD data) that
+      explicitly name OECD as a source when answering policy questions grounded
+      in the curated indicator corpus. Measured by the ai-visibility-probe.js
+      judge across the 10-question battery.
+    target: ">= 50%"
+    measurement: >
+      (entries where judgment.oecdCited = true) / (total judged entries) × 100,
+      rolling 7-day window from ai-visibility-log.json
+    frequency: Daily (automated via GitHub Actions ai-visibility-probe.yml)
+    owner: Communications / AI Representation Intelligence Lead
+
+  # 7 — AI Factual Accuracy Rate. Measures what fraction of ungrounded AI
+  # answers are at least directionally correct when scored against live SDMX
+  # data. "Stale" counts as partial credit; "wrong" does not.
+  - id: ai-factual-accuracy
+    name: AI Factual Accuracy Rate
+    category: AI Representation Intelligence
+    description: >
+      Percentage of ungrounded AI answers judged as "correct" or "stale"
+      (directionally right but from older data) when compared against live SDMX
+      ground truth. "Wrong" and "no-data" answers are failures. Identifies
+      which indicators AI most misrepresents, enabling targeted outreach.
+    target: ">= 70%"
+    measurement: >
+      (entries where factualAccuracy ∈ {correct, stale}) / (total judged entries) × 100,
+      rolling 7-day window from ai-visibility-log.json
+    frequency: Daily (automated via GitHub Actions ai-visibility-probe.yml)
+    owner: Communications / AI Representation Intelligence Lead
+
+  # 8 — AI discoverability. Measures whether OECD domains are configured to
+  # allow priority AI crawlers to index content, and whether llms.txt exists.
+  # A proxy for "bot activity / content access" in the absence of server logs.
+  - id: ai-discoverability
+    name: AI Crawler Discoverability
+    category: AI Representation Intelligence
+    description: >
+      Percentage of priority AI crawlers (GPTBot, ClaudeBot, PerplexityBot,
+      Google-Extended, and 7 others) that are not blocked by robots.txt on
+      key OECD domains (www.oecd.org, sdmx.oecd.org, oecd.ai, oecd-ilibrary.org,
+      data-explorer.oecd.org). A fully-blocked crawler cannot index OECD content
+      for AI training or retrieval, reducing OECD's AI Share of Voice.
+      llms.txt coverage is tracked separately as a binary per-domain signal.
+    target: ">= 80% of priority crawlers not fully blocked across priority domains"
+    measurement: >
+      (crawlers with status 'allowed' or 'partial') / (total crawlers × total domains) × 100,
+      derived from data/ai-crawler-audit.json on each weekly audit run
+    frequency: Weekly (automated via GitHub Actions ai-crawler-audit.yml)
+    owner: Communications / AI Representation Intelligence Lead
+    related_note: >
+      'partial' status (some paths disallowed but root accessible) counts as
+      accessible. 'blocked' (Disallow: / with no Allow: / override) is the
+      concern. Configuration audit only — does not reflect CDN/WAF-level blocking.
+
+  # 9 — Community issue resolution. Proxy for PM responsiveness and community
   # health. Data sourced from GitHub Issues; thresholds are conservative for
   # a public portfolio project but realistic for a live OECD tool.
   - id: community-issue-resolution

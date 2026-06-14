@@ -160,35 +160,92 @@ User question: "${question.replace(/"/g, '\\"')}"`;
   return parsed;
 }
 
+// ISO 3166-1 alpha-3 → plain English, for grounding prompt context.
+const ISO3_NAMES = {
+  AUS:'Australia',AUT:'Austria',BEL:'Belgium',BRA:'Brazil',CAN:'Canada',
+  CHE:'Switzerland',CHL:'Chile',CHN:'China',COL:'Colombia',CRI:'Costa Rica',
+  CZE:'Czech Republic',DEU:'Germany',DNK:'Denmark',ESP:'Spain',EST:'Estonia',
+  FIN:'Finland',FRA:'France',GBR:'United Kingdom',GRC:'Greece',HUN:'Hungary',
+  IDN:'Indonesia',IRL:'Ireland',ISL:'Iceland',ISR:'Israel',ITA:'Italy',
+  JPN:'Japan',KOR:'South Korea',LTU:'Lithuania',LUX:'Luxembourg',LVA:'Latvia',
+  MEX:'Mexico',NLD:'Netherlands',NOR:'Norway',NZL:'New Zealand',POL:'Poland',
+  PRT:'Portugal',SAU:'Saudi Arabia',SVK:'Slovakia',SVN:'Slovenia',SWE:'Sweden',
+  TUR:'Turkey',USA:'United States',ZAF:'South Africa',
+  OECD:'OECD aggregate',OEA:'OECD (Europe) aggregate',EA19:'Euro area (19)',EA20:'Euro area (20)',
+  G20:'G20 aggregate',WLD:'World',EU27_2020:'EU27 (2020)'
+};
+
+function labelArea(code) {
+  return ISO3_NAMES[code] ? `${ISO3_NAMES[code]} (${code})` : code;
+}
+
+// Unit code → readable label
+const UNIT_LABELS = {
+  PC_ACT: '% of active population (labour force)',
+  PC_LF:  '% of labour force',
+  PT_B1GQ:'% of GDP',
+  PC_GDP: '% of GDP',
+  XDC:    'nominal national currency (XDC — not inflation-adjusted)',
+  USD:    'USD',
+  EUR:    'EUR',
+  PC:     '%',
+  PC_POP: '% of population',
+  IND:    'index'
+};
+
+function labelUnit(code) {
+  return UNIT_LABELS[code] || code;
+}
+
 async function generateGroundedAnswer(question, indicator, sdmxResult, apiKey, model) {
   const recent = sdmxResult.observations.slice(-50);
+
+  // Enrich each row with human-readable area and unit labels (context only — series stays raw).
   const dataLines = recent.map(o => {
-    const dims = Object.entries(o)
+    const parts = Object.entries(o)
       .filter(([k]) => k !== 'OBS_VALUE')
-      .map(([k, v]) => `${k}:${v}`)
-      .join(' ');
-    return `${dims} → ${o.OBS_VALUE}`;
+      .map(([k, v]) => {
+        if (k === 'REF_AREA') return `REF_AREA=${labelArea(v)}`;
+        if (k === 'UNIT_MEASURE') return `UNIT_MEASURE=${labelUnit(v)}`;
+        return `${k}=${v}`;
+      });
+    return `  ${parts.join(', ')}, OBS_VALUE=${o.OBS_VALUE}`;
   }).join('\n');
 
   const [t0, t1] = sdmxResult.meta.timeRange;
   const timeContext = t0 ? `${t0} to ${t1 ?? t0}` : 'unknown range';
 
+  const isNominal = indicator.id === 'edu_spending_per_student' ||
+    indicator.description.toLowerCase().includes('national currency');
+
   const prompt = `You are a precise statistical analyst. Answer the user question using ONLY the data provided below. Do not invent, extrapolate, or recall any specific numbers from your training — use only the values shown here.
 
 Indicator: ${indicator.name}
 Agency: ${indicator.agency} | Dataflow: ${indicator.dataflowId}
-Period covered: ${timeContext} | Observations available: ${sdmxResult.meta.count}
+Period in dataset: ${timeContext} | Total observations: ${sdmxResult.meta.count}
+${isNominal ? 'IMPORTANT: Values are in nominal national currency (XDC) — NOT adjusted for inflation and NOT comparable across currencies.' : ''}
 
-Data (most recent up to 50 observations):
+Data (up to 50 most recent observations):
 ${dataLines}
 
 User question: "${question.replace(/"/g, '\\"')}"
 
-Instructions:
-1. Answer factually citing only values and time periods visible in the data above.
-2. If the data does not contain enough detail to fully answer, state that clearly.
-3. Keep the answer concise — 2 to 4 sentences maximum.
-4. Do not mention that you are limited to a data sample.`;
+MANDATORY RULES — apply every rule for every figure you cite:
+
+1. REFERENCE AREA: Name the exact area from REF_AREA for each figure. Never say "OECD countries" unless the REF_AREA field explicitly shows an OECD aggregate. If you only have data for specific countries, say which ones.
+
+2. TIME PERIOD: State the exact TIME_PERIOD for each figure (e.g. "in 2024-04", "for 2023").
+
+3. UNIT: State the unit for each figure using the UNIT_MEASURE label (e.g. "% of GDP", "% of active population"). For XDC, add "(nominal national currency, not inflation-adjusted)".
+
+4. NUMBER FORMAT:
+   - Round percentages to 1 decimal place (write "4.9%" not "4.982449%").
+   - For large nominal values use thousands separators (write "138,152" not "138151.96").
+   - Do NOT round the raw data differently — only format the number you write in prose.
+
+5. NO OVER-GENERALIZATION: A single country's figure does not represent its whole region or group. If the data is limited to certain countries, state that limitation.
+${isNominal ? '\n6. NOMINAL CAVEAT: Explicitly note that these figures are in nominal national currency (XDC) and that increases over time reflect both real changes and inflation.\n' : ''}
+Keep the answer to 2–5 sentences. Do not mention that you are using a data sample.`;
 
   return geminiGenerate(apiKey, model, prompt, false);
 }

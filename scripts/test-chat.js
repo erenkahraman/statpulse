@@ -9,10 +9,13 @@
 import handler from '../api/chat.js';
 
 const QUESTIONS = [
+  // 1 — in-scope (grounded behavior must be unchanged)
   'What is the current unemployment rate in OECD countries?',
-  'How does GDP growth compare across OECD nations?',
-  'How much do OECD countries spend on healthcare as a percentage of GDP?',
-  'What is Turkey\'s education spending per student?',
+  // 2 — OOS statistical (catalogue match expected → Data Explorer deep link)
+  'How is air pollution trending in European cities?',
+  // 3 — OOS non-statistical (no catalogue match → search fallback)
+  'What are the best practices for open government communication?',
+  // 4 — OOS query designed for a bad deep link (uncommon topic → search fallback)
   'What is the population of Mars?'
 ];
 
@@ -39,7 +42,17 @@ function summarise(question, status, body) {
     lines.push(`Answer: ${body.answer}`);
   } else {
     lines.push(`Out-of-scope note: ${body.outOfScopeNote}`);
+    lines.push(`isGrounded: ${body.isGrounded}`);
     lines.push(`Answer: ${body.answer}`);
+    const s = body.suggestion;
+    if (s) {
+      lines.push(`Suggestion link: ${s.link}`);
+      lines.push(`Link type: ${s.linkType} | verified: ${s.linkVerified}`);
+      lines.push(`Label: ${s.label}`);
+      lines.push(`Note: ${s.note}`);
+    } else {
+      lines.push('Suggestion: none (no verified link available)');
+    }
   }
   if (body.error) lines.push(`Error: ${body.error}`);
   return lines.join('\n');

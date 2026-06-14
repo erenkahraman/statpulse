@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-05-27T15:06:39.202Z",
-  "totalFlows": 2527,
+  "fetchedAt": "2026-06-14T12:47:01.508Z",
+  "totalFlows": 2536,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -219,6 +219,12 @@
       "name": "Greenhouse gas emissions - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_ENV@DF_GHG",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.5",
+      "name": "Greenhouse gas emissions - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_ENV@DF_GREEN_AREA",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -252,6 +258,12 @@
       "id": "DSD_FUA_ENV@DF_POLLUTION",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.2",
+      "name": "Air pollution - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_ENV@DF_POLLUTION",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.5",
       "name": "Air pollution - Cities and FUAs"
     },
     {
@@ -4815,6 +4827,12 @@
       "name": "Combined (corporate and shareholder) statutory tax rates on dividend income"
     },
     {
+      "id": "DSD_TAX_CIT@DF_CIT_DIVD_INCOME",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Combined (corporate and shareholder) statutory tax rates on dividend income"
+    },
+    {
       "id": "DSD_TAX_PIT@DF_PIT_AV",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -5149,6 +5167,12 @@
       "agencyID": "OECD.DAF.INV",
       "version": "2.0",
       "name": "OECD FDI Regulatory Restrictiveness Index - Scores"
+    },
+    {
+      "id": "DSD_ITID_DASH@DF_SECTOR_PREV",
+      "agencyID": "OECD.DAF.INV",
+      "version": "1.0",
+      "name": "ITID Dashboard Visualisation (Comparator tab - Figure 4)"
     },
     {
       "id": "DSD_QDD_FDI@DF_FDI_BMD4",
@@ -6069,6 +6093,12 @@
       "name": "Economic Outlook No 118"
     },
     {
+      "id": "DSD_EO@DF_EO",
+      "agencyID": "OECD.ECO.MAD",
+      "version": "1.5",
+      "name": "Economic Outlook 119"
+    },
+    {
       "id": "DSD_EO_114@DF_EO_114",
       "agencyID": "OECD.ECO.MAD",
       "version": "1.0",
@@ -6091,6 +6121,12 @@
       "agencyID": "OECD.ECO.MAD",
       "version": "1.0",
       "name": "Economic Outlook No 117"
+    },
+    {
+      "id": "DSD_EO_118@DF_EO_118",
+      "agencyID": "OECD.ECO.MAD",
+      "version": "1.0",
+      "name": "Economic Outlook No 118"
     },
     {
       "id": "DSD_EO_LTB@DF_EO_LTB",
@@ -12918,7 +12954,7 @@
       "id": "DSD_PATENTS@DF_PATENTS_WIPO",
       "agencyID": "OECD.STI.PIE",
       "version": "1.0",
-      "name": "STAN Database for Structural Analysis"
+      "name": "STAN Database for Structural Analysis, 2020 edition"
     },
     {
       "id": "DSD_STAN@DF_STAN",
@@ -13284,6 +13320,12 @@
       "id": "DSD_REICO_REFPUB@DF_EMBED",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
+      "name": "National publications and references"
+    },
+    {
+      "id": "DSD_REICO_REFPUB_EMBED@DF_ALL",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.0",
       "name": "ReICO database for StatPlanet dashboard"
     },
     {
@@ -13308,6 +13350,18 @@
       "id": "DSD_SBRD@DF_SBRD",
       "agencyID": "OECD.STI.STP",
       "version": "1.2",
+      "name": "R&amp;D indicators sub-platform"
+    },
+    {
+      "id": "DSD_SBRD@DF_SBRD",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.3",
+      "name": "R&amp;D indicators sub-platform"
+    },
+    {
+      "id": "DSD_SBRD@DF_SBRD",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.4",
       "name": "Trends of political violence in West Africa: Analysis by armed group"
     },
     {

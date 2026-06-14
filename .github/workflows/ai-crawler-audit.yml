@@ -1,0 +1,54 @@
+# ai-crawler-audit.yml
+# Weekly robots.txt + llms.txt audit for priority OECD domains.
+# Determines which AI crawlers are allowed/blocked and whether llms.txt exists.
+# Results committed to data/ai-crawler-audit.json and governance/ai-crawler-audit.md.
+
+name: AI Crawler Discoverability Audit
+
+on:
+  # Weekly on Mondays at 07:00 UTC — after the health-check (06:00) so both
+  # runs don't compete for the branch write lock.
+  schedule:
+    - cron: '0 7 * * 1'
+
+  # Manual trigger for ad-hoc audits or on-demand after OECD robots.txt changes.
+  workflow_dispatch:
+
+# contents: write so the bot can commit the audit results back to the branch.
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    name: Audit AI crawler access to OECD domains
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies (skip devDeps to avoid large Chromium download)
+        run: npm ci --omit=dev
+
+      - name: Run AI crawler discoverability audit
+        run: node scripts/ai-crawler-audit.js
+
+      - name: Commit audit results
+        run: |
+          git config user.name "statpulse-bot"
+          git config user.email "statpulse-bot@users.noreply.github.com"
+
+          git add data/ai-crawler-audit.json governance/ai-crawler-audit.md
+
+          git diff --staged --quiet || git commit -m "chore(data): update ai-crawler audit [skip ci]"
+
+          git push

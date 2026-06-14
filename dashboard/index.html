@@ -305,7 +305,11 @@
     .chat-chart-canvas-wrap { position: relative; height: 180px; }
     .chat-oos-box { background: rgba(234,179,8,0.06); border: 1px solid rgba(234,179,8,0.15); border-radius: 6px; padding: 12px 14px; }
     .chat-oos-label { font-size: 11px; color: #eab308; font-weight: 600; margin-bottom: 5px; }
-    .chat-oos-body { font-size: 12px; color: #94a3b8; }
+    .chat-oos-body { font-size: 13px; color: #e2e8f0; line-height: 1.65; margin: 0 0 10px; white-space: pre-wrap; }
+    .chat-oos-note { font-size: 11px; color: #7b8ea4; margin: 0 0 10px; }
+    .chat-oos-link { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #f59e0b; background: rgba(234,179,8,0.1); border: 1px solid rgba(234,179,8,0.25); border-radius: 6px; padding: 5px 12px; text-decoration: none; }
+    .chat-oos-link:hover { background: rgba(234,179,8,0.18); }
+    .chat-oos-link:focus-visible { outline: 2px solid #eab308; outline-offset: 2px; }
     .chat-error-box { background: rgba(239,68,68,0.06); border: 1px solid rgba(239,68,68,0.18); border-radius: 6px; padding: 12px 14px; font-size: 12px; color: #ef4444; }
     .chat-degraded-box { background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.15); border-radius: 6px; padding: 12px 14px; font-size: 12px; color: #94a3b8; }
     .chat-degraded-box strong { color: #e2e8f0; display: block; margin-bottom: 4px; }
@@ -1675,9 +1679,18 @@
       btn.disabled = false; btn.textContent = 'Ask'; inp.removeAttribute('aria-busy');
 
       if (!data.matched) {
+        const s = data.suggestion;
+        const linkHtml = s && s.link && s.linkVerified
+          ? `<a class="chat-oos-link" href="${escHtml(s.link)}" target="_blank" rel="noopener noreferrer">
+               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+               ${escHtml(s.label || 'Explore on OECD')} &rarr;
+             </a>`
+          : '';
         setChatResult(`<div class="chat-oos-box" role="status">
-          <p class="chat-oos-label">${escHtml(data.outOfScopeNote || 'Outside available indicators.')}</p>
-          <p class="chat-oos-body">${escHtml(data.answer || '')}</p>
+          <p class="chat-oos-label">Not from live OECD data &mdash; ${escHtml(data.outOfScopeNote || 'Outside available indicators.')}</p>
+          <p class="chat-oos-body">${escHtml(data.answer || '').replace(/\n/g, '<br>')}</p>
+          ${s ? `<p class="chat-oos-note">${escHtml(s.note || '')}</p>` : ''}
+          ${linkHtml}
         </div>`);
         return;
       }

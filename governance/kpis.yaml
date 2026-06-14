@@ -153,7 +153,27 @@ kpis:
       accessible. 'blocked' (Disallow: / with no Allow: / override) is the
       concern. Configuration audit only — does not reflect CDN/WAF-level blocking.
 
-  # 9 — Community issue resolution. Proxy for PM responsiveness and community
+  # 9 — Content gap coverage. Tracks volume of out-of-scope queries to surface
+  # which statistical topics users ask about that StatPulse cannot yet ground.
+  # High volume on a single topic = strong signal to extend the curated corpus.
+  - id: content-gap-coverage
+    name: Content Gap Coverage (Unmatched Queries)
+    category: AI Representation Intelligence
+    description: >
+      Rolling 7-day count of out-of-scope chat queries (questions that did not
+      match any curated indicator), broken down by topic where identifiable via
+      catalogue keyword match. Tracks whether catalogue coverage is growing to
+      meet user demand; also measures catalogue match rate (how often an OOS
+      query can still be routed to a relevant OECD dataset).
+    target: "Catalogue match rate >= 70% of OOS queries; topic volume reviewed weekly"
+    measurement: >
+      (entries with catalogueMatchFound=true) / total OOS entries × 100, rolling
+      7-day window from data/unmatched-queries.json. Total volume reported weekly.
+    frequency: Daily (materialized from Vercel KV by materialize-oos-queries.yml)
+    owner: Communications / AI Representation Intelligence Lead
+    dependency: "Requires KV_REST_API_URL + KV_REST_API_TOKEN provisioned in Vercel and GitHub secrets"
+
+  # 11 — Community issue resolution. Proxy for PM responsiveness and community
   # health. Data sourced from GitHub Issues; thresholds are conservative for
   # a public portfolio project but realistic for a live OECD tool.
   - id: community-issue-resolution

@@ -1,0 +1,51 @@
+# materialize-oos-queries.yml
+# Daily job: reads the unmatched-query list from Vercel KV and commits
+# data/unmatched-queries.json + dashboard/unmatched-queries.json to the repo.
+# Requires KV_REST_API_URL and KV_REST_API_TOKEN as GitHub repository secrets.
+# If the secrets are absent the script exits 0 gracefully with no commit.
+
+name: Materialize OOS Query Log
+
+on:
+  schedule:
+    - cron: '30 6 * * *'   # Daily 06:30 UTC — after AI visibility probe (06:00)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    name: Dump KV unmatched queries to repo
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies (skip devDeps)
+        run: npm ci --omit=dev
+
+      - name: Materialize OOS query log
+        env:
+          KV_REST_API_URL:   ${{ secrets.KV_REST_API_URL }}
+          KV_REST_API_TOKEN: ${{ secrets.KV_REST_API_TOKEN }}
+        run: node scripts/materialize-oos-queries.js
+
+      - name: Commit materialized log
+        run: |
+          git config user.name "statpulse-bot"
+          git config user.email "statpulse-bot@users.noreply.github.com"
+
+          git add data/unmatched-queries.json dashboard/unmatched-queries.json
+
+          git diff --staged --quiet || git commit -m "chore(data): materialize OOS query log from KV [skip ci]"
+
+          git push

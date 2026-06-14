@@ -5,12 +5,17 @@
   "type": "module",
   "scripts": {
     "check": "node scripts/check-health.js",
-    "audit:a11y": "node scripts/accessibility-audit.js"
+    "audit:a11y": "node scripts/accessibility-audit.js",
+    "test:chat": "node --env-file=.env scripts/test-chat.js"
   },
   "engines": {
     "node": ">=20.0.0"
   },
   "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.5"
+  },
   "devDependencies": {
     "axe-core": "^4.11.1",
     "puppeteer": "^24.37.4"

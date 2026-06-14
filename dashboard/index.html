@@ -310,6 +310,15 @@
     .chat-degraded-box { background: rgba(59,130,246,0.05); border: 1px solid rgba(59,130,246,0.15); border-radius: 6px; padding: 12px 14px; font-size: 12px; color: #94a3b8; }
     .chat-degraded-box strong { color: #e2e8f0; display: block; margin-bottom: 4px; }
     @media (max-width: 560px) { .chat-input-row { flex-direction: column; } .chat-input-row button { height: 38px; } }
+    /* ── AI Visibility Section ───────────────────────────────── */
+    .aiv-chart-label { font-size: 10px; font-weight: 700; color: #7b8ea4; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 8px; }
+    .aiv-chart-wrap { position: relative; height: 200px; background: #060a0f; border: 1px solid #1e2530; border-radius: 6px; padding: 10px; }
+    .aiv-badge-correct { color: #22c55e; }
+    .aiv-badge-stale { color: #eab308; }
+    .aiv-badge-wrong { color: #ef4444; }
+    .aiv-badge-nodata { color: #7b8ea4; }
+    .aiv-cited-yes { color: #22c55e; font-weight: 700; }
+    .aiv-cited-no { color: #7b8ea4; }
   </style>
 </head>
 <body>
@@ -534,6 +543,28 @@
                 View on GitHub →
               </a>
             </div>
+          </div>
+        </section>
+        <section class="panel" id="ai-visibility-panel" aria-labelledby="aiv-title">
+          <div class="section-header">
+            <div><h2 id="aiv-title">How AI Represents OECD</h2><p class="subtitle">Measuring AI share of voice and factual accuracy across OECD statistical indicators</p></div>
+            <span class="badge" style="color:#a855f7;background:rgba(168,85,247,0.1);border-color:rgba(168,85,247,0.25);align-self:flex-start">AI INTELLIGENCE</span>
+          </div>
+          <div id="aiv-empty" class="empty" style="display:none">No AI visibility data yet — the probe runs daily via GitHub Actions. Trigger it manually from the <a href="https://github.com/erenkahraman/statpulse/actions" target="_blank" rel="noopener">Actions tab</a>.</div>
+          <div id="aiv-content" style="display:none">
+            <div class="grid-5" id="aiv-kpis"></div>
+            <div class="grid-auto" style="margin-bottom:14px">
+              <div>
+                <p class="aiv-chart-label" id="aiv-accuracy-label">Factual Accuracy Breakdown</p>
+                <div class="aiv-chart-wrap"><canvas id="aiv-accuracy-chart" aria-labelledby="aiv-accuracy-label"></canvas></div>
+              </div>
+              <div>
+                <p class="aiv-chart-label" id="aiv-sov-label">OECD Share of Voice by Topic</p>
+                <div class="aiv-chart-wrap"><canvas id="aiv-sov-chart" aria-labelledby="aiv-sov-label"></canvas></div>
+              </div>
+            </div>
+            <div class="table-toolbar"><h3 class="table-title" id="aiv-compare-title">Grounded vs. Ungrounded Comparison</h3><span class="subtitle">Recent probe results — latest 8 entries</span></div>
+            <div class="table-wrap"><table aria-labelledby="aiv-compare-title"><thead><tr><th>Question</th><th>Indicator</th><th>Accuracy</th><th>OECD Cited</th><th>Recency</th></tr></thead><tbody id="aiv-comparison-body"></tbody></table></div>
           </div>
         </section>
       </section>
@@ -1707,8 +1738,126 @@
       }, 0);
     }
 
+    // ---------- AI Visibility Section ----------
+    const AIV_TOPIC_LABELS = {
+      'oecd_unemployment': 'Unemployment', 'oecd_gdp': 'GDP Growth',
+      'oecd_health': 'Health Spending', 'edu_spending_per_student': 'Edu/Student',
+      'edu_gov_expenditure_share': 'Edu. Gov. Budget', 'fin_household_indicators': 'Household',
+      'digital_rd_expenditure': 'R&D', 'digital_ict_business': 'ICT Business'
+    };
+    let _aivCharts = [];
+
+    async function loadAiVisibilitySection() {
+      const raw = await fetchJson('./data/ai-visibility-log.json');
+      const entries = Array.isArray(raw) ? raw : [];
+      const emptyEl = $('aiv-empty');
+      const contentEl = $('aiv-content');
+      const judged = entries.filter(e => e.matched && e.judgment);
+
+      if (judged.length === 0) {
+        emptyEl.style.display = '';
+        contentEl.style.display = 'none';
+        return;
+      }
+      emptyEl.style.display = 'none';
+      contentEl.style.display = '';
+
+      const sovCount = judged.filter(e => e.judgment.oecdCited === true).length;
+      const sovPct = Math.round((sovCount / judged.length) * 100);
+      const accCount = judged.filter(e => ['correct', 'stale'].includes(e.judgment.factualAccuracy)).length;
+      const accPct = Math.round((accCount / judged.length) * 100);
+      const lastTs = entries.reduce((a, b) => (b.timestamp > a ? b.timestamp : a), '');
+      const lastDate = lastTs ? lastTs.split('T')[0] : '—';
+
+      const kpisEl = $('aiv-kpis');
+      kpisEl.textContent = '';
+      appendKpi(kpisEl, sovPct + '%', 'AI Share of Voice', 'Ungrounded answers citing OECD', sovPct >= 50 ? 'green' : sovPct >= 25 ? 'amber' : 'red');
+      appendKpi(kpisEl, accPct + '%', 'Accuracy Rate', 'Correct or near-correct answers', accPct >= 70 ? 'green' : accPct >= 40 ? 'amber' : 'red');
+      appendKpi(kpisEl, String(judged.length), 'Questions Judged', 'Probe entries with judgment');
+      appendKpi(kpisEl, String(entries.length), 'Total Log Entries', 'All probe log entries');
+      appendKpi(kpisEl, lastDate, 'Last Probe Run', 'Most recent probe timestamp');
+
+      _aivCharts.forEach(c => c.destroy());
+      _aivCharts = [];
+
+      setTimeout(() => {
+        const canvas = $('aiv-accuracy-chart');
+        if (!canvas) return;
+        const counts = { correct: 0, stale: 0, wrong: 0, 'no-data': 0 };
+        judged.forEach(e => { const k = e.judgment.factualAccuracy; if (k in counts) counts[k]++; });
+        _aivCharts.push(new Chart(canvas, {
+          type: 'doughnut',
+          data: {
+            labels: ['Correct', 'Stale', 'Wrong', 'No data'],
+            datasets: [{ data: [counts.correct, counts.stale, counts.wrong, counts['no-data']], backgroundColor: ['#22c55e', '#eab308', '#ef4444', '#334155'], borderColor: '#0d1117', borderWidth: 2 }]
+          },
+          options: {
+            responsive: true, maintainAspectRatio: false, cutout: '60%',
+            plugins: {
+              legend: { position: 'bottom', labels: { color: '#7b8ea4', font: { size: 10 }, boxWidth: 10, padding: 8 } },
+              tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw}` } }
+            }
+          }
+        }));
+      }, 0);
+
+      setTimeout(() => {
+        const canvas = $('aiv-sov-chart');
+        if (!canvas) return;
+        const topicMap = {};
+        judged.forEach(e => {
+          const t = e.topic || 'unknown';
+          if (!topicMap[t]) topicMap[t] = { yes: 0, total: 0 };
+          topicMap[t].total++;
+          if (e.judgment.oecdCited) topicMap[t].yes++;
+        });
+        const topics = Object.keys(topicMap);
+        const labels = topics.map(t => AIV_TOPIC_LABELS[t] || t);
+        const vals = topics.map(t => Math.round((topicMap[t].yes / topicMap[t].total) * 100));
+        _aivCharts.push(new Chart(canvas, {
+          type: 'bar',
+          data: { labels, datasets: [{ label: '% cited OECD', data: vals, backgroundColor: vals.map(v => v >= 50 ? '#22c55e' : v >= 25 ? '#eab308' : '#ef4444'), borderRadius: 3 }] },
+          options: {
+            indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}%` } } },
+            scales: {
+              x: { min: 0, max: 100, ticks: { color: '#7b8ea4', font: { size: 10 }, callback: v => v + '%' }, grid: { color: '#1e2530' } },
+              y: { ticks: { color: '#7b8ea4', font: { size: 10 } }, grid: { display: false } }
+            }
+          }
+        }));
+      }, 0);
+
+      const tbody = $('aiv-comparison-body');
+      tbody.textContent = '';
+      [...judged].reverse().slice(0, 8).forEach(e => {
+        const acc = e.judgment.factualAccuracy || '—';
+        const accClass = { correct: 'aiv-badge-correct', stale: 'aiv-badge-stale', wrong: 'aiv-badge-wrong', 'no-data': 'aiv-badge-nodata' }[acc] || 'aiv-badge-nodata';
+        const cited = e.judgment.oecdCited;
+        const shortQ = e.question && e.question.length > 55 ? e.question.slice(0, 52) + '…' : (e.question || '—');
+        const indName = (e.indicatorName || e.topic || '—').replace(' — Expenditure Approach', '').replace(' (SHA)', '').trim();
+        const tr = document.createElement('tr');
+        [
+          { text: shortQ, title: e.question || '' },
+          { text: indName, style: 'color:#7b8ea4;font-size:11px' },
+          { text: acc, cls: accClass, style: 'font-weight:700;font-size:11px;text-transform:capitalize' },
+          { text: cited ? 'Yes' : 'No', cls: cited ? 'aiv-cited-yes' : 'aiv-cited-no' },
+          { text: (e.judgment.recency || '—'), style: 'color:#7b8ea4;font-size:11px;text-transform:capitalize' }
+        ].forEach(({ text, title, cls, style }) => {
+          const td = document.createElement('td');
+          td.textContent = text;
+          if (title) td.title = title;
+          if (cls) td.className = cls;
+          if (style) td.style.cssText = style;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
     initChatPanel();
     loadData();
+    loadAiVisibilitySection();
   </script>
 </body>
 </html>

@@ -1757,7 +1757,7 @@
     let _aivCharts = [];
 
     async function loadAiVisibilitySection() {
-      const raw = await fetchJson('./data/ai-visibility-log.json');
+      const raw = await fetchJson('./ai-visibility-log.json');
       const entries = Array.isArray(raw) ? raw : [];
       const emptyEl = $('aiv-empty');
       const contentEl = $('aiv-content');
@@ -1866,7 +1866,7 @@
 
     // ---------- AI Discoverability Panel ----------
     async function loadCrawlerAudit() {
-      const data = await fetchJson('./data/ai-crawler-audit.json');
+      const data = await fetchJson('./ai-crawler-audit.json');
       const emptyEl = $('ai-crawlers-empty');
       const wrapEl  = $('ai-crawlers-wrap');
       const lastEl  = $('ai-crawlers-last-run');

@@ -28,13 +28,17 @@ jobs:
           cp data/health-log.json dashboard/health-log.json
           cp data/oecd-live.json dashboard/oecd-live.json
           cp data/oecd-catalogue.json dashboard/oecd-catalogue.json
+          if [ -f data/ai-visibility-log.json ]; then cp data/ai-visibility-log.json dashboard/ai-visibility-log.json; else printf '[]\n' > dashboard/ai-visibility-log.json; fi
+          if [ -f data/ai-crawler-audit.json ]; then cp data/ai-crawler-audit.json dashboard/ai-crawler-audit.json; else printf '{"targets":[],"crawlers":[]}\n' > dashboard/ai-crawler-audit.json; fi
+          if [ -f data/unmatched-queries.json ]; then cp data/unmatched-queries.json dashboard/unmatched-queries.json; else printf '[]\n' > dashboard/unmatched-queries.json; fi
 
       - name: Commit synced dashboard data
         run: |
           git config user.name "statpulse-bot"
           git config user.email "statpulse-bot@users.noreply.github.com"
 
-          git add dashboard/health-log.json dashboard/oecd-live.json dashboard/oecd-catalogue.json
+          git add dashboard/health-log.json dashboard/oecd-live.json dashboard/oecd-catalogue.json \
+                  dashboard/ai-visibility-log.json dashboard/ai-crawler-audit.json dashboard/unmatched-queries.json
 
           git diff --staged --quiet || git commit -m "chore(data): sync dashboard data for Vercel [skip ci]"
 

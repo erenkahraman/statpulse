@@ -59,7 +59,9 @@ jobs:
           git config user.name "statpulse-bot"
           git config user.email "statpulse-bot@users.noreply.github.com"
 
-          git add data/ai-visibility-log.json
+          cp data/ai-visibility-log.json dashboard/ai-visibility-log.json
+
+          git add data/ai-visibility-log.json dashboard/ai-visibility-log.json
 
           git diff --staged --quiet || git commit -m "chore(data): update ai-visibility log [skip ci]"
 

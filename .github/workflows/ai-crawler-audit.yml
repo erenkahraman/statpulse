@@ -47,7 +47,9 @@ jobs:
           git config user.name "statpulse-bot"
           git config user.email "statpulse-bot@users.noreply.github.com"
 
-          git add data/ai-crawler-audit.json governance/ai-crawler-audit.md
+          cp data/ai-crawler-audit.json dashboard/ai-crawler-audit.json
+
+          git add data/ai-crawler-audit.json governance/ai-crawler-audit.md dashboard/ai-crawler-audit.json
 
           git diff --staged --quiet || git commit -m "chore(data): update ai-crawler audit [skip ci]"
 

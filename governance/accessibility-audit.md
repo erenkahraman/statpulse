@@ -13,7 +13,7 @@
 | Serious | 0 |
 | Moderate | 0 |
 | Minor | 0 |
-| Passes | 40 |
+| Passes | 41 |
 
 ## Violations
 

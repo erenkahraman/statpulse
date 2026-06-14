@@ -57,6 +57,25 @@ A PM artifact that makes architectural choices transparent and reviewable.
 
 ---
 
+## 2026-06 — AI discoverability audit: robots.txt proxy for content access
+
+**Context:** The OECD Communications role JD references "bot activity / content access / AI discoverability" as a measurement area. StatPulse has no access to server-level access logs for oecd.org. A configuration audit of publicly available robots.txt files and llms.txt presence is the highest-fidelity proxy available without infrastructure access.
+
+**Decision:** `scripts/ai-crawler-audit.js` fetches `/robots.txt` and `/llms.txt` for five priority OECD domains and classifies each of 11 AI crawlers as allowed/blocked/partial. Results are committed to `data/ai-crawler-audit.json` and visualised in the Governance view.
+
+**Key findings from first audit run (2026-06-14):**
+- `data-explorer.oecd.org` — only OECD domain with `llms.txt` present (✅). All crawlers allowed.
+- `sdmx.oecd.org` — no robots.txt (404 = all crawlers allowed by default).
+- `www.oecd.org` and `oecd.ai` — partial blocks (some paths restricted, root accessible).
+- `www.oecd-ilibrary.org` — robots.txt returns 403 (treated as no-rules → allowed by RFC).
+- No OECD domain fully blocks any of the 11 priority AI crawlers.
+
+**Limit acknowledged:** robots.txt is a polite convention, not enforcement. Cloudflare, WAF rules, or rate-limiting can block crawlers independently of robots.txt. This audit measures declared intent, not actual access.
+
+**Rationale:** For a portfolio-level intelligence tool, declared intent is measurable, reproducible, and sufficient for the JD's "discoverability" signal without requiring privileged server access.
+
+---
+
 ## 2026-06 — Grounded chat + AI-visibility measurement design
 
 **Context:** The product brief required two connected capabilities: (a) a chat panel that answers OECD statistical questions using live SDMX data, and (b) a measurement layer that scores how public AI systems represent OECD content.

@@ -320,6 +320,14 @@
     .aiv-cited-yes { color: #22c55e; font-weight: 700; }
     .aiv-cited-no { color: #7b8ea4; }
     #aiv-empty a { text-decoration: underline; }
+    /* ── AI Discoverability Panel ────────────────────────────── */
+    .crawler-allowed { color: #22c55e; font-weight: 700; }
+    .crawler-blocked { color: #ef4444; font-weight: 700; }
+    .crawler-partial { color: #eab308; font-weight: 700; }
+    .crawler-unknown { color: #7b8ea4; }
+    .llms-yes { color: #22c55e; font-weight: 700; }
+    .llms-no  { color: #7b8ea4; }
+    #ai-crawlers-last-run { font-size: 11px; color: #7b8ea4; margin-left: auto; }
   </style>
 </head>
 <body>
@@ -576,7 +584,7 @@
 
       <section id="view-reports" class="view" aria-labelledby="reports-title"><div class="page-bar"><div><h1 id="reports-title">Reports & Analytics</h1><p class="subtitle">Weekly automated health reports and platform governance telemetry.</p></div></div><div class="two-col"><section class="panel" aria-labelledby="weekly-title"><h2 id="weekly-title">Weekly Reports</h2><div id="reports-state" class="empty">Loading weekly reports...</div><div id="reports-list"></div></section><section class="panel" aria-labelledby="pm-title"><h2 id="pm-title">PM Governance Stats</h2><div id="pm-stats"></div></section></div></section>
 
-      <section id="view-governance" class="view" aria-labelledby="governance-title"><div class="page-bar"><div><h1 id="governance-title">Governance</h1><p class="subtitle">KPI scorecard, accessibility audit status, and compliance documentation.</p></div></div><section class="panel"><h2>KPI Scorecard</h2><div class="table-wrap"><table class="gov-table"><thead><tr><th>KPI Name</th><th>Target</th><th>Current</th><th>Status</th><th>Trend</th></tr></thead><tbody id="governance-kpis"></tbody></table></div></section><section class="panel"><h2>Accessibility Audit Status</h2><div class="audit-grid"><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Critical</div><div class="kpi-delta">axe-core v4.11.1</div></div><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Serious</div><div class="kpi-delta">WCAG 2.1 AA</div></div><div class="card"><div class="kpi-value blue">AA</div><div class="kpi-label">Standard</div><div class="kpi-delta">Last run: 2026-02-19</div></div><div class="card"><div class="kpi-value green">PASS</div><div class="kpi-label">Status</div><div class="kpi-delta">No blocker violations</div></div></div><a href="https://github.com/erenkahraman/statpulse/blob/main/governance/accessibility-audit.md" target="_blank" rel="noopener">View full accessibility audit</a></section><section class="panel"><h2>Governance Docs</h2><div class="grid-3"><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance" target="_blank" rel="noopener">Governance folder</a><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance/user-research" target="_blank" rel="noopener">User research</a><a class="card" href="https://github.com/erenkahraman/statpulse/issues?q=label%3Aweekly-report" target="_blank" rel="noopener">Weekly report issues</a></div></section></section>
+      <section id="view-governance" class="view" aria-labelledby="governance-title"><div class="page-bar"><div><h1 id="governance-title">Governance</h1><p class="subtitle">KPI scorecard, accessibility audit status, and compliance documentation.</p></div></div><section class="panel"><h2>KPI Scorecard</h2><div class="table-wrap"><table class="gov-table"><thead><tr><th>KPI Name</th><th>Target</th><th>Current</th><th>Status</th><th>Trend</th></tr></thead><tbody id="governance-kpis"></tbody></table></div></section><section class="panel"><h2>Accessibility Audit Status</h2><div class="audit-grid"><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Critical</div><div class="kpi-delta">axe-core v4.11.1</div></div><div class="card"><div class="kpi-value green">0</div><div class="kpi-label">Serious</div><div class="kpi-delta">WCAG 2.1 AA</div></div><div class="card"><div class="kpi-value blue">AA</div><div class="kpi-label">Standard</div><div class="kpi-delta">Last run: 2026-02-19</div></div><div class="card"><div class="kpi-value green">PASS</div><div class="kpi-label">Status</div><div class="kpi-delta">No blocker violations</div></div></div><a href="https://github.com/erenkahraman/statpulse/blob/main/governance/accessibility-audit.md" target="_blank" rel="noopener">View full accessibility audit</a></section><section class="panel" id="ai-crawlers-panel" aria-labelledby="ai-crawlers-title"><div class="table-toolbar"><h2 id="ai-crawlers-title" class="table-title">AI Discoverability Audit</h2><span id="ai-crawlers-last-run"></span></div><p class="subtitle" style="margin-bottom:10px">robots.txt access + llms.txt presence for priority OECD domains — configuration audit</p><div id="ai-crawlers-empty" class="empty" style="display:none">Audit data not yet available. Run <code>node scripts/ai-crawler-audit.js</code> to generate.</div><div class="table-wrap" id="ai-crawlers-wrap"><table aria-labelledby="ai-crawlers-title"><thead><tr><th>Target</th><th>Domain</th><th title="Number of the 11 checked AI crawlers with access">Allowed</th><th title="Number of the 11 checked AI crawlers fully blocked">Blocked</th><th title="Number with partial path restrictions">Partial</th><th>llms.txt</th></tr></thead><tbody id="ai-crawlers-body"></tbody></table></div></section><section class="panel"><h2>Governance Docs</h2><div class="grid-3"><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance" target="_blank" rel="noopener">Governance folder</a><a class="card" href="https://github.com/erenkahraman/statpulse/tree/main/governance/user-research" target="_blank" rel="noopener">User research</a><a class="card" href="https://github.com/erenkahraman/statpulse/issues?q=label%3Aweekly-report" target="_blank" rel="noopener">Weekly report issues</a></div></section></section>
       <p class="footer-note">Built as a portfolio project for OECD SDD/SDPS PM role. Not officially affiliated with OECD or SIS-CC.</p>
     </main>
   </div>
@@ -1856,9 +1864,48 @@
       });
     }
 
+    // ---------- AI Discoverability Panel ----------
+    async function loadCrawlerAudit() {
+      const data = await fetchJson('./data/ai-crawler-audit.json');
+      const emptyEl = $('ai-crawlers-empty');
+      const wrapEl  = $('ai-crawlers-wrap');
+      const lastEl  = $('ai-crawlers-last-run');
+
+      if (!data || !Array.isArray(data.targets) || !data.targets.length) {
+        emptyEl.style.display = '';
+        wrapEl.style.display  = 'none';
+        return;
+      }
+      emptyEl.style.display = 'none';
+      wrapEl.style.display  = '';
+      lastEl.textContent = `Last audited: ${data.timestamp ? data.timestamp.split('T')[0] : '—'}`;
+
+      const tbody = $('ai-crawlers-body');
+      tbody.textContent = '';
+      data.targets.forEach(t => {
+        const tr = document.createElement('tr');
+        [
+          { text: t.name },
+          { text: t.domain, style: 'font-family:monospace;font-size:10px;color:#7b8ea4' },
+          { text: String(t.allowedCount),  cls: t.allowedCount > 0  ? 'crawler-allowed' : '' },
+          { text: String(t.blockedCount),  cls: t.blockedCount > 0  ? 'crawler-blocked' : 'muted' },
+          { text: String(t.partialCount),  cls: t.partialCount > 0  ? 'crawler-partial' : 'muted' },
+          { text: t.llmsTxtExists ? 'Yes ✓' : 'No',  cls: t.llmsTxtExists ? 'llms-yes' : 'llms-no' },
+        ].forEach(({ text, cls, style }) => {
+          const td = document.createElement('td');
+          td.textContent = text;
+          if (cls) td.className = cls;
+          if (style) td.style.cssText = style;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
     initChatPanel();
     loadData();
     loadAiVisibilitySection();
+    loadCrawlerAudit();
   </script>
 </body>
 </html>

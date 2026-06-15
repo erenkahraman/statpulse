@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-15T08:12:50.273Z",
-  "totalFlows": 2536,
+  "fetchedAt": "2026-06-15T14:15:29.184Z",
+  "totalFlows": 2538,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -9363,6 +9363,12 @@
       "name": "Public finance by economic transaction - government at a glance indicators, yearly updates"
     },
     {
+      "id": "DSD_QDD_GOV_DGI_2025@DF_GOV_DGI_2025",
+      "agencyID": "OECD.GOV.GIP",
+      "version": "1.0",
+      "name": "Digital government - 2025"
+    },
+    {
       "id": "DSD_QDD_GOV_FMR@DF_GOV_FMR",
       "agencyID": "OECD.GOV.GIP",
       "version": "1.0",
@@ -9397,6 +9403,12 @@
       "agencyID": "OECD.GOV.GIP",
       "version": "1.0",
       "name": "Governance of infrastructure - 2022"
+    },
+    {
+      "id": "DSD_QDD_GOV_OGD_2025@DF_GOV_OGD_2025",
+      "agencyID": "OECD.GOV.GIP",
+      "version": "1.0",
+      "name": "Open government data - 2025"
     },
     {
       "id": "DSD_QDD_GOV_PCSD_2023@DF_GOV_PCSD_2023",

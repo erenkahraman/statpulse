@@ -1,6 +1,6 @@
 # AI Crawler Discoverability Audit
 
-**Audit date:** 2026-06-14  
+**Audit date:** 2026-06-15  
 **Targets audited:** 5  
 **AI crawlers checked:** 11  
 **Source:** /robots.txt + /llms.txt (configuration audit — no content crawling)  

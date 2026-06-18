@@ -2,60 +2,6 @@
   {
     "endpoint": "Structures",
     "url": "https://nsi-demo-stable.siscc.org/rest/datastructure/all/all/all?detail=allstubs",
-    "timestamp": "2026-05-31T18:30:48.567Z",
-    "status": 200,
-    "ok": true,
-    "responseTimeMs": 417,
-    "contentTypeValid": true,
-    "responseSizeKB": 75.04,
-    "extraMetric": {
-      "label": "DataStructure count",
-      "value": 428
-    },
-    "anomaly": {
-      "detected": false
-    },
-    "error": null
-  },
-  {
-    "endpoint": "Data Query",
-    "url": "https://nsi-demo-stable.siscc.org/rest/data/OECD.CFE,INBOUND@TOURISM_TRIPS,2.0",
-    "timestamp": "2026-05-31T18:30:48.992Z",
-    "status": 200,
-    "ok": true,
-    "responseTimeMs": 350,
-    "contentTypeValid": true,
-    "responseSizeKB": 1558.17,
-    "extraMetric": {
-      "label": "Response size KB",
-      "value": "1558.17"
-    },
-    "anomaly": {
-      "detected": false
-    },
-    "error": null
-  },
-  {
-    "endpoint": "Codelists",
-    "url": "https://nsi-demo-stable.siscc.org/rest/codelist/all/all/latest?detail=allstubs",
-    "timestamp": "2026-05-31T18:30:49.845Z",
-    "status": 200,
-    "ok": true,
-    "responseTimeMs": 227,
-    "contentTypeValid": true,
-    "responseSizeKB": 376.23,
-    "extraMetric": {
-      "label": "Codelist count",
-      "value": 2393
-    },
-    "anomaly": {
-      "detected": false
-    },
-    "error": null
-  },
-  {
-    "endpoint": "Structures",
-    "url": "https://nsi-demo-stable.siscc.org/rest/datastructure/all/all/all?detail=allstubs",
     "timestamp": "2026-06-01T01:05:55.652Z",
     "status": 200,
     "ok": true,
@@ -3612,6 +3558,60 @@
     "status": 200,
     "ok": true,
     "responseTimeMs": 294,
+    "contentTypeValid": true,
+    "responseSizeKB": 380.45,
+    "extraMetric": {
+      "label": "Codelist count",
+      "value": 2423
+    },
+    "anomaly": {
+      "detected": false
+    },
+    "error": null
+  },
+  {
+    "endpoint": "Structures",
+    "url": "https://nsi-demo-stable.siscc.org/rest/datastructure/all/all/all?detail=allstubs",
+    "timestamp": "2026-06-18T18:54:19.226Z",
+    "status": 200,
+    "ok": true,
+    "responseTimeMs": 730,
+    "contentTypeValid": true,
+    "responseSizeKB": 75.05,
+    "extraMetric": {
+      "label": "DataStructure count",
+      "value": 428
+    },
+    "anomaly": {
+      "detected": false
+    },
+    "error": null
+  },
+  {
+    "endpoint": "Data Query",
+    "url": "https://nsi-demo-stable.siscc.org/rest/data/OECD.CFE,INBOUND@TOURISM_TRIPS,2.0",
+    "timestamp": "2026-06-18T18:54:19.964Z",
+    "status": 200,
+    "ok": true,
+    "responseTimeMs": 401,
+    "contentTypeValid": true,
+    "responseSizeKB": 1558.17,
+    "extraMetric": {
+      "label": "Response size KB",
+      "value": "1558.17"
+    },
+    "anomaly": {
+      "detected": false
+    },
+    "error": null
+  },
+  {
+    "endpoint": "Codelists",
+    "url": "https://nsi-demo-stable.siscc.org/rest/codelist/all/all/latest?detail=allstubs",
+    "timestamp": "2026-06-18T18:54:20.802Z",
+    "status": 200,
+    "ok": true,
+    "responseTimeMs": 429,
     "contentTypeValid": true,
     "responseSizeKB": 380.45,
     "extraMetric": {

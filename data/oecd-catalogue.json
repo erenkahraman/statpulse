@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-17T01:07:33.635Z",
-  "totalFlows": 2538,
+  "fetchedAt": "2026-06-18T18:54:21.367Z",
+  "totalFlows": 2544,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -2011,6 +2011,36 @@
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
       "name": "Effective tax rates for expenditure based tax incentives - Corporate tax statistics"
+    },
+    {
+      "id": "DSD_ITID@DF_ITID_DES",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "1.0",
+      "name": "ITID - Design features"
+    },
+    {
+      "id": "DSD_ITID@DF_ITID_ELIG",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "1.0",
+      "name": "ITID - Eligibility conditions"
+    },
+    {
+      "id": "DSD_ITID@DF_ITID_LEG",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "1.0",
+      "name": "ITID - Legal basis"
+    },
+    {
+      "id": "DSD_ITID@DF_ITID_SEC",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "1.0",
+      "name": "ITID - Sector targeting"
+    },
+    {
+      "id": "DSD_ITID@DF_ITID_SUS",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "1.0",
+      "name": "ITID - Sustainable development area"
     },
     {
       "id": "DSD_NECR@DF_NECRS",
@@ -13326,6 +13356,12 @@
       "id": "DSD_REICO_REFPUB@DF_ALL",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
+      "name": "ReICO national publications and references"
+    },
+    {
+      "id": "DSD_REICO_REFPUB@DF_ALL",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.0",
       "name": "National studies, publications and initiatives by country"
     },
     {

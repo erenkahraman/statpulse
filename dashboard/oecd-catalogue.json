@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-19T18:43:38.615Z",
-  "totalFlows": 2544,
+  "fetchedAt": "2026-06-20T01:02:13.570Z",
+  "totalFlows": 2545,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -5893,6 +5893,12 @@
       "agencyID": "OECD.DEV.EMEA",
       "version": "1.0",
       "name": "Africa's Development Dynamics (AfDD) - all tables, all indicators"
+    },
+    {
+      "id": "DSD_MASCUL@DF_MASCUL",
+      "agencyID": "OECD.DEV.INDP",
+      "version": "1.0",
+      "name": "OECD Masculinities index database"
     },
     {
       "id": "DSD_KIIBIH@DF_B10",

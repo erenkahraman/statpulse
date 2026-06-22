@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-22T08:14:20.971Z",
-  "totalFlows": 2545,
+  "fetchedAt": "2026-06-22T14:00:20.806Z",
+  "totalFlows": 2550,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -6013,6 +6013,36 @@
       "agencyID": "OECD.DEV.LAC",
       "version": "1.0",
       "name": "Workers by firm size and formality status"
+    },
+    {
+      "id": "DSD_KIIBIH_EMP@DF_EMP",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Informal economy"
+    },
+    {
+      "id": "DSD_KIIBIH_HLD@DF_HLD",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Household informality"
+    },
+    {
+      "id": "DSD_KIIBIH_LAB@DF_LAB",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Workers' profiles"
+    },
+    {
+      "id": "DSD_KIIBIH_POV@DF_POV",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Household and working poverty"
+    },
+    {
+      "id": "DSD_KIIBIH_SPI@DF_SPI",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Access to social protection"
     },
     {
       "id": "DF_T2SEV4EYSJTJMT3HVC8I",

@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-23T07:23:45.111Z",
-  "totalFlows": 2545,
+  "fetchedAt": "2026-06-23T13:06:44.577Z",
+  "totalFlows": 2551,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -6013,6 +6013,36 @@
       "agencyID": "OECD.DEV.LAC",
       "version": "1.0",
       "name": "Workers by firm size and formality status"
+    },
+    {
+      "id": "DSD_KIIBIH_EMP@DF_EMP",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Informal economy"
+    },
+    {
+      "id": "DSD_KIIBIH_HLD@DF_HLD",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Household informality"
+    },
+    {
+      "id": "DSD_KIIBIH_LAB@DF_LAB",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Workers' profiles"
+    },
+    {
+      "id": "DSD_KIIBIH_POV@DF_POV",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Household and working poverty"
+    },
+    {
+      "id": "DSD_KIIBIH_SPI@DF_SPI",
+      "agencyID": "OECD.DEV.LAC",
+      "version": "1.0",
+      "name": "Access to social protection"
     },
     {
       "id": "DF_T2SEV4EYSJTJMT3HVC8I",
@@ -13356,6 +13386,12 @@
       "id": "DSD_REICO_FULL@DF_RDT",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
+      "name": "ReICO database on key indicators"
+    },
+    {
+      "id": "DSD_REICO_KEY@DF_ALL",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.0",
       "name": "National studies, publications and initiatives list"
     },
     {

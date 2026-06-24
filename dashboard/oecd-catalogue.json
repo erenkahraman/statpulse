@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-06-24T12:52:59.367Z",
+  "fetchedAt": "2026-06-24T18:41:13.621Z",
   "totalFlows": 2551,
   "flows": [
     {
@@ -12174,7 +12174,7 @@
       "id": "DSD_SDBSBD_ISIC4@DF_BD_API",
       "agencyID": "OECD.SDD.TPS",
       "version": "1.0",
-      "name": "Business demography by size class and economic activity - ISIC rev.4 (for API users)"
+      "name": "SDBS Business demography statistics by size class and economic activity - ISIC rev.4 (for API users)"
     },
     {
       "id": "DSD_SDBSBD_ISIC4@DF_BD_B_D",

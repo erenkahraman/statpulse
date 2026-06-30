@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-06-30T12:49:05.920Z",
-  "totalFlows": 2552,
+  "fetchedAt": "2026-06-30T18:43:35.883Z",
+  "totalFlows": 2593,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -2184,12 +2184,6 @@
       "id": "DSD_REF_ASAP@DF_REFSERIES_ASAP",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
-      "name": "Reference series of Asia and the Pacific economies"
-    },
-    {
-      "id": "DSD_REF_ASAP@DF_REFSERIES_ASAP",
-      "agencyID": "OECD.CTP.TPS",
-      "version": "2.0",
       "name": "Revenue Statistics in Asia and the Pacific - Reference series"
     },
     {
@@ -2919,6 +2913,12 @@
       "name": "Armenia - tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVARM",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Armenia - tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVAUS",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -2928,6 +2928,12 @@
       "id": "DSD_REV_ASAP@DF_REVAUS",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Australia - tax revenues in Revenue Statistics in Asia and the Pacific"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVAUS",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Australia - tax revenues in Revenue Statistics in Asia and the Pacific"
     },
     {
@@ -2943,6 +2949,12 @@
       "name": "Azerbaijan - tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVAZE",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Azerbaijan - tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVBGD",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -2952,6 +2964,12 @@
       "id": "DSD_REV_ASAP@DF_REVBGD",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Bangladesh - tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVBGD",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Bangladesh - tax revenues"
     },
     {
@@ -2967,6 +2985,12 @@
       "name": "Bhutan - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVBTN",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Bhutan - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVCHN",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -2976,6 +3000,12 @@
       "id": "DSD_REV_ASAP@DF_REVCHN",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "China - tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVCHN",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "China - tax revenues"
     },
     {
@@ -2991,6 +3021,12 @@
       "name": "Cook Islands - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVCOK",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Cook Islands - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVFJI",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3000,6 +3036,12 @@
       "id": "DSD_REV_ASAP@DF_REVFJI",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Fiji - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVFJI",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Fiji - tax and non-tax revenues"
     },
     {
@@ -3015,6 +3057,12 @@
       "name": "Georgia - tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVGEO",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Georgia - tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVHKG",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3024,6 +3072,12 @@
       "id": "DSD_REV_ASAP@DF_REVHKG",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Hong Kong, China - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVHKG",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Hong Kong, China - tax and non-tax revenues"
     },
     {
@@ -3039,6 +3093,12 @@
       "name": "Indonesia - tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVIDN",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Indonesia - tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVJPN",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3048,6 +3108,12 @@
       "id": "DSD_REV_ASAP@DF_REVJPN",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Japan - tax revenues in Revenue Statistics in Asia and the Pacific"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVJPN",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Japan - tax revenues in Revenue Statistics in Asia and the Pacific"
     },
     {
@@ -3063,6 +3129,12 @@
       "name": "Kazakhstan - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVKAZ",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Kazakhstan - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVKGZ",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3072,6 +3144,12 @@
       "id": "DSD_REV_ASAP@DF_REVKGZ",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Kyrgyzstan - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVKGZ",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Kyrgyzstan - tax and non-tax revenues"
     },
     {
@@ -3087,6 +3165,12 @@
       "name": "Cambodia - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVKHM",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Cambodia - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVKIR",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3096,6 +3180,12 @@
       "id": "DSD_REV_ASAP@DF_REVKIR",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Kiribati - tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVKIR",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Kiribati - tax revenues"
     },
     {
@@ -3111,6 +3201,12 @@
       "name": "Korea - tax revenues in Revenue Statistics in Asia and the Pacific"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVKOR",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Korea - tax revenues in Revenue Statistics in Asia and the Pacific"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVLAO",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3120,6 +3216,12 @@
       "id": "DSD_REV_ASAP@DF_REVLAO",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Lao PDR - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVLAO",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Lao PDR - tax and non-tax revenues"
     },
     {
@@ -3135,6 +3237,12 @@
       "name": "Sri Lanka - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVLKA",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Sri Lanka - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVMDV",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3144,6 +3252,12 @@
       "id": "DSD_REV_ASAP@DF_REVMDV",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Maldives - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVMDV",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Maldives - tax and non-tax revenues"
     },
     {
@@ -3159,6 +3273,12 @@
       "name": "Marshall Islands - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVMHL",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Marshall Islands - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVMNG",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3168,6 +3288,12 @@
       "id": "DSD_REV_ASAP@DF_REVMNG",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Mongolia - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVMNG",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Mongolia - tax and non-tax revenues"
     },
     {
@@ -3183,9 +3309,21 @@
       "name": "Malaysia - tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVMYS",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Malaysia - tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVNIU",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Niue - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVNIU",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Niue - tax and non-tax revenues"
     },
     {
@@ -3201,6 +3339,12 @@
       "name": "Nauru - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVNRU",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Nauru - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVNZL",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3210,6 +3354,12 @@
       "id": "DSD_REV_ASAP@DF_REVNZL",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "New Zealand - tax revenues in Revenue Statistics in Asia and the Pacific"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVNZL",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "New Zealand - tax revenues in Revenue Statistics in Asia and the Pacific"
     },
     {
@@ -3225,6 +3375,12 @@
       "name": "Pakistan - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVPAK",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Pakistan - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVPHL",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3234,6 +3390,12 @@
       "id": "DSD_REV_ASAP@DF_REVPHL",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Philippines - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVPHL",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Philippines - tax and non-tax revenues"
     },
     {
@@ -3249,6 +3411,12 @@
       "name": "Papua New Guinea - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVPNG",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Papua New Guinea - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVSGP",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3258,6 +3426,12 @@
       "id": "DSD_REV_ASAP@DF_REVSGP",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Singapore - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVSGP",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Singapore - tax and non-tax revenues"
     },
     {
@@ -3273,6 +3447,12 @@
       "name": "Solomon Islands - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVSLB",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Solomon Islands - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVTHA",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3282,6 +3462,12 @@
       "id": "DSD_REV_ASAP@DF_REVTHA",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Thailand - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVTHA",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Thailand - tax and non-tax revenues"
     },
     {
@@ -3297,6 +3483,12 @@
       "name": "Tokelau - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVTKL",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Tokelau - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVTLS",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3309,6 +3501,18 @@
       "name": "Timor-Leste - tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVTLS",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Timor-Leste - tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVTON",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Tonga - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVVNM",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3318,6 +3522,12 @@
       "id": "DSD_REV_ASAP@DF_REVVNM",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Viet Nam - tax and non-tax revenues"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REVVNM",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Viet Nam - tax and non-tax revenues"
     },
     {
@@ -3333,6 +3543,12 @@
       "name": "Vanuatu - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVVUT",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Vanuatu - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REVWSM",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.0",
@@ -3345,9 +3561,21 @@
       "name": "Samoa - tax and non-tax revenues"
     },
     {
+      "id": "DSD_REV_ASAP@DF_REVWSM",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
+      "name": "Samoa - tax and non-tax revenues"
+    },
+    {
       "id": "DSD_REV_ASAP@DF_REV_ALL",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
+      "name": "Tax revenues, all ASAP countries"
+    },
+    {
+      "id": "DSD_REV_ASAP@DF_REV_ALL",
+      "agencyID": "OECD.CTP.TPS",
+      "version": "2.1",
       "name": "Tax revenues, all ASAP countries"
     },
     {
@@ -5898,7 +6126,7 @@
       "id": "DSD_MASCUL@DF_MASCUL",
       "agencyID": "OECD.DEV.INDP",
       "version": "1.0",
-      "name": "OECD Masculinities index database"
+      "name": "OECD Masculinities Index database"
     },
     {
       "id": "DSD_KIIBIH@DF_B10",
@@ -13374,10 +13602,28 @@
       "id": "DSD_REICO_FULL@DF_RDC",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
+      "name": "ReICO database - R&amp;I talent circulation"
+    },
+    {
+      "id": "DSD_REICO_FULL@DF_RDC",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.0",
       "name": "ReICO database - R&amp;I labour market"
     },
     {
       "id": "DSD_REICO_FULL@DF_RDL",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.0",
+      "name": "ReICO database - R&amp;I labour market"
+    },
+    {
+      "id": "DSD_REICO_FULL@DF_RDL",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.0",
+      "name": "ReICO database - R&amp;I talent development"
+    },
+    {
+      "id": "DSD_REICO_FULL@DF_RDT",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
       "name": "ReICO database - R&amp;I talent development"
@@ -13385,7 +13631,7 @@
     {
       "id": "DSD_REICO_FULL@DF_RDT",
       "agencyID": "OECD.STI.STP",
-      "version": "1.0",
+      "version": "2.0",
       "name": "ReICO database on key indicators"
     },
     {

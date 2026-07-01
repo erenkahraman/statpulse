@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-07-01T13:04:07.397Z",
-  "totalFlows": 2593,
+  "fetchedAt": "2026-07-01T18:45:30.395Z",
+  "totalFlows": 2601,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -7077,6 +7077,12 @@
       "name": "Share of total government expenditure on education"
     },
     {
+      "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SHARE_EDU_GOV",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
+      "name": "Share of total government expenditure on education"
+    },
+    {
       "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE",
       "agencyID": "OECD.EDU.IMEP",
       "version": "3.0",
@@ -7086,6 +7092,12 @@
       "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE",
       "agencyID": "OECD.EDU.IMEP",
       "version": "3.1",
+      "name": "Full dataset - Indicators, source, destination and nature of expenditure on education"
+    },
+    {
+      "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_INDIC_SOURCE_NATURE",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
       "name": "Full dataset - Indicators, source, destination and nature of expenditure on education"
     },
     {
@@ -7113,6 +7125,12 @@
       "name": "Capital and total current expenditure on education (from all sources)"
     },
     {
+      "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_NATURE_CUR_CAP",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
+      "name": "Capital and total current expenditure on education (from all sources)"
+    },
+    {
       "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_NATURE_STAFF",
       "agencyID": "OECD.EDU.IMEP",
       "version": "1.0",
@@ -7128,6 +7146,12 @@
       "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_NATURE_STAFF",
       "agencyID": "OECD.EDU.IMEP",
       "version": "3.1",
+      "name": "Expenditure on staff compensation in educational institutions (from all sources)"
+    },
+    {
+      "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_NATURE_STAFF",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
       "name": "Expenditure on staff compensation in educational institutions (from all sources)"
     },
     {
@@ -7155,6 +7179,12 @@
       "name": "Distribution of government, private and non-domestic expenditure on educational institutions"
     },
     {
+      "id": "DSD_EAG_UOE_FIN@DF_UOE_FIN_SOURCE_GV_PR_NDOM",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
+      "name": "Distribution of government, private and non-domestic expenditure on educational institutions"
+    },
+    {
       "id": "DSD_EAG_UOE_FIN@DF_UOE_INDIC_FIN_GDP",
       "agencyID": "OECD.EDU.IMEP",
       "version": "1.0",
@@ -7179,6 +7209,12 @@
       "name": "Expenditure on educational institutions per full-time equivalent student"
     },
     {
+      "id": "DSD_EAG_UOE_FIN@DF_UOE_INDIC_FIN_PERSTUD",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
+      "name": "Expenditure on educational institutions per full-time equivalent student"
+    },
+    {
       "id": "DSD_EAG_UOE_FIN_ANNEX@DF_UOE_FIN_ANNEX",
       "agencyID": "OECD.EDU.IMEP",
       "version": "3.0",
@@ -7188,6 +7224,12 @@
       "id": "DSD_EAG_UOE_FIN_ANNEX@DF_UOE_FIN_ANNEX",
       "agencyID": "OECD.EDU.IMEP",
       "version": "3.1",
+      "name": "Reference statistics for education finance indicators"
+    },
+    {
+      "id": "DSD_EAG_UOE_FIN_ANNEX@DF_UOE_FIN_ANNEX",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
       "name": "Reference statistics for education finance indicators"
     },
     {
@@ -7200,6 +7242,12 @@
       "id": "DSD_EAG_UOE_FIN_ENR@DF_UOE_FIN_ENR",
       "agencyID": "OECD.EDU.IMEP",
       "version": "3.1",
+      "name": "Enrolment data adjusted to the financial year"
+    },
+    {
+      "id": "DSD_EAG_UOE_FIN_ENR@DF_UOE_FIN_ENR",
+      "agencyID": "OECD.EDU.IMEP",
+      "version": "3.2",
       "name": "Enrolment data adjusted to the financial year"
     },
     {
@@ -13205,13 +13253,13 @@
     {
       "id": "DSD_INDUSTRIAL_POLICY@DF_FIN",
       "agencyID": "OECD.STI.PIE",
-      "version": "1.4",
+      "version": "1.5",
       "name": "QuIS Industrial policy grants and tax expenditures"
     },
     {
       "id": "DSD_INDUSTRIAL_POLICY@DF_GRANTAX",
       "agencyID": "OECD.STI.PIE",
-      "version": "1.4",
+      "version": "1.5",
       "name": "Patents by technology"
     },
     {

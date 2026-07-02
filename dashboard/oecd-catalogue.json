@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-07-02T09:16:46.464Z",
-  "totalFlows": 2601,
+  "fetchedAt": "2026-07-02T14:06:38.712Z",
+  "totalFlows": 2602,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -6127,6 +6127,12 @@
       "agencyID": "OECD.DEV.INDP",
       "version": "1.0",
       "name": "OECD Masculinities Index database"
+    },
+    {
+      "id": "DSD_TPFD@DF_TPFD",
+      "agencyID": "OECD.DEV.INDP",
+      "version": "1.0",
+      "name": "Total Private Philanthropy for Development"
     },
     {
       "id": "DSD_KIIBIH@DF_B10",

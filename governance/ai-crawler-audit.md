@@ -1,6 +1,6 @@
 # AI Crawler Discoverability Audit
 
-**Audit date:** 2026-07-13  
+**Audit date:** 2026-07-20  
 **Targets audited:** 5  
 **AI crawlers checked:** 11  
 **Source:** /robots.txt + /llms.txt (configuration audit — no content crawling)  
@@ -22,7 +22,7 @@
 ### OECD Main (`www.oecd.org`)
 
 - **robots.txt:** HTTP 200
-- **llms.txt:** ❌ not found (HTTP 404)
+- **llms.txt:** ❌ not found (HTTP N/A)
 
 | AI Crawler | Status |
 |---|---|

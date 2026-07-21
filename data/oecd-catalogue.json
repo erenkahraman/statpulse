@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-07-21T08:32:14.831Z",
-  "totalFlows": 2630,
+  "fetchedAt": "2026-07-21T13:56:23.858Z",
+  "totalFlows": 2627,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -1989,12 +1989,6 @@
       "name": "Effective tax rates - Corporate tax statistics"
     },
     {
-      "id": "DSD_ETR@DF_ETR_BASELINE",
-      "agencyID": "OECD.CTP.TPS",
-      "version": "2.1",
-      "name": "Effective tax rates - Corporate tax statistics"
-    },
-    {
       "id": "DSD_ETR@DF_ETR_IBRD",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.1",
@@ -2007,12 +2001,6 @@
       "name": "Effective tax rates for income based tax incentives - Corporate tax statistics"
     },
     {
-      "id": "DSD_ETR@DF_ETR_IBRD",
-      "agencyID": "OECD.CTP.TPS",
-      "version": "2.1",
-      "name": "Effective tax rates for income based tax incentives - Corporate tax statistics"
-    },
-    {
       "id": "DSD_ETR@DF_ETR_XBRD",
       "agencyID": "OECD.CTP.TPS",
       "version": "1.1",
@@ -2022,12 +2010,6 @@
       "id": "DSD_ETR@DF_ETR_XBRD",
       "agencyID": "OECD.CTP.TPS",
       "version": "2.0",
-      "name": "Effective tax rates for expenditure based tax incentives - Corporate tax statistics"
-    },
-    {
-      "id": "DSD_ETR@DF_ETR_XBRD",
-      "agencyID": "OECD.CTP.TPS",
-      "version": "2.1",
       "name": "Effective tax rates for expenditure based tax incentives - Corporate tax statistics"
     },
     {

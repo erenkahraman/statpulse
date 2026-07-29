@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-07-29T08:43:23.977Z",
-  "totalFlows": 2629,
+  "fetchedAt": "2026-07-29T14:13:36.585Z",
+  "totalFlows": 2630,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -1662,6 +1662,12 @@
       "id": "DSD_DASHBOARD@COFOG",
       "agencyID": "OECD.CFE.RDG",
       "version": "1.0",
+      "name": "Subnational government expenditure by functional classification (COFOG)"
+    },
+    {
+      "id": "DSD_DASHBOARD@COFOG",
+      "agencyID": "OECD.CFE.RDG",
+      "version": "1.1",
       "name": "Subnational government expenditure by functional classification (COFOG)"
     },
     {

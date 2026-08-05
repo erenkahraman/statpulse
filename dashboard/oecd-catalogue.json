@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-08-05T08:38:38.583Z",
-  "totalFlows": 2630,
+  "fetchedAt": "2026-08-05T14:12:27.189Z",
+  "totalFlows": 2635,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -13734,6 +13734,12 @@
       "id": "DSD_RDS_GERD@DF_GERD_FORD",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
+      "name": "Gross domestic expenditure on R&amp;D by sector of performance and region"
+    },
+    {
+      "id": "DSD_RDS_GERD@DF_GERD_REG",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.0",
       "name": "Gross domestic expenditure on R&amp;D by sector of performance and socio-economic objectives"
     },
     {
@@ -13770,10 +13776,28 @@
       "id": "DSD_RDS_PERS@DF_PERS_FORD",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
+      "name": "R&amp;D personel by sector of performance and major field of R&amp;D"
+    },
+    {
+      "id": "DSD_RDS_PERS@DF_PERS_FORD",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.1",
       "name": "R&amp;D personnel by sector of performance and function"
     },
     {
       "id": "DSD_RDS_PERS@DF_PERS_FUNC",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.0",
+      "name": "R&amp;D personnel by sector of performance and function"
+    },
+    {
+      "id": "DSD_RDS_PERS@DF_PERS_FUNC",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.1",
+      "name": "R&amp;D personnel in the business enterprise sector by main activity"
+    },
+    {
+      "id": "DSD_RDS_PERS@DF_PERS_INDU",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
       "name": "R&amp;D personnel in the business enterprise sector by main activity"
@@ -13781,11 +13805,17 @@
     {
       "id": "DSD_RDS_PERS@DF_PERS_INDU",
       "agencyID": "OECD.STI.STP",
-      "version": "1.0",
+      "version": "1.1",
       "name": "R&amp;D personnel by sector of performance and formal qualification"
     },
     {
       "id": "DSD_RDS_PERS@DF_PERS_QUAL",
+      "agencyID": "OECD.STI.STP",
+      "version": "1.1",
+      "name": "R&amp;D personel by sector of performance and region"
+    },
+    {
+      "id": "DSD_RDS_PERS@DF_PERS_REG",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
       "name": "Income-based tax support for R&amp;D and Innovation"

@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-08-06T14:15:41.201Z",
-  "totalFlows": 2639,
+  "fetchedAt": "2026-08-07T00:03:39.472Z",
+  "totalFlows": 2635,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -9633,18 +9633,6 @@
       "name": "Waste - Selected waste streams: generation, recovery and recycling"
     },
     {
-      "id": "DSD_KFRA@DF_RC_IO",
-      "agencyID": "OECD.FATF",
-      "version": "1.0",
-      "name": "Effectiveness text - 4th round (2013 Methodology)"
-    },
-    {
-      "id": "DSD_KFRA_5@DF_RC_IO",
-      "agencyID": "OECD.FATF",
-      "version": "1.0",
-      "name": "Effectiveness text - 5th round (2022 Methodology)"
-    },
-    {
       "id": "DSD_GOV@DF_GOV_2023",
       "agencyID": "OECD.GOV.GIP",
       "version": "1.0",
@@ -10311,21 +10299,9 @@
       "name": "Household indicators dashboard – country view"
     },
     {
-      "id": "DSD_HHDASH@DF_HHDASH_CTRY",
-      "agencyID": "OECD.SDD.NAD",
-      "version": "1.1",
-      "name": "Household indicators dashboard – country view"
-    },
-    {
       "id": "DSD_HHDASH@DF_HHDASH_INDIC",
       "agencyID": "OECD.SDD.NAD",
       "version": "1.0",
-      "name": "Household indicators dashboard – indicator view"
-    },
-    {
-      "id": "DSD_HHDASH@DF_HHDASH_INDIC",
-      "agencyID": "OECD.SDD.NAD",
-      "version": "1.1",
       "name": "Household indicators dashboard – indicator view"
     },
     {

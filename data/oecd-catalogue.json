@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-08T18:39:57.619Z",
+  "fetchedAt": "2026-08-09T01:52:50.938Z",
   "totalFlows": 2639,
   "flows": [
     {
@@ -13800,7 +13800,7 @@
       "id": "DSD_RDS_PERS@DF_PERS_FORD",
       "agencyID": "OECD.STI.STP",
       "version": "1.0",
-      "name": "R&amp;D personel by sector of performance and major field of R&amp;D"
+      "name": "R&amp;D personnel by sector of performance and major field of R&amp;D"
     },
     {
       "id": "DSD_RDS_PERS@DF_PERS_FORD",
@@ -13836,7 +13836,7 @@
       "id": "DSD_RDS_PERS@DF_PERS_QUAL",
       "agencyID": "OECD.STI.STP",
       "version": "1.1",
-      "name": "R&amp;D personel by sector of performance and region"
+      "name": "R&amp;D personnel by sector of performance and region"
     },
     {
       "id": "DSD_RDS_PERS@DF_PERS_REG",

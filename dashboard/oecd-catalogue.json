@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-08-11T07:10:29.370Z",
-  "totalFlows": 2639,
+  "fetchedAt": "2026-08-11T13:09:29.980Z",
+  "totalFlows": 2641,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -9633,16 +9633,28 @@
       "name": "Waste - Selected waste streams: generation, recovery and recycling"
     },
     {
-      "id": "DSD_KFRA@DF_RC_IO",
+      "id": "DSD_RAT@DF_EFF",
       "agencyID": "OECD.FATF",
-      "version": "1.0",
-      "name": "Effectiveness text - 4th round (2013 Methodology)"
+      "version": "3.2",
+      "name": "Effectiveness Ratings - 4th round (2013 Methodology)"
     },
     {
-      "id": "DSD_KFRA_5@DF_RC_IO",
+      "id": "DSD_RAT@DF_TC_DD_PUBLIC",
       "agencyID": "OECD.FATF",
       "version": "1.0",
-      "name": "Effectiveness text - 5th round (2022 Methodology)"
+      "name": "Technical Compliance Ratings - 4th round (2013 Methodology) - Public version"
+    },
+    {
+      "id": "DSD_RAT_5@DF_EFF_5",
+      "agencyID": "OECD.FATF",
+      "version": "1.1",
+      "name": "Effectiveness Ratings - 5th round (2022 Methodology)"
+    },
+    {
+      "id": "DSD_RAT_5@DF_TC_DD_5_PUBLIC",
+      "agencyID": "OECD.FATF",
+      "version": "1.0",
+      "name": "Technical Compliance Ratings - 5th round (2022 Methodology) - Public version"
     },
     {
       "id": "DSD_GOV@DF_GOV_2023",

@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-14T02:05:50.648Z",
+  "fetchedAt": "2026-08-14T07:26:33.529Z",
   "totalFlows": 2641,
   "flows": [
     {
@@ -9651,7 +9651,7 @@
       "name": "Effectiveness Ratings - 5th round (2022 Methodology)"
     },
     {
-      "id": "DSD_RAT_5@DF_TC_DD_5_PUBLIC",
+      "id": "DSD_RAT_5_PUBLIC@DF_TC_DD_5_PUBLIC",
       "agencyID": "OECD.FATF",
       "version": "1.0",
       "name": "Technical Compliance Ratings - 5th round (2022 Methodology) - Public version"

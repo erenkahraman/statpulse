@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-08-19T18:37:31.671Z",
-  "totalFlows": 2674,
+  "fetchedAt": "2026-08-20T01:19:52.077Z",
+  "totalFlows": 2675,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -1843,6 +1843,12 @@
       "agencyID": "OECD.CFE.TOU",
       "version": "1.3",
       "name": "Domestic tourism"
+    },
+    {
+      "id": "DSD_TOURISM_ENT_EMP@DF_ENT_EMP",
+      "agencyID": "OECD.CFE.TOU",
+      "version": "1.0",
+      "name": "Enterprises and employment in tourism"
     },
     {
       "id": "DSD_TOURISM_ENT_EMP@DF_ENT_EMP",

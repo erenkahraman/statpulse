@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-08-25T06:51:30.462Z",
-  "totalFlows": 2674,
+  "fetchedAt": "2026-08-25T12:50:36.204Z",
+  "totalFlows": 2675,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -14124,6 +14124,12 @@
       "id": "DSD_REICO_KEY@DF_ALL",
       "agencyID": "OECD.STI.STP",
       "version": "2.0",
+      "name": "ReICO database on key indicators"
+    },
+    {
+      "id": "DSD_REICO_KEY@DF_ALL",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.1",
       "name": "National studies, publications and initiatives list"
     },
     {

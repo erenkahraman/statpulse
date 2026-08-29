@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-29T06:11:13.651Z",
+  "fetchedAt": "2026-08-29T16:22:59.710Z",
   "totalFlows": 2675,
   "flows": [
     {
@@ -9659,8 +9659,8 @@
     {
       "id": "DSD_GG@DF_GREEN_GROWTH",
       "agencyID": "OECD.ENV.EPI",
-      "version": "1.1",
-      "name": "Green Growth"
+      "version": "1.2",
+      "name": "Green Transition"
     },
     {
       "id": "DSD_GREEN_TRANSITION@DF_GREEN_TRANSITION",

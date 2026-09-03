@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-09-03T10:51:37.472Z",
-  "totalFlows": 2675,
+  "fetchedAt": "2026-09-03T15:59:45.557Z",
+  "totalFlows": 2678,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -14094,6 +14094,12 @@
       "id": "DSD_REICO_FULL@DF_RDC",
       "agencyID": "OECD.STI.STP",
       "version": "2.0",
+      "name": "ReICO database - R&amp;I talent circulation"
+    },
+    {
+      "id": "DSD_REICO_FULL@DF_RDC",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.1",
       "name": "ReICO database - R&amp;I labour market"
     },
     {
@@ -14106,6 +14112,12 @@
       "id": "DSD_REICO_FULL@DF_RDL",
       "agencyID": "OECD.STI.STP",
       "version": "2.0",
+      "name": "ReICO database - R&amp;I labour market"
+    },
+    {
+      "id": "DSD_REICO_FULL@DF_RDL",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.1",
       "name": "ReICO database - R&amp;I talent development"
     },
     {
@@ -14118,6 +14130,12 @@
       "id": "DSD_REICO_FULL@DF_RDT",
       "agencyID": "OECD.STI.STP",
       "version": "2.0",
+      "name": "ReICO database - R&amp;I talent development"
+    },
+    {
+      "id": "DSD_REICO_FULL@DF_RDT",
+      "agencyID": "OECD.STI.STP",
+      "version": "2.1",
       "name": "ReICO database on key indicators"
     },
     {

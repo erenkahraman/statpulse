@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-09-09T16:08:16.636Z",
-  "totalFlows": 2678,
+  "fetchedAt": "2026-09-09T20:38:27.478Z",
+  "totalFlows": 2679,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -10099,6 +10099,12 @@
       "agencyID": "OECD.GOV.GIP",
       "version": "1.0",
       "name": "Public finance by economic transaction - government at a glance indicators, yearly updates"
+    },
+    {
+      "id": "DSD_QDD_GOV_ARFND@DF_GOV_ARFND",
+      "agencyID": "OECD.GOV.GIP",
+      "version": "1.0",
+      "name": "Accounting and Reporting for the Fiscal Costs of Natural Disasters - 2025"
     },
     {
       "id": "DSD_QDD_GOV_DGI_2025@DF_GOV_DGI_2025",

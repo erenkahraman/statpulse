@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-09-14T12:08:55.046Z",
-  "totalFlows": 2679,
+  "fetchedAt": "2026-09-14T21:37:04.281Z",
+  "totalFlows": 2681,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -9829,6 +9829,18 @@
       "agencyID": "OECD.ENV.EPI",
       "version": "1.0",
       "name": "Waste - Selected waste streams: generation, recovery and recycling"
+    },
+    {
+      "id": "DSD_KFRA@DF_RC_IO",
+      "agencyID": "OECD.FATF",
+      "version": "1.0",
+      "name": "Effectiveness text - 4th round (2013 Methodology)"
+    },
+    {
+      "id": "DSD_KFRA_5@DF_RC_IO",
+      "agencyID": "OECD.FATF",
+      "version": "1.0",
+      "name": "Effectiveness text - 5th round (2022 Methodology)"
     },
     {
       "id": "DSD_RAT@DF_EFF",

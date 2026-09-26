@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-25T21:14:00.513Z",
+  "fetchedAt": "2026-09-26T04:05:01.063Z",
   "totalFlows": 2685,
   "flows": [
     {
@@ -8658,7 +8658,7 @@
       "id": "DSD_HEALTH_STAT@DF_AWDI",
       "agencyID": "OECD.ELS.HD",
       "version": "1.1",
-      "name": "Sickness absences from work"
+      "name": "Sick leave from work"
     },
     {
       "id": "DSD_HEALTH_STAT@DF_C",

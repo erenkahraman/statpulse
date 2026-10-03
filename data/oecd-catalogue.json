@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-02T21:56:31.119Z",
-  "totalFlows": 2689,
+  "fetchedAt": "2026-10-03T04:21:59.237Z",
+  "totalFlows": 2688,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -9007,12 +9007,6 @@
       "agencyID": "OECD.ELS.JAI",
       "version": "1.0",
       "name": "Net childcare cost for parents using centre-based childcare"
-    },
-    {
-      "id": "DSD_TAXBEN_NCC@DF_NCC",
-      "agencyID": "OECD.ELS.JAI",
-      "version": "1.1",
-      "name": "Net childcare cost for parents using childcare facilities"
     },
     {
       "id": "DSD_TAXBEN_NRR@DF_NRR",

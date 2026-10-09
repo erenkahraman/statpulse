@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-09T12:47:10.669Z",
-  "totalFlows": 2706,
+  "fetchedAt": "2026-10-09T22:24:05.722Z",
+  "totalFlows": 2721,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -27,6 +27,12 @@
       "name": "Climate projections by scenario, 2030–2060 – Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_CLIM@DF_CLIM_PROJ",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
+      "name": "Climate projections by scenario, 2030–2060 – Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_CLIM@DF_COASTAL_FLOOD",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -42,6 +48,12 @@
       "id": "DSD_FUA_CLIM@DF_COASTAL_FLOOD",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.4",
+      "name": "Coastal flooding - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_CLIM@DF_COASTAL_FLOOD",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
       "name": "Coastal flooding - Cities and FUAs"
     },
     {
@@ -57,6 +69,12 @@
       "name": "Drought - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_CLIM@DF_DROUGHT",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
+      "name": "Drought - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_CLIM@DF_FIRES",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -75,6 +93,12 @@
       "name": "Wildfires - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_CLIM@DF_FIRES",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
+      "name": "Wildfires - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_CLIM@DF_HEAT_STRESS",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -90,12 +114,24 @@
       "id": "DSD_FUA_CLIM@DF_HEAT_STRESS",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.4",
+      "name": "Heat stress - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_CLIM@DF_HEAT_STRESS",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
       "name": "Heat stress - Cities and FUAs"
     },
     {
       "id": "DSD_FUA_CLIM@DF_LAND_TEMP",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.2",
+      "name": "Land surface temperature -  Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_CLIM@DF_LAND_TEMP",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
       "name": "Land surface temperature -  Cities and FUAs"
     },
     {
@@ -108,6 +144,12 @@
       "id": "DSD_FUA_CLIM@DF_PRECIP",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.4",
+      "name": "Precipitation - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_CLIM@DF_PRECIP",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
       "name": "Precipitation - Cities and FUAs"
     },
     {
@@ -129,6 +171,12 @@
       "name": "River flooding - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_CLIM@DF_RIVER_FLOOD",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
+      "name": "River flooding - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_CLIM@DF_TEMPERATURES",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.1",
@@ -141,9 +189,21 @@
       "name": "Air temperature, hot days, tropical nights and icing days - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_CLIM@DF_TEMPERATURES",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
+      "name": "Air temperature, hot days, tropical nights and icing days - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_CLIM@DF_WIND",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.5",
+      "name": "Wind threats - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_CLIM@DF_WIND",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.6",
       "name": "Wind threats - Cities and FUAs"
     },
     {
@@ -153,9 +213,21 @@
       "name": "Population by age and sex - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_DEMO@DF_AGE_SEX",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.3",
+      "name": "Population by age and sex - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_DEMO@DF_CITIZENSHIP",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.2",
+      "name": "Population by citizenship - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_DEMO@DF_CITIZENSHIP",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.3",
       "name": "Population by citizenship - Cities and FUAs"
     },
     {
@@ -165,9 +237,21 @@
       "name": "Dependency ratio - Cities and FUAs"
     },
     {
+      "id": "DSD_FUA_DEMO@DF_DEPEND",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.3",
+      "name": "Dependency ratio - Cities and FUAs"
+    },
+    {
       "id": "DSD_FUA_DEMO@DF_ORIGIN",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.2",
+      "name": "Foreign-born population - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_DEMO@DF_ORIGIN",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.3",
       "name": "Foreign-born population - Cities and FUAs"
     },
     {
@@ -210,6 +294,12 @@
       "id": "DSD_FUA_ENER@DF_CDD_HDD",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.2",
+      "name": "Cooling and heating degree days - Cities and FUAs"
+    },
+    {
+      "id": "DSD_FUA_ENER@DF_CDD_HDD",
+      "agencyID": "OECD.CFE.EDS",
+      "version": "1.3",
       "name": "Cooling and heating degree days - Cities and FUAs"
     },
     {

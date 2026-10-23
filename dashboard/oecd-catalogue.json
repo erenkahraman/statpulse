@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-22T21:18:12.515Z",
-  "totalFlows": 2725,
+  "fetchedAt": "2026-10-23T03:51:19.867Z",
+  "totalFlows": 2727,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -10111,6 +10111,18 @@
       "agencyID": "OECD.FATF",
       "version": "1.0",
       "name": "Technical Compliance Ratings - 4th round (2013 Methodology) - Public version"
+    },
+    {
+      "id": "DSD_TCOMP_5_PUBLIC@DF_TECH_COMP_5_PUBLIC",
+      "agencyID": "OECD.FATF",
+      "version": "1.0",
+      "name": "Technical Compliance Annex - 5th round (2022 Methodology) - Public version"
+    },
+    {
+      "id": "DSD_TCOMP_PUBLIC@DF_TECH_COMP_PUBLIC",
+      "agencyID": "OECD.FATF",
+      "version": "1.0",
+      "name": "Technical Compliance Annex - 4th round (2013 Methodology) - Public version"
     },
     {
       "id": "DSD_GOV@DF_GOV_2023",

@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-28T04:39:30.576Z",
-  "totalFlows": 2730,
+  "fetchedAt": "2026-10-28T12:19:47.461Z",
+  "totalFlows": 2731,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -12643,6 +12643,12 @@
       "agencyID": "OECD.SDD.STES",
       "version": "4.0",
       "name": "Monetary aggregates"
+    },
+    {
+      "id": "DSD_STES@DF_SAHM",
+      "agencyID": "OECD.SDD.STES",
+      "version": "1.0",
+      "name": "Sahm rule recession indicator"
     },
     {
       "id": "DSD_STES_REVISIONS@DF_STES_REVISIONS",

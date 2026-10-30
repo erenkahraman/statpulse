@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-10-30T12:21:02.590Z",
-  "totalFlows": 2731,
+  "fetchedAt": "2026-10-30T22:00:56.802Z",
+  "totalFlows": 2725,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -951,12 +951,6 @@
       "name": "Economic statistics - Regions (for 'Developer API')"
     },
     {
-      "id": "DSD_REG_ECO@DF_ECO_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
-      "name": "Economic statistics ROPI-adjusted for inflation - Regions (for 'Developer API')"
-    },
-    {
       "id": "DSD_REG_ECO@DF_EMP",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -993,12 +987,6 @@
       "name": "Gross domestic product - Regions"
     },
     {
-      "id": "DSD_REG_ECO@DF_GDP_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
-      "name": "Real gross domestic product (ROPI-adjusted for inflation) - Regions"
-    },
-    {
       "id": "DSD_REG_ECO@DF_GVA",
       "agencyID": "OECD.CFE.EDS",
       "version": "1.0",
@@ -1015,12 +1003,6 @@
       "agencyID": "OECD.CFE.EDS",
       "version": "2.4",
       "name": "Gross value added by main economic activity - Regions"
-    },
-    {
-      "id": "DSD_REG_ECO@DF_GVA_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
-      "name": "Real gross value added by main economic activity (ROPI-adjusted for inflation) - Regions"
     },
     {
       "id": "DSD_REG_ECO@DF_INC",
@@ -1057,12 +1039,6 @@
       "agencyID": "OECD.CFE.EDS",
       "version": "2.4",
       "name": "Labour productivity by main economic activity - Regions"
-    },
-    {
-      "id": "DSD_REG_ECO@DF_LPR_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
-      "name": "Real labour productivity by main economic activity (ROPI-adjusted for inflation) - Regions"
     },
     {
       "id": "DSD_REG_ECO@DF_TRAD",
@@ -1125,21 +1101,9 @@
       "name": "Economic statistics ROPI-adjusted for inflation - Regions (for 'Developer API')"
     },
     {
-      "id": "DSD_REG_ECO_ROPI@DF_ECO_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
-      "name": "Economic statistics ROPI-adjusted for inflation - Regions (for 'Developer API')"
-    },
-    {
       "id": "DSD_REG_ECO_ROPI@DF_GDP_ROPI",
       "agencyID": "OECD.CFE.EDS",
       "version": "2.0",
-      "name": "Real gross domestic product (ROPI-adjusted for inflation) - Regions"
-    },
-    {
-      "id": "DSD_REG_ECO_ROPI@DF_GDP_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
       "name": "Real gross domestic product (ROPI-adjusted for inflation) - Regions"
     },
     {
@@ -1149,21 +1113,9 @@
       "name": "Real gross value added by main economic activity (ROPI-adjusted for inflation) - Regions"
     },
     {
-      "id": "DSD_REG_ECO_ROPI@DF_GVA_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
-      "name": "Real gross value added by main economic activity (ROPI-adjusted for inflation) - Regions"
-    },
-    {
       "id": "DSD_REG_ECO_ROPI@DF_LPR_ROPI",
       "agencyID": "OECD.CFE.EDS",
       "version": "2.0",
-      "name": "Real labour productivity by main economic activity (ROPI-adjusted for inflation) - Regions"
-    },
-    {
-      "id": "DSD_REG_ECO_ROPI@DF_LPR_ROPI",
-      "agencyID": "OECD.CFE.EDS",
-      "version": "2.4",
       "name": "Real labour productivity by main economic activity (ROPI-adjusted for inflation) - Regions"
     },
     {
@@ -1843,6 +1795,18 @@
       "agencyID": "OECD.CFE.RDG",
       "version": "1.0",
       "name": "Subnational government tax revenue"
+    },
+    {
+      "id": "DSD_MUNIFI_DDOWN@DF_MUNIFI",
+      "agencyID": "OECD.CFE.RDG",
+      "version": "1.0",
+      "name": "Municipal government finance (MUNIFI)"
+    },
+    {
+      "id": "DSD_REGOFI@DF_REGOFI",
+      "agencyID": "OECD.CFE.RDG",
+      "version": "1.0",
+      "name": "Regional government finance (REGOFI)"
     },
     {
       "id": "DSD_SNGF_AGG@DF_MUNIFI",

@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-11-04T13:56:14.941Z",
-  "totalFlows": 2738,
+  "fetchedAt": "2026-11-04T23:21:06.164Z",
+  "totalFlows": 2739,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -9664,6 +9664,12 @@
     },
     {
       "id": "DSD_CAPMF@DF_CAPMF",
+      "agencyID": "OECD.ENV.EPI",
+      "version": "1.0",
+      "name": "Climate actions and policies measurement framework"
+    },
+    {
+      "id": "DSD_CAPMF_NEW@DF_CAPMF_NEW",
       "agencyID": "OECD.ENV.EPI",
       "version": "1.0",
       "name": "Climate actions and policies measurement framework"

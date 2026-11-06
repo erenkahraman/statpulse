@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-11-05T14:13:41.324Z",
-  "totalFlows": 2739,
+  "fetchedAt": "2026-11-06T05:38:55.796Z",
+  "totalFlows": 2745,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -16374,6 +16374,12 @@
       "id": "DSD_HSL@DF_HSL_CWB",
       "agencyID": "OECD.WISE.WDP",
       "version": "1.1",
+      "name": "Current well-being"
+    },
+    {
+      "id": "DSD_HSL@DF_HSL_CWB",
+      "agencyID": "OECD.WISE.WDP",
+      "version": "1.2",
       "name": "Current well-being by age"
     },
     {
@@ -16386,6 +16392,12 @@
       "id": "DSD_HSL@DF_HSL_CWB_AGE",
       "agencyID": "OECD.WISE.WDP",
       "version": "1.1",
+      "name": "Current well-being by age"
+    },
+    {
+      "id": "DSD_HSL@DF_HSL_CWB_AGE",
+      "agencyID": "OECD.WISE.WDP",
+      "version": "1.2",
       "name": "Current well-being by education level"
     },
     {
@@ -16398,6 +16410,12 @@
       "id": "DSD_HSL@DF_HSL_CWB_EDU",
       "agencyID": "OECD.WISE.WDP",
       "version": "1.1",
+      "name": "Current well-being by education level"
+    },
+    {
+      "id": "DSD_HSL@DF_HSL_CWB_EDU",
+      "agencyID": "OECD.WISE.WDP",
+      "version": "1.2",
       "name": "Current well-being vertical inequality"
     },
     {
@@ -16410,6 +16428,12 @@
       "id": "DSD_HSL@DF_HSL_CWB_INEQ",
       "agencyID": "OECD.WISE.WDP",
       "version": "1.1",
+      "name": "Current well-being vertical inequality"
+    },
+    {
+      "id": "DSD_HSL@DF_HSL_CWB_INEQ",
+      "agencyID": "OECD.WISE.WDP",
+      "version": "1.2",
       "name": "Current well-being by sex"
     },
     {
@@ -16422,6 +16446,12 @@
       "id": "DSD_HSL@DF_HSL_CWB_SEX",
       "agencyID": "OECD.WISE.WDP",
       "version": "1.1",
+      "name": "Current well-being by sex"
+    },
+    {
+      "id": "DSD_HSL@DF_HSL_CWB_SEX",
+      "agencyID": "OECD.WISE.WDP",
+      "version": "1.2",
       "name": "Future well-being"
     },
     {
@@ -16434,6 +16464,12 @@
       "id": "DSD_HSL@DF_HSL_FWB",
       "agencyID": "OECD.WISE.WDP",
       "version": "1.1",
+      "name": "Future well-being"
+    },
+    {
+      "id": "DSD_HSL@DF_HSL_FWB",
+      "agencyID": "OECD.WISE.WDP",
+      "version": "1.2",
       "name": "DSD_HSL@DF_HSL_FWB"
     }
   ]

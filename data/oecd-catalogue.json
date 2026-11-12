@@ -1,6 +1,6 @@
 {
-  "fetchedAt": "2026-11-12T00:12:35.566Z",
-  "totalFlows": 2757,
+  "fetchedAt": "2026-11-12T14:48:37.714Z",
+  "totalFlows": 2758,
   "flows": [
     {
       "id": "SEEA_AEA_A",
@@ -12708,6 +12708,12 @@
       "id": "DSD_BOP@DF_BOP",
       "agencyID": "OECD.SDD.TPS",
       "version": "1.0",
+      "name": "Balance of payments"
+    },
+    {
+      "id": "DSD_BOP@DF_BOP",
+      "agencyID": "OECD.SDD.TPS",
+      "version": "1.1",
       "name": "Balance of payments"
     },
     {
